@@ -1,0 +1,12 @@
+export const GEOM = {
+    BOX: 'BOX',
+    CYLINDER: 'CYLINDER',
+    DISC: 'DISC',
+    ICOSPHERE: 'ICOSPHERE',
+    PLANE: 'PLANE',
+    POLYHEDRON: 'POLYHEDRON',
+    TORUS: 'TORUS',
+    TUBE: 'TUBE',
+    RIBBON: 'RIBBON',
+    SPHERE: 'SPHERE',
+};

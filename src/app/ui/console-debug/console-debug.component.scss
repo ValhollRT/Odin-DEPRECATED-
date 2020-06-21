@@ -1,0 +1,19 @@
+.container {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 200px;
+    background: #111;
+    z-index: 10;
+    opacity: .85;
+}
+
+.title {
+    border: 1px solid #333;
+    color: #fff;
+    background-color: #222;
+}
+
+.inner-text {
+    color: rgb(255, 166, 0);
+}
