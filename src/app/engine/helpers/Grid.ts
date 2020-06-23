@@ -2,14 +2,12 @@
 import { GridMaterial } from 'babylonjs-materials';
 import { Mesh, Scene, AbstractMesh } from 'babylonjs';
 
-export class Grid extends Mesh {
+export class Grid {
 
     public ground: Mesh
 
     constructor(scene: Scene) {
-        super("grid", scene);
         this.build(scene);
-        console.log("Grid");
     }
 
     public build(scene: Scene) {
@@ -25,5 +23,6 @@ export class Grid extends Mesh {
         grid.opacity = .99;
         this.ground.material = grid;
         grid.alphaMode = 10;
+        this.ground.isPickable = false;
     }
 }

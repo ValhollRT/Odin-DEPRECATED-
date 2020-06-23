@@ -1,6 +1,8 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { EngineCore } from '../engine/EngineCore';
 import { WindowService } from './window.service';
+import { Scene } from 'babylonjs';
+import { LogService } from './log.service';
 
 
 @Injectable({
@@ -9,8 +11,8 @@ import { WindowService } from './window.service';
 export class EngineService {
 
   public engineCore: EngineCore
-  constructor(wrs: WindowService) {
-    this.engineCore = new EngineCore(wrs);
+  constructor(wrs: WindowService, ls: LogService) {
+    this.engineCore = new EngineCore(wrs, ls);
   }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -22,6 +24,10 @@ export class EngineService {
 
   public createGeometry(param: string): void {
     this.engineCore.createGeometry(param);
+  }
+
+  public getScene(): Scene {
+    return this.engineCore.getScene();
   }
 }
 

@@ -8,23 +8,27 @@ import {
   ArcRotateCamera,
   HemisphericLight,
   PointLight,
+  GizmoManager,
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { Grid } from './helpers/Grid';
+import { Container } from './common/Container';
+import { LogService } from '../services/log.service';
+import { AxisHelper } from './helpers/AxisHelper';
 
 export class EngineCore {
   private canvas: HTMLCanvasElement;
   private engine: Engine;
   private camera: ArcRotateCamera;
-  public scene: Scene;
-  public grid: Grid;
-  public startingPoint: any;
-  public currentMesh: any;
-  public pickInfo: any;
+  private scene: Scene;
+  private grid: Grid;
+  private startingPoint: any;
+  private currentMesh: any;
+  private pickInfo: any;
+  private axisHelper: AxisHelper;
+  private gizmoManager: GizmoManager;
 
-  public constructor(public wrs: WindowRefService) {
-    console.log("Engine Service");
-  }
+  public constructor(public wrs: WindowRefService, public ls: LogService) { }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
@@ -32,9 +36,8 @@ export class EngineCore {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0, 0, 0, 1);
 
-
     this.grid = new Grid(this.scene);
-
+    this.axisHelper = new AxisHelper(10, this.scene);
     // Add lights to the scene
     var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), this.scene);
     var light2 = new PointLight("light2", new Vector3(0, 1, -1), this.scene);
@@ -46,15 +49,42 @@ export class EngineCore {
     // Events
     var _canvas = this.engine.getRenderingCanvas();
 
+    // Initialize GizmoManager
+    this.gizmoManager = new GizmoManager(this.scene)
+    this.gizmoManager.boundingBoxGizmoEnabled = true
+    this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
+
+    document.onkeydown = (e) => {
+      if (e.key == 'w') {
+        this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+      }
+      if (e.key == 'e') {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+      }
+      if (e.key == 'r') {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+      }
+      if (e.key == 'q') {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.boundingBoxGizmoEnabled = !this.gizmoManager.boundingBoxGizmoEnabled
+      }
+    }
 
     var getGroundPosition = () => {
-      console.log("getGroundPosition");
       // Use a predicate to get position on the ground
       this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
-
-      console.log(this.grid.ground)
       if (this.pickInfo.hit) {
-        console.log("hit!");
         return this.pickInfo.pickedPoint;
       }
 
@@ -63,13 +93,11 @@ export class EngineCore {
 
     var onPointerDown = (ev) => {
       if (ev.button !== 0) return;
-      console.log("onPointerDown");
       // check if we are under a mesh
-      this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY, mesh => mesh !== this.grid.ground);
+      this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY, mesh => mesh !== this.grid.ground && mesh !== this.axisHelper);
       if (this.pickInfo.hit) {
         this.currentMesh = this.pickInfo.pickedMesh;
         this.startingPoint = getGroundPosition();
-        console.log("pick!");
         if (this.startingPoint) { // we need to disconnect camera from canvas
           setTimeout(() => {
             this.camera.detachControl(_canvas);
@@ -108,13 +136,20 @@ export class EngineCore {
     }
 
     this.scene.registerAfterRender(() => { });
+
   }
 
   public getScene(): Scene {
     return this.scene
   }
 
-  public createGeometry(param: string) {
+  public createGeometry(type: string) {
+    let c = new Container().createGeometry(type, this.scene);
+    let container = {
+      uid: c.UID,
+      name: c.mesh.name
+    };
+    this.ls.log(container);
   }
 
   public animate(): void {
