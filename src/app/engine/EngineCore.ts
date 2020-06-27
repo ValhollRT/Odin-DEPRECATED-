@@ -9,12 +9,14 @@ import {
   HemisphericLight,
   PointLight,
   GizmoManager,
+  Mesh,
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { Grid } from './helpers/Grid';
 import { Container } from './common/Container';
 import { LogService } from '../services/log.service';
 import { AxisHelper } from './helpers/AxisHelper';
+import { Observable } from 'rxjs';
 
 export class EngineCore {
   private canvas: HTMLCanvasElement;
@@ -28,7 +30,7 @@ export class EngineCore {
   private axisHelper: AxisHelper;
   private gizmoManager: GizmoManager;
 
-  public constructor(public wrs: WindowRefService, public ls: LogService) { }
+  public constructor(public wrs: WindowRefService) { }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
@@ -134,7 +136,7 @@ export class EngineCore {
       this.canvas.removeEventListener("pointerup", onPointerUp);
       this.canvas.removeEventListener("pointermove", onPointerMove);
     }
-
+    11111
     this.scene.registerAfterRender(() => { });
 
   }
@@ -143,13 +145,9 @@ export class EngineCore {
     return this.scene
   }
 
-  public createGeometry(type: string) {
+  public createGeometry(type: string): Observable<Container> {
     let c = new Container().createGeometry(type, this.scene);
-    let container = {
-      uid: c.UID,
-      name: c.mesh.name
-    };
-    this.ls.log(container);
+    return new Observable(o => { o.next(c); o.complete() });
   }
 
   public animate(): void {

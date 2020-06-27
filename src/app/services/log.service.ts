@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LogLevel } from '../models/logModels/logLevel';
+import { Container } from '../engine/common/Container';
+import { MeshLog } from '../models/logModels/meshLog';
 
 @Injectable()
 export class LogService {
@@ -7,13 +9,20 @@ export class LogService {
   level: LogLevel = LogLevel.All;
   logWithDate: boolean = true;
 
+  public bufferLogConsole: String[] = [];
+
   constructor() {
     console.log("LogService");
   }
 
+  getDate(): number {
+    return new Date().getTime();
+  }
   public log(msg: any) {
-    console.log(new Date() + ": "
-      + JSON.stringify(msg));
+    if (msg instanceof Container) msg = new MeshLog(msg.mesh);
+    let logMessage = + this.getDate() + ": " + JSON.stringify(msg);
+    this.bufferLogConsole.push(logMessage);
+    console.log(logMessage);
   }
 
   private shouldLog(level: LogLevel): boolean {

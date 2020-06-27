@@ -1,6 +1,6 @@
 <div class="container">
     <div class="title">Debug</div>
-    <ul class="inner-text">
-        <li></li>
+    <ul *ngFor="let item of ls.bufferLogConsole" class="inner-text">
+        <li>{{item}}</li>
     </ul>
 </div>

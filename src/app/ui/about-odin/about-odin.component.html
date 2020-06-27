@@ -1,1 +1,8 @@
-<p>about-odin works!</p>
+<div [ngClass]="{'open-modal': this.isOpen}" class="modal-window">
+  <div>
+    <a (click)="closeDialog()" title="Close" class="modal-close">Close</a>
+    <h1>About Odin</h1>
+    <div>Odin is a Broadcast web app createad by</div>
+    <a href="https://www.sparanzza.com" target="_blank">Aurelio Muñoz Hijano</a>
+  </div>
+</div>

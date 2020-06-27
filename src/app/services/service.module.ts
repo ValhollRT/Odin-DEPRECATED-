@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { WindowService } from './window.service';
 import { EngineService } from './engine.service';
 import { LogService } from './log.service';
+import { AppService } from './app.service';
 
 @NgModule({
     imports: [CommonModule],
@@ -11,7 +12,8 @@ import { LogService } from './log.service';
     providers: [
         WindowService,
         EngineService,
-        LogService
+        LogService,
+        AppService
     ],
 })
 export class ServiceModule { }

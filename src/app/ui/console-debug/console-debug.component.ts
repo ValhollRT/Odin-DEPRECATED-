@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LogService } from 'src/app/services/log.service';
 
 @Component({
   selector: 'console-debug',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConsoleDebugComponent implements OnInit {
 
-  constructor() { }
+  constructor(public ls: LogService) { }
 
   ngOnInit(): void {
   }

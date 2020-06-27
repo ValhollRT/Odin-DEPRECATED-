@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { LogService } from 'src/app/services/log.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
-  selector: 'app-about-odin',
+  selector: 'about-odin',
   templateUrl: './about-odin.component.html',
   styleUrls: ['./about-odin.component.scss']
 })
 export class AboutOdinComponent implements OnInit {
 
-  constructor() { }
+  isOpen = false;
+  constructor(public appService: AppService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.appService.isOpenAboutUs.subscribe(isOpen => {
+      this.isOpen = isOpen;
+    });
   }
+  closeDialog() { this.appService.isOpenAboutUs.next(false); }
 
 }

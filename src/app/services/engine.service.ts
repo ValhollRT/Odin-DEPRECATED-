@@ -11,8 +11,8 @@ import { LogService } from './log.service';
 export class EngineService {
 
   public engineCore: EngineCore
-  constructor(wrs: WindowService, ls: LogService) {
-    this.engineCore = new EngineCore(wrs, ls);
+  constructor(wrs: WindowService, public ls: LogService) {
+    this.engineCore = new EngineCore(wrs);
   }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -23,11 +23,19 @@ export class EngineService {
   }
 
   public createGeometry(param: string): void {
-    this.engineCore.createGeometry(param);
+    this.engineCore.createGeometry(param).subscribe(c => {
+      let container = {
+        uid: c.UID,
+        name: c.mesh.name
+      };
+      this.ls.log(container);
+    });
   }
 
   public getScene(): Scene {
     return this.engineCore.getScene();
   }
+
+
 }
 

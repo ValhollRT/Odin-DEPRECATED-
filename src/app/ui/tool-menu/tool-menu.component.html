@@ -1,7 +1,7 @@
 <ul>
-    <li *ngFor="let menu of menus"><a>{{menu.displayName}}</a>
+    <li *ngFor="let menu of menus"><a (click)=executeCommandMenu(menu.param)>{{menu.displayName}}</a>
         <ul>
-            <li *ngFor="let m of menu.child"><a (click)=createGeometry(m.param)>{{m.displayName}}</a></li>
+            <li *ngFor="let m of menu.child"><a (click)=executeCommandMenu(m.param)>{{m.displayName}}</a></li>
         </ul>
     </li>
 </ul>
