@@ -14,9 +14,9 @@ import {
 import 'babylonjs-materials';
 import { Grid } from './helpers/Grid';
 import { Container } from './common/Container';
-import { LogService } from '../services/log.service';
 import { AxisHelper } from './helpers/AxisHelper';
 import { Observable } from 'rxjs';
+import { CanvasHelper } from './helpers/CanvasHelper';
 
 export class EngineCore {
   private canvas: HTMLCanvasElement;
@@ -24,9 +24,7 @@ export class EngineCore {
   private camera: ArcRotateCamera;
   private scene: Scene;
   private grid: Grid;
-  private startingPoint: any;
-  private currentMesh: any;
-  private pickInfo: any;
+
   private axisHelper: AxisHelper;
   private gizmoManager: GizmoManager;
 
@@ -40,6 +38,7 @@ export class EngineCore {
 
     this.grid = new Grid(this.scene);
     this.axisHelper = new AxisHelper(10, this.scene);
+
     // Add lights to the scene
     var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), this.scene);
     var light2 = new PointLight("light2", new Vector3(0, 1, -1), this.scene);
@@ -48,8 +47,8 @@ export class EngineCore {
     this.camera.setTarget(Vector3.Zero());
     this.camera.attachControl(this.canvas, false);
 
-    // Events
-    var _canvas = this.engine.getRenderingCanvas();
+    // Event Canvas
+    // new CanvasHelper(this.canvas, this.scene, this.camera);
 
     // Initialize GizmoManager
     this.gizmoManager = new GizmoManager(this.scene)
@@ -83,60 +82,6 @@ export class EngineCore {
       }
     }
 
-    var getGroundPosition = () => {
-      // Use a predicate to get position on the ground
-      this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
-      if (this.pickInfo.hit) {
-        return this.pickInfo.pickedPoint;
-      }
-
-      return null;
-    }
-
-    var onPointerDown = (ev) => {
-      if (ev.button !== 0) return;
-      // check if we are under a mesh
-      this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY, mesh => mesh !== this.grid.ground && mesh !== this.axisHelper);
-      if (this.pickInfo.hit) {
-        this.currentMesh = this.pickInfo.pickedMesh;
-        this.startingPoint = getGroundPosition();
-        if (this.startingPoint) { // we need to disconnect camera from canvas
-          setTimeout(() => {
-            this.camera.detachControl(_canvas);
-          }, 0);
-        }
-      }
-    }
-
-    var onPointerUp = () => {
-      if (this.startingPoint) {
-        this.camera.attachControl(_canvas, true);
-        this.startingPoint = null;
-        return;
-      }
-    }
-
-    var onPointerMove = () => {
-      if (!this.startingPoint) return;
-
-      var current = getGroundPosition();
-      if (!current) return;
-
-      var diff = current.subtract(this.startingPoint);
-      this.currentMesh.position.addInPlace(diff);
-      this.startingPoint = current;
-    }
-
-    this.canvas.addEventListener("pointerdown", onPointerDown, false);
-    this.canvas.addEventListener("pointerup", onPointerUp, false);
-    this.canvas.addEventListener("pointermove", onPointerMove, false);
-
-    this.scene.onDispose = () => {
-      this.canvas.removeEventListener("pointerdown", onPointerDown);
-      this.canvas.removeEventListener("pointerup", onPointerUp);
-      this.canvas.removeEventListener("pointermove", onPointerMove);
-    }
-    11111
     this.scene.registerAfterRender(() => { });
 
   }

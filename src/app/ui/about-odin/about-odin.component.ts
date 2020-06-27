@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LogService } from 'src/app/services/log.service';
 import { AppService } from 'src/app/services/app.service';
 
 @Component({
