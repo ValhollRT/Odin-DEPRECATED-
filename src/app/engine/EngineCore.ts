@@ -26,9 +26,8 @@ export class EngineCore {
   private grid: Grid;
 
   private axisHelper: AxisHelper;
-  private gizmoManager: GizmoManager;
 
-  public constructor(public wrs: WindowRefService) { }
+  public constructor(public windowService: WindowRefService) { }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
@@ -46,41 +45,10 @@ export class EngineCore {
     this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(100, 0, 100), this.scene);
     this.camera.setTarget(Vector3.Zero());
     this.camera.attachControl(this.canvas, false);
+    this.camera.panningSensibility = 100 ;
 
     // Event Canvas
-    // new CanvasHelper(this.canvas, this.scene, this.camera);
-
-    // Initialize GizmoManager
-    this.gizmoManager = new GizmoManager(this.scene)
-    this.gizmoManager.boundingBoxGizmoEnabled = true
-    this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-
-    document.onkeydown = (e) => {
-      if (e.key == 'w') {
-        this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
-        this.gizmoManager.rotationGizmoEnabled = false;
-        this.gizmoManager.scaleGizmoEnabled = false;
-        this.gizmoManager.boundingBoxGizmoEnabled = false;
-      }
-      if (e.key == 'e') {
-        this.gizmoManager.positionGizmoEnabled = false;
-        this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled
-        this.gizmoManager.scaleGizmoEnabled = false;
-        this.gizmoManager.boundingBoxGizmoEnabled = false;
-      }
-      if (e.key == 'r') {
-        this.gizmoManager.positionGizmoEnabled = false;
-        this.gizmoManager.rotationGizmoEnabled = false;
-        this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled
-        this.gizmoManager.boundingBoxGizmoEnabled = false;
-      }
-      if (e.key == 'q') {
-        this.gizmoManager.positionGizmoEnabled = false;
-        this.gizmoManager.rotationGizmoEnabled = false;
-        this.gizmoManager.scaleGizmoEnabled = false;
-        this.gizmoManager.boundingBoxGizmoEnabled = !this.gizmoManager.boundingBoxGizmoEnabled
-      }
-    }
+    new CanvasHelper(this.canvas, this.scene, this.camera, this.windowService.document);
 
     this.scene.registerAfterRender(() => { });
 
@@ -101,15 +69,15 @@ export class EngineCore {
       this.scene.render();
     };
 
-    if (this.wrs.document.readyState !== 'loading') {
+    if (this.windowService.document.readyState !== 'loading') {
       this.engine.runRenderLoop(rendererLoopCallback);
     } else {
-      this.wrs.window.addEventListener('DOMContentLoaded', () => {
+      this.windowService.window.addEventListener('DOMContentLoaded', () => {
         this.engine.runRenderLoop(rendererLoopCallback);
       });
     }
 
-    this.wrs.window.addEventListener('resize', () => {
+    this.windowService.window.addEventListener('resize', () => {
       this.engine.resize();
     });
 
