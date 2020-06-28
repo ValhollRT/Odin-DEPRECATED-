@@ -9,15 +9,15 @@
 }
 
 .title {
-    border: 1px solid #333;
-    color: #fff;
-    background-color: #222;
+    border: var(--main-menu-border);
+    color: var(--main-menu-color);
+    background-color: var(--main-menu-background-color);
 }
 
 .inner-text {
     margin: 0px;
     font-size: 12px;
     text-align: left;
-    color: rgb(255, 166, 0);
+    color: var(--console-debug-color);
     list-style: none;
 }

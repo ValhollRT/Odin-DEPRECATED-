@@ -1,3 +1,50 @@
+/* colors */
+* {
+  --main-menu-background-color: #222;
+  --main-menu-background-color-hover: #fff;
+  --main-menu-color: #fff;
+  --main-menu-color-hover: #000;
+  --main-menu-border: 1px solid #333;
+  --console-debug-color: rgb(255, 187, 0);
+}
+
+/* general */
+a:link {
+  text-decoration: none;
+  color: var(--console-debug-color);
+}
+
+a:hover {
+  color: var(--console-debug-color);
+  font-family: arial;
+  text-decoration: none
+}
+
+a:visited {
+  color: var(--console-debug-color);
+  font-family: arial;
+  text-decoration: none
+}
+
+* {
+  outline: none !important;
+}
+
+*:focus {
+  outline: none !important;
+}
+
+textarea:focus,
+input:focus {
+  outline: none !important;
+}
+
+a {
+  text-decoration: none !important;
+  outline: none !important;
+}
+
+/* engine style */
 html,
 body,
 app-root {
@@ -37,6 +84,6 @@ body {
   position: absolute;
 
   * {
-    z-index: 10;
+    z-index: 1;
   }
 }

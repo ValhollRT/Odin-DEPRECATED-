@@ -1,6 +1,6 @@
 import { Utils } from '../Utils/Utils';
 import { Material, Mesh, Scene, MeshBuilder } from 'babylonjs';
-import { GEOM } from 'src/app/configuration/appConstants';
+import { GEOM } from 'src/app/configuration/AppConstants';
 
 
 export class Container {

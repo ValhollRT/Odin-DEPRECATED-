@@ -1,4 +1,5 @@
 .modal-window {
+    color: var(--main-menu-color);
     position: fixed;
     top: 0;
     right: 0;
@@ -17,7 +18,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         padding: 2em;
-        background: #ffffff;
+        background: var(--main-menu-background-color);
         pointer-events: visible;
     }
 
@@ -28,7 +29,7 @@
 }
 
 .modal-close {
-    color: #aaa;
+    color: var(--main-menu-color);
     line-height: 50px;
     position: absolute;
     right: 0;
@@ -39,12 +40,12 @@
     cursor: pointer;
 
     &:hover {
-        color: black;
+        color: var(--console-debug-color);
     }
 }
 
 .btn {
-    background-color: #fff;
+    color: var(--console-debug-color);
     padding: 1em 1.5em;
     border-radius: 3px;
     text-decoration: none;

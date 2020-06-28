@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EngineService, AppService } from 'src/app/services/index.service';
 import { ToolMenu } from 'src/app/models/toolMenu';
-import { GEOM } from '../../configuration/appConstants'
+import { GEOM } from '../../configuration/AppConstants'
 import { LogService } from 'src/app/services/log.service';
 
 @Component({

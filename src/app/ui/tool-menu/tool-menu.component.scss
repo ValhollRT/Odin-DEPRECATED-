@@ -16,14 +16,14 @@ li a {
     padding: 2px;
     width: 100px;
     height: 22px;
-    border: 1px solid #333;
-    color: #fff;
-    background-color: #222;
+    border: var(--main-menu-border);
+    color: var(--main-menu-color);
+    background-color: var(--main-menu-background-color);
 }
 
 li a:hover {
-    color: #000;
-    background-color: #fff;
+    color: var(--main-menu-color-hover);
+    background-color: var(--main-menu-background-color-hover);
 
 }
 
