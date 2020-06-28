@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { LogService } from 'src/app/services/log.service';
 
 @Component({
@@ -7,10 +7,19 @@ import { LogService } from 'src/app/services/log.service';
   styleUrls: ['./console-debug.component.scss']
 })
 export class ConsoleDebugComponent implements OnInit {
+  @ViewChild('scroller') scroller: ElementRef;
 
-  constructor(public ls: LogService) { }
+  isExpanded: boolean = false;
+  constructor(public logService: LogService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  expand() { this.isExpanded = !this.isExpanded; }
+
+  public onElementScroll(event) {
+    console.log(event);
+    this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;
   }
+
 
 }

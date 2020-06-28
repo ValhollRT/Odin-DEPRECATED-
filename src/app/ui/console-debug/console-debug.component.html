@@ -1,6 +1,18 @@
-<div class="container">
-    <div class="title">Debug</div>
-    <ul *ngFor="let item of ls.bufferLogConsole" class="inner-text">
-        <li>{{item}}</li>
-    </ul>
+<div [ngClass]="{'container-collapse': isExpanded}" class="container">
+    <div class="title title-min">
+        <div class="icon-color icon-console icon-xs float-left"></div>
+        <span>Console</span>
+        <span *ngIf="!this.isExpanded" class="inner-text-console"> {{logService.bufferLogConsole.slice(-1)[0]}}</span>
+        <div (click)='expand()' class="float-right" style="cursor: pointer;">
+            <div *ngIf="!this.isExpanded" class="icon-color icon-expand icon-xs"></div>
+            <div *ngIf="this.isExpanded" class="icon-color icon-minimize icon-xs"></div>
+        </div>
+    </div>
+    <div #scroller (scroll)=onElementScroll($event) class="panel-scroll">
+        <div *ngIf="this.isExpanded" class="panel-scroll-child">
+            <ul *ngFor="let blc of logService.bufferLogConsole" class="inner-text-console">
+                <li>{{blc}}</li>
+            </ul>
+        </div>
+    </div>
 </div>

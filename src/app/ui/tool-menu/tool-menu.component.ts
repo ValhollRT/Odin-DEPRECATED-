@@ -60,10 +60,18 @@ export class ToolMenuComponent implements OnInit {
         ]
       },
       {
+        displayName: 'Materials', child: [
+          { displayName: 'Create new', param: "CREATENEW" }
+        ]
+      },
+      {
         displayName: 'Functions', child: [
           { displayName: 'TextBox', param: "TEXTBOX" },
           { displayName: 'FollowUp', param: "FOLLOWUP" },
-          { displayName: 'ScreenSize', param: "SCREENSIZE" }
+          { displayName: 'ScreenSize', param: "SCREENSIZE" },
+          { displayName: 'Clone', param: "CLONE" },
+          { displayName: 'Arrange', param: "ARRANGE" },
+          { displayName: 'Mask', param: "MASK" }
         ]
       },
       { displayName: "About Odin", param: "ABOUTODIN" }

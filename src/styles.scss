@@ -3,6 +3,7 @@
   --main-menu-background-color: #222;
   --main-menu-background-color-hover: #fff;
   --main-menu-color: #fff;
+  --main-menu-mute-color: #888;
   --main-menu-color-hover: #000;
   --main-menu-border: 1px solid #333;
   --console-debug-color: rgb(255, 187, 0);
@@ -86,4 +87,44 @@ body {
   * {
     z-index: 1;
   }
+}
+
+/* general */
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.mute-color {
+  color: var(--main-menu-mute-color);
+}
+
+/* icons */
+.icon-console {
+  mask-image: url("/assets/icons/terminal.svg");
+}
+
+.icon-expand {
+  mask-image: url("/assets/icons/expand.svg");
+}
+
+.icon-minimize {
+  mask-image: url("/assets/icons/minim.svg");
+}
+
+.icon-color {
+  background-color: var(--main-menu-color);
+}
+
+.icon-xs {
+  width: 15px;
+  height: 15px;
+  margin: 0px 5px;
 }
