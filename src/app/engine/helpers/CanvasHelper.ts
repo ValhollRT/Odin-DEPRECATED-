@@ -89,8 +89,7 @@ export class CanvasHelper {
 
     public onPointerDown = (ev) => {
         if (ev.button !== 0) return;
-
-        if (this.currentMesh !== undefined) this.currentMesh.renderOutline = false
+        this.highLight.removeAllMeshes();
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
         if (this.pickInfo.hit) {
@@ -112,7 +111,6 @@ export class CanvasHelper {
 
     public onPointerUp = () => {
         if (this.startingPoint) {
-            //this.currentMesh.renderOutline = false;
             this.camera.attachControl(this.canvas, true);
             this.startingPoint = null;
             return;
