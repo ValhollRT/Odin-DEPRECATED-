@@ -70,9 +70,8 @@ export class TransformMenuComponent implements OnInit {
   }
 
   updateCenterAxis() {
-    console.log(this.tm.center.x, this.tm.center.y, this.tm.center.z)
-
-    this.currentMeshSelected.setPivotPoint(new Vector3(this.tm.center.x, this.tm.center.y, this.tm.center.z));
+    this.currentMeshSelected.showSubMeshesBoundingBox = true;
+    this.currentMeshSelected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, this.cz.nativeElement.value));
   }
 
 }
