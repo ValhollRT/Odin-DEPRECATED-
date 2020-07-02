@@ -8,7 +8,6 @@ import {
   ArcRotateCamera,
   HemisphericLight,
   PointLight,
-  GizmoManager,
   Mesh,
 } from 'babylonjs';
 import 'babylonjs-materials';
@@ -24,6 +23,7 @@ export class EngineCore {
   private camera: ArcRotateCamera;
   private scene: Scene;
   private grid: Grid;
+  private canvasHelper: CanvasHelper;
 
   private axisHelper: AxisHelper;
 
@@ -45,10 +45,10 @@ export class EngineCore {
     this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(100, 0, 100), this.scene);
     this.camera.setTarget(Vector3.Zero());
     this.camera.attachControl(this.canvas, false);
-    this.camera.panningSensibility = 100 ;
+    this.camera.panningSensibility = 100;
 
     // Event Canvas
-    new CanvasHelper(this.canvas, this.scene, this.camera, this.windowService.document);
+    this.canvasHelper = new CanvasHelper(this.canvas, this.scene, this.camera, this.windowService.document);
 
     this.scene.registerAfterRender(() => { });
 
@@ -56,6 +56,10 @@ export class EngineCore {
 
   public getScene(): Scene {
     return this.scene
+  }
+
+  public getCurrentMeshSelected(): Observable<Mesh> {
+    return this.canvasHelper.getCurrentMeshSelected();
   }
 
   public createGeometry(type: string): Observable<Container> {

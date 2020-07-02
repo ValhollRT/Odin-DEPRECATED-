@@ -4,9 +4,11 @@
   --main-menu-background-color-hover: #fff;
   --main-menu-color: #fff;
   --main-menu-mute-color: #888;
+  --input-background-color: #444;
   --main-menu-color-hover: #000;
   --main-menu-border: 1px solid #333;
   --console-debug-color: rgb(255, 187, 0);
+  --highlight-color: rgb(255, 187, 0);
 }
 
 /* general */
@@ -29,6 +31,7 @@ a:visited {
 
 * {
   outline: none !important;
+  letter-spacing: .5px;
 }
 
 *:focus {

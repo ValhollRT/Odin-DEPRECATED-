@@ -1,11 +1,14 @@
-import { Scene, TargetCamera, GizmoManager, HighlightLayer } from 'babylonjs';
+import { Scene, TargetCamera, GizmoManager, HighlightLayer, Mesh, Nullable, AbstractMesh } from 'babylonjs';
+import { BehaviorSubject, ObservedValueOf, Observable } from 'rxjs';
 
 export class CanvasHelper {
 
-    private currentMesh: any;
+    private currentMesh: Mesh;
     private pickInfo: any;
     private startingPoint: any;
     public gizmoManager: GizmoManager;
+    public currentMesh$: BehaviorSubject<Mesh>;
+    public currentMeshRotation$: BehaviorSubject<Mesh>;
     private highLight: HighlightLayer;
 
     constructor(
@@ -21,6 +24,7 @@ export class CanvasHelper {
         this.highLight.blurVerticalSize = 1;
         this.highLight.innerGlow = false;
 
+        this.currentMesh$ = new BehaviorSubject(null);
         // Initialize GizmoManager
         this.gizmoManager = new GizmoManager(this.scene)
         this.gizmoManager.boundingBoxGizmoEnabled = true
@@ -61,9 +65,16 @@ export class CanvasHelper {
                 this.gizmoManager.scaleGizmoEnabled = false;
                 // this.gizmoManager.boundingBoxGizmoEnabled = !this.gizmoManager.boundingBoxGizmoEnabled
             }
+            if (e.key == 't') {
+                this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh;
+                this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
+
+                this.gizmoManager.gizmos.positionGizmo.updateScale = true;
+            }
         }
 
         this.gizmoManager.boundingBoxGizmoEnabled = false;
+
     }
 
 
@@ -78,10 +89,12 @@ export class CanvasHelper {
 
     public onPointerDown = (ev) => {
         if (ev.button !== 0) return;
-        this.highLight.removeAllMeshes();
+
+        if (this.currentMesh !== undefined) this.currentMesh.renderOutline = false
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
         if (this.pickInfo.hit) {
+
             this.currentMesh = this.pickInfo.pickedMesh;
             this.highLight.addMesh(this.currentMesh, BABYLON.Color3.Yellow());
 
@@ -91,11 +104,15 @@ export class CanvasHelper {
                     this.camera.detachControl(this.canvas);
                 }, 0);
             }
+
+            this.getCurrentMeshTransformation();
+            this.currentMesh$.next(this.currentMesh);
         }
     }
 
     public onPointerUp = () => {
         if (this.startingPoint) {
+            //this.currentMesh.renderOutline = false;
             this.camera.attachControl(this.canvas, true);
             this.startingPoint = null;
             return;
@@ -111,6 +128,49 @@ export class CanvasHelper {
         var diff = current.subtract(this.startingPoint);
         this.currentMesh.position.addInPlace(diff);
         this.startingPoint = current;
+    }
+
+    // return currentMesh
+    public getCurrentMeshSelected(): Observable<Mesh> {
+        return this.currentMesh$;
+    }
+
+    sendMesh() {
+        if (this.currentMesh !== null)
+            this.currentMesh$.next(this.currentMesh);
+    }
+    public getCurrentMeshTransformation() {
+        if (this.gizmoManager === null || this.gizmoManager === undefined) return;
+        this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+        this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+        this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+
+        this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+        this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+        this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+
+        this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+        this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+        this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
+            this.sendMesh();
+        });
+
     }
 
 }

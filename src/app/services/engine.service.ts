@@ -3,6 +3,8 @@ import { EngineCore } from '../engine/EngineCore';
 import { WindowService } from './window.service';
 import { Scene } from 'babylonjs';
 import { LogService } from './log.service';
+import { Mesh } from 'babylonjs/Meshes/mesh';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -30,6 +32,10 @@ export class EngineService {
       };
       this.ls.log(container);
     });
+  }
+
+  public getCurrentMeshSelected(): Observable<Mesh> {
+    return this.engineCore.getCurrentMeshSelected();
   }
 
   public getScene(): Scene {

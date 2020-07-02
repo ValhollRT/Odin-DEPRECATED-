@@ -1,0 +1,43 @@
+.container {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: var(--main-menu-background-color);
+}
+
+input {
+    margin: 1px;
+
+    display: block;
+    width: 60px;
+    background-color: var(--input-background-color);
+    color: var(--console-debug-color);
+    font-size:bold;
+    border: 0;
+    outline: none;
+}
+
+label {
+    float: left;
+    color: white;
+    margin: 0px 5px;
+    width: 5px;
+    font-size: 9px;
+    line-height: 18px;
+}
+
+.input-group {
+    padding: 5px;
+    margin: 5px;
+
+    border: var(--main-menu-border);
+}
+
+.col-transform-menu{
+    float: left;
+}
+
+.title-section-menu{
+    font-size: 10px;
+    color: var(--console-debug-color);
+}
