@@ -1,5 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { EngineService } from '../../services/engine.service';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { EngineService } from '../../engine/engine.service';
 @Component({
   selector: 'app-viewport',
   templateUrl: './viewport.component.html',

@@ -1,5 +1,5 @@
-import { Scene, TargetCamera, GizmoManager, HighlightLayer, Mesh, Nullable, AbstractMesh } from 'babylonjs';
-import { BehaviorSubject, ObservedValueOf, Observable } from 'rxjs';
+import { GizmoManager, HighlightLayer, Mesh, Scene, TargetCamera } from 'babylonjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export class CanvasHelper {
 

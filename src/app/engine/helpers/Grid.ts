@@ -1,6 +1,6 @@
 // https://doc.babylonjs.com/extensions/grid
+import { Mesh, Scene } from 'babylonjs';
 import { GridMaterial } from 'babylonjs-materials';
-import { Mesh, Scene, AbstractMesh } from 'babylonjs';
 
 export class Grid {
 

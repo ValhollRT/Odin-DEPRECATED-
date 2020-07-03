@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Mesh, Vector3 } from 'babylonjs';
+import { filter } from 'rxjs/operators';
+import { Utils } from 'src/app/engine/Utils/Utils';
+import { TransformMenu } from 'src/app/models/transformMenuModel';
 import { EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
-import { Mesh, Quaternion, Vector3, Angle, VectorSplitterBlock } from 'babylonjs';
-import { filter } from 'rxjs/operators';
-import { TransformMenu } from 'src/app/models/transformMenuModel';
-import { Utils } from 'src/app/engine/Utils/Utils';
 
 @Component({
   selector: 'transform-menu',

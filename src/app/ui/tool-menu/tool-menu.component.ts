@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { EngineService, AppService } from 'src/app/services/index.service';
 import { ToolMenu } from 'src/app/models/toolMenu';
-import { GEOM } from '../../configuration/AppConstants'
+import { AppService, EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
+import { GEOM } from '../../configuration/AppConstants';
 
 @Component({
   selector: 'tool-menu',

@@ -1,33 +1,35 @@
-import { WindowRefService } from './../services/index.service';
-import { ElementRef } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import {
-  Engine,
-  Scene,
-  Color4,
-  Vector3,
-  ArcRotateCamera,
+  ArcRotateCamera, Color4, Engine,
   HemisphericLight,
-  PointLight,
-  Mesh,
+  Mesh, PointLight, Scene,
+  Vector3
 } from 'babylonjs';
 import 'babylonjs-materials';
-import { Grid } from './helpers/Grid';
+import { Observable } from 'rxjs';
+import { LogService } from '../services/log.service';
+import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';
 import { AxisHelper } from './helpers/AxisHelper';
-import { Observable } from 'rxjs';
 import { CanvasHelper } from './helpers/CanvasHelper';
+import { Grid } from './helpers/Grid';
 
-export class EngineCore {
+@Injectable({
+  providedIn: 'root',
+})
+export class EngineService {
   private canvas: HTMLCanvasElement;
   private engine: Engine;
   private camera: ArcRotateCamera;
   private scene: Scene;
   private grid: Grid;
   private canvasHelper: CanvasHelper;
-
   private axisHelper: AxisHelper;
 
-  public constructor(public windowService: WindowRefService) { }
+  public constructor(
+    public windowService: WindowService,
+    public logService: LogService
+  ) { }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
@@ -64,6 +66,11 @@ export class EngineCore {
 
   public createGeometry(type: string): Observable<Container> {
     let c = new Container().createGeometry(type, this.scene);
+    let container = {
+      uid: c.UID,
+      name: c.mesh.name
+    };
+    this.logService.log(container);
     return new Observable(o => { o.next(c); o.complete() });
   }
 
@@ -87,4 +94,3 @@ export class EngineCore {
 
   }
 }
-

@@ -1,4 +1,11 @@
-import { Mesh, Vector3, Color3, Scene, DynamicTexture, StandardMaterial } from 'babylonjs';
+import {
+    Color3,
+    DynamicTexture,
+    Mesh,
+    Scene,
+    StandardMaterial,
+    Vector3
+} from 'babylonjs';
 
 export class AxisHelper extends Mesh {
     // show axis
