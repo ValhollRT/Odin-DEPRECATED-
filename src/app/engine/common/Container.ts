@@ -1,19 +1,23 @@
 import { Utils } from '../Utils/Utils';
 import { Material, Mesh, Scene, MeshBuilder } from 'babylonjs';
 import { GEOM } from 'src/app/configuration/AppConstants';
-
-
 export class Container {
-    public UID: Number;
-    public date: Number;
+    public UUID: string;
+    public name: string;
     public mesh: Mesh;
-    public material: Material;
+    public material: Material
+    public children: Container[] = [];
+    public parent: Container;
+    public level: number = 0;
+    public expandable: boolean = false;
 
-    constructor(private _uid?: Number, private _date?: Number) {
-        if (!_date) _date = Date.now();
-        if (!_uid) _uid = Utils.generateUID(_date.toString());
-        this.UID = _uid;
-        this.date = _date;
+    constructor() {
+        this.UUID = Utils.generatorUUID();
+    }
+
+    public setName(name: string): Container {
+        this.name = name;
+        return this;
     }
 
     createGeometry(type: string, scene: Scene): Container {
@@ -21,7 +25,8 @@ export class Container {
         return this;
     }
 
-    setMesh(type: String, s: Scene, options?: any): Mesh {
+    setMesh(type: string, s: Scene, options?: any): Mesh {
+        this.name = type;
         switch (type) {
             case GEOM.BOX:
                 return MeshBuilder.CreateBox("box", { height: 10, width: 10, depth: 10 }, s);

@@ -21,5 +21,12 @@ export class Utils {
     public static degreeToRadians(degrees: number): number {
         return degrees * (Math.PI / 180);
     }
+    public static generatorUUID(): string {
+        const isString = `${Utils.S4()}${Utils.S4()}-${Utils.S4()}-${Utils.S4()}-${Utils.S4()}-${Utils.S4()}${Utils.S4()}${Utils.S4()}`;
+        return isString;
+    }
 
+    public static S4(): string {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
 }

@@ -4,7 +4,7 @@ import { Quaternion } from './Quaternion';
 
 export interface TransformMenu {
     position: Point3D;
-    rotationQuaternion: Quaternion;
+    rotation: Point3D;
     scaling: Point3D;
     center: Point3D;
     screenPosition: Point2D;

@@ -14,8 +14,7 @@ export class CanvasHelper {
     constructor(
         public canvas: HTMLCanvasElement,
         public scene: Scene,
-        public camera: TargetCamera,
-        private document: Document) {
+        public camera: TargetCamera) {
 
         // hightlight selected mesh    
         this.highLight = new HighlightLayer("highLight", scene);
@@ -40,7 +39,7 @@ export class CanvasHelper {
             // this.canvas.removeEventListener("pointermove", this.onPointerMove);
         }
 
-        this.document.onkeydown = (e) => {
+        this.canvas.onkeydown = (e) => {
             if (e.key == 'w') {
                 this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
                 this.gizmoManager.rotationGizmoEnabled = false;
@@ -63,20 +62,27 @@ export class CanvasHelper {
                 this.gizmoManager.positionGizmoEnabled = false;
                 this.gizmoManager.rotationGizmoEnabled = false;
                 this.gizmoManager.scaleGizmoEnabled = false;
-                // this.gizmoManager.boundingBoxGizmoEnabled = !this.gizmoManager.boundingBoxGizmoEnabled
             }
             if (e.key == 't') {
                 this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh;
                 this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
-
                 this.gizmoManager.gizmos.positionGizmo.updateScale = true;
             }
         }
-
-        this.gizmoManager.boundingBoxGizmoEnabled = false;
-
+        
+        this.initializeGizmo();
     }
 
+    initializeGizmo(){
+        this.gizmoManager.positionGizmoEnabled = true;
+        this.gizmoManager.rotationGizmoEnabled = true;
+        this.gizmoManager.scaleGizmoEnabled = true;
+        this.gizmoManager.boundingBoxGizmoEnabled = true;
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+    }
 
     getGroundPosition() {
         // Use a predicate to get position on the ground
@@ -98,6 +104,7 @@ export class CanvasHelper {
             this.highLight.addMesh(this.currentMesh, BABYLON.Color3.Yellow());
 
             this.startingPoint = this.getGroundPosition();
+            this.gizmoManager.attachToMesh(this.currentMesh);
             if (this.startingPoint) { // we need to disconnect camera from canvas
                 setTimeout(() => {
                     this.camera.detachControl(this.canvas);
@@ -134,11 +141,12 @@ export class CanvasHelper {
     }
 
     sendMesh() {
-        if (this.currentMesh !== null)
+        if (this.currentMesh !== null) {
+            this.gizmoManager.attachToMesh(this.currentMesh);
             this.currentMesh$.next(this.currentMesh);
+        }
     }
     public getCurrentMeshTransformation() {
-        if (this.gizmoManager === null || this.gizmoManager === undefined) return;
         this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
             this.sendMesh();
         });

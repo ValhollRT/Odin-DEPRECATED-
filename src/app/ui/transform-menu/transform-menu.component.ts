@@ -27,13 +27,12 @@ export class TransformMenuComponent implements OnInit {
   constructor(
     public engineService: EngineService,
     public logService: LogService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-
     this.tm = {
       position: { x: 0, y: 0, z: 0 },
-      rotationQuaternion: { x: 0, y: 0, z: 0, w: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
       scaling: { x: 1, y: 1, z: 1 },
       center: { x: 0, y: 0, z: 0 },
       screenPosition: { x: 0, y: 0 }
@@ -49,19 +48,19 @@ export class TransformMenuComponent implements OnInit {
 
   setTransformMenuSelectedMesh(m: Mesh) {
     this.tm.position = m.position;
+    
     if (m.rotationQuaternion !== null) {
       m.rotation = m.rotationQuaternion.toEulerAngles();
       m.rotationQuaternion = null;
-      this.tm.rotationQuaternion.x = m.rotation.x;
-      this.tm.rotationQuaternion.y = m.rotation.y;
-      this.tm.rotationQuaternion.z = m.rotation.z;
-      // this.tm.rotationQuaternion.w = m.rotation.w;
+      this.tm.rotation = m.rotation;
     }
+
     this.tm.scaling = m.scaling;
     this.tm.center = m.getPivotPoint();
   }
 
-  updateRotationQuaternion(event: any) {
+
+  updateRotation(event: any) {
     let x = Utils.degreeToRadians(this.rx.nativeElement.value);
     let y = Utils.degreeToRadians(this.ry.nativeElement.value);
     let z = Utils.degreeToRadians(this.rz.nativeElement.value);

@@ -34,7 +34,6 @@ export class ToolMenuComponent implements OnInit {
     }
   }
   createGeometry(param: string): void {
-    console.log(param);
     this.engine.createGeometry(param);
   }
 

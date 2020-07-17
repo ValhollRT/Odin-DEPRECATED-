@@ -11,15 +11,15 @@
         </div>
         <div class="input-group">
             <div class="title-section-menu">Rotation</div>
-            <label for="rotationQuaternionX">X</label>
-            <input #rx type="number" [ngModel]="this.tm.rotationQuaternion.x | rotation"
-                (ngModelChange)=updateRotationQuaternion($event) min="-99999" max="99999" step="0.1">
-            <label for="rotationQuaternionY">Y</label>
-            <input #ry type="number" [ngModel]="this.tm.rotationQuaternion.y | rotation"
-                (ngModelChange)=updateRotationQuaternion($event) min="-99999" max="99999" step="0.1">
-            <label for="rotationQuaternionZ">Z</label>
-            <input #rz type="number" [ngModel]="this.tm.rotationQuaternion.z | rotation"
-                (ngModelChange)=updateRotationQuaternion($event) min="-99999" max="99999" step="0.1">
+            <label for="rotationX">X</label>
+            <input #rx type="number" [ngModel]="this.tm.rotation.x | rotation"
+                (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="0.1">
+            <label for="rotationY">Y</label>
+            <input #ry type="number" [ngModel]="this.tm.rotation.y | rotation"
+                (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="0.1">
+            <label for="rotationZ">Z</label>
+            <input #rz type="number" [ngModel]="this.tm.rotation.z | rotation"
+                (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="0.1">
         </div>
         <div class="input-group">
             <div class="title-section-menu">Scaling</div>

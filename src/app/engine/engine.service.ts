@@ -6,7 +6,7 @@ import {
   Vector3
 } from 'babylonjs';
 import 'babylonjs-materials';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';
@@ -18,17 +18,20 @@ import { Grid } from './helpers/Grid';
   providedIn: 'root',
 })
 export class EngineService {
+
+  private static grid: Grid;
+  private static axisHelper: AxisHelper;
+
   private canvas: HTMLCanvasElement;
   private engine: Engine;
   private camera: ArcRotateCamera;
   private scene: Scene;
-  private grid: Grid;
   private canvasHelper: CanvasHelper;
-  private axisHelper: AxisHelper;
+  public newContainer$ = new BehaviorSubject<Container>(undefined);
 
   public constructor(
     public windowService: WindowService,
-    public logService: LogService
+    public logService: LogService,
   ) { }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -37,8 +40,8 @@ export class EngineService {
     this.scene = new Scene(this.engine);
     this.scene.clearColor = new Color4(0, 0, 0, 1);
 
-    this.grid = new Grid(this.scene);
-    this.axisHelper = new AxisHelper(10, this.scene);
+    EngineService.grid = new Grid(this.scene);
+    EngineService.axisHelper = new AxisHelper(10, this.scene);
 
     // Add lights to the scene
     var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), this.scene);
@@ -50,7 +53,7 @@ export class EngineService {
     this.camera.panningSensibility = 100;
 
     // Event Canvas
-    this.canvasHelper = new CanvasHelper(this.canvas, this.scene, this.camera, this.windowService.document);
+    this.canvasHelper = new CanvasHelper(this.canvas, this.scene, this.camera);
 
     this.scene.registerAfterRender(() => { });
 
@@ -66,12 +69,8 @@ export class EngineService {
 
   public createGeometry(type: string): Observable<Container> {
     let c = new Container().createGeometry(type, this.scene);
-    let container = {
-      uid: c.UID,
-      name: c.mesh.name
-    };
-    this.logService.log(container);
-    return new Observable(o => { o.next(c); o.complete() });
+    this.newContainer$.next(c);
+    return new Observable(o => { o.next(c); });
   }
 
   public animate(): void {

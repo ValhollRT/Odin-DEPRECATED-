@@ -1,0 +1,40 @@
+<div #transformMenuValue class="container">
+  <div class="input-group">
+    <div class="title-section-menu">Tree Node</div>
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
+        <button mat-icon-button disabled></button>
+        <div
+          [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                                          'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                                          'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+          draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);"
+          (dragover)="handleDragOver($event, node);" (drop)="handleDrop($event, node);"
+          (dragend)="handleDragEnd($event);">
+          <div class="box-node">
+            {{node.name}}
+          </div>
+        </div>
+      </mat-tree-node>
+
+      <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
+        <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <div
+          [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                                          'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                                          'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+          draggable="true" (dragstart)="handleDragStart($event, node);" (dragover)="handleDragOver($event, node);"
+          (drop)="handleDrop($event, node);" (dragend)="handleDragEnd($event);">
+          <div class="box-node">
+            {{node.name}}
+          </div>
+        </div>
+      </mat-tree-node>
+    </mat-tree>
+    <span #emptyItem></span>
+  </div>
+</div>
