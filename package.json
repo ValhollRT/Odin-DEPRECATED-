@@ -1,6 +1,6 @@
 {
-  "name": "odin",
-  "version": "0.0.1",
+  "name": "Odin",
+  "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -38,7 +38,6 @@ export class DataTreeContainer {
     }
 
     above(from: Container, to: Container) {
-        console.log("from", from, "to", to);
         this.deleteNode(from);
         to.parent.children.push(from);
         from.parent = to.parent;
@@ -47,7 +46,6 @@ export class DataTreeContainer {
     }
 
     below(from: Container, to: Container) {
-        console.log("from", from, "to", to);
         this.deleteNode(from);
         to.parent.children.push(from);
         from.parent = to.parent;

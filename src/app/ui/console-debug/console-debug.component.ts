@@ -17,7 +17,6 @@ export class ConsoleDebugComponent implements OnInit {
   expand() { this.isExpanded = !this.isExpanded; }
 
   public onElementScroll(event) {
-    console.log(event);
     this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;
   }
 

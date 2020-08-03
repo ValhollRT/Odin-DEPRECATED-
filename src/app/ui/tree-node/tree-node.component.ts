@@ -42,8 +42,6 @@ export class TreeNodeComponent {
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
     dataTree.dataChange.subscribe(data => {
-      console.log("---dataChange");
-      console.log(data);
       this.dataSource.data = [];
       this.dataSource.data = data;
     });
@@ -111,13 +109,10 @@ export class TreeNodeComponent {
     if (node !== this.dragNode) {
       let newItem: Container;
       if (this.dragNodeExpandOverArea === 'above') {
-        console.log("above Container");
         newItem = this.dataTree.above(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       } else if (this.dragNodeExpandOverArea === 'below') {
-        console.log("below Container");
         newItem = this.dataTree.below(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       } else {
-        console.log("child container");
         newItem = this.dataTree.moveContainer(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       }
       this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
@@ -125,9 +120,6 @@ export class TreeNodeComponent {
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
-
-    console.log(event);
-    console.log(node);
   }
 
   handleDragEnd(event) {

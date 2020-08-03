@@ -20,7 +20,6 @@ export class LogService {
     if (msg instanceof Container) msg = new MeshLog(msg.mesh);
     let logMessage = + this.getDate() + ": " + JSON.stringify(msg);
     this.bufferLogConsole.push(logMessage);
-    // console.log(logMessage);
   }
 
   private shouldLog(level: LogLevel): boolean {
