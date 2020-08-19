@@ -2,14 +2,14 @@ import { GizmoManager, HighlightLayer, Mesh, Scene, TargetCamera } from 'babylon
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export class CanvasHelper {
-
-    private currentMesh: Mesh;
+    
     private pickInfo: any;
     private startingPoint: any;
-    public gizmoManager: GizmoManager;
-    public currentMesh$: BehaviorSubject<Mesh>;
-    public currentMeshRotation$: BehaviorSubject<Mesh>;
-    private highLight: HighlightLayer;
+    
+    private static currentMesh: Mesh;
+    private static gizmoManager: GizmoManager;
+    private static currentMeshSelected$: BehaviorSubject<Mesh> = new BehaviorSubject(undefined);
+    private static highLight: HighlightLayer;
 
     constructor(
         public canvas: HTMLCanvasElement,
@@ -17,17 +17,16 @@ export class CanvasHelper {
         public camera: TargetCamera) {
 
         // hightlight selected mesh    
-        this.highLight = new HighlightLayer("highLight", scene);
-        this.highLight.outerGlow = true;
-        this.highLight.blurHorizontalSize = 1;
-        this.highLight.blurVerticalSize = 1;
-        this.highLight.innerGlow = false;
+        CanvasHelper.highLight = new HighlightLayer("highLight", scene);
+        CanvasHelper.highLight.outerGlow = true;
+        CanvasHelper.highLight.blurHorizontalSize = 1;
+        CanvasHelper.highLight.blurVerticalSize = 1;
+        CanvasHelper.highLight.innerGlow = false;
 
-        this.currentMesh$ = new BehaviorSubject(null);
         // Initialize GizmoManager
-        this.gizmoManager = new GizmoManager(this.scene)
-        this.gizmoManager.boundingBoxGizmoEnabled = true
-        this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
+        CanvasHelper.gizmoManager = new GizmoManager(scene)
+        CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = true
+        CanvasHelper.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
 
         this.canvas.addEventListener("pointerdown", this.onPointerDown, false);
         this.canvas.addEventListener("pointerup", this.onPointerUp, false);
@@ -41,47 +40,47 @@ export class CanvasHelper {
 
         this.canvas.onkeydown = (e) => {
             if (e.key == 'w') {
-                this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
-                this.gizmoManager.rotationGizmoEnabled = false;
-                this.gizmoManager.scaleGizmoEnabled = false;
-                this.gizmoManager.boundingBoxGizmoEnabled = false;
+                CanvasHelper.gizmoManager.positionGizmoEnabled = !CanvasHelper.gizmoManager.positionGizmoEnabled
+                CanvasHelper.gizmoManager.rotationGizmoEnabled = false;
+                CanvasHelper.gizmoManager.scaleGizmoEnabled = false;
+                CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = false;
             }
             if (e.key == 'e') {
-                this.gizmoManager.positionGizmoEnabled = false;
-                this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled
-                this.gizmoManager.scaleGizmoEnabled = false;
-                this.gizmoManager.boundingBoxGizmoEnabled = false;
+                CanvasHelper.gizmoManager.positionGizmoEnabled = false;
+                CanvasHelper.gizmoManager.rotationGizmoEnabled = !CanvasHelper.gizmoManager.rotationGizmoEnabled
+                CanvasHelper.gizmoManager.scaleGizmoEnabled = false;
+                CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = false;
             }
             if (e.key == 'r') {
-                this.gizmoManager.positionGizmoEnabled = false;
-                this.gizmoManager.rotationGizmoEnabled = false;
-                this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled
-                this.gizmoManager.boundingBoxGizmoEnabled = false;
+                CanvasHelper.gizmoManager.positionGizmoEnabled = false;
+                CanvasHelper.gizmoManager.rotationGizmoEnabled = false;
+                CanvasHelper.gizmoManager.scaleGizmoEnabled = !CanvasHelper.gizmoManager.scaleGizmoEnabled
+                CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = false;
             }
             if (e.key == 'q') {
-                this.gizmoManager.positionGizmoEnabled = false;
-                this.gizmoManager.rotationGizmoEnabled = false;
-                this.gizmoManager.scaleGizmoEnabled = false;
+                CanvasHelper.gizmoManager.positionGizmoEnabled = false;
+                CanvasHelper.gizmoManager.rotationGizmoEnabled = false;
+                CanvasHelper.gizmoManager.scaleGizmoEnabled = false;
             }
             if (e.key == 't') {
-                this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh;
-                this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
-                this.gizmoManager.gizmos.positionGizmo.updateScale = true;
+                CanvasHelper.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh = !CanvasHelper.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh;
+                CanvasHelper.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !CanvasHelper.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
+                CanvasHelper.gizmoManager.gizmos.positionGizmo.updateScale = true;
             }
         }
-        
+
         this.initializeGizmo();
     }
 
-    initializeGizmo(){
-        this.gizmoManager.positionGizmoEnabled = true;
-        this.gizmoManager.rotationGizmoEnabled = true;
-        this.gizmoManager.scaleGizmoEnabled = true;
-        this.gizmoManager.boundingBoxGizmoEnabled = true;
-        this.gizmoManager.positionGizmoEnabled = false;
-        this.gizmoManager.rotationGizmoEnabled = false;
-        this.gizmoManager.scaleGizmoEnabled = false;
-        this.gizmoManager.boundingBoxGizmoEnabled = false;
+    initializeGizmo() {
+        CanvasHelper.gizmoManager.positionGizmoEnabled = true;
+        CanvasHelper.gizmoManager.rotationGizmoEnabled = true;
+        CanvasHelper.gizmoManager.scaleGizmoEnabled = true;
+        CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = true;
+        CanvasHelper.gizmoManager.positionGizmoEnabled = false;
+        CanvasHelper.gizmoManager.rotationGizmoEnabled = false;
+        CanvasHelper.gizmoManager.scaleGizmoEnabled = false;
+        CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = false;
     }
 
     getGroundPosition() {
@@ -95,24 +94,20 @@ export class CanvasHelper {
 
     public onPointerDown = (ev) => {
         if (ev.button !== 0) return;
-        this.highLight.removeAllMeshes();
+        CanvasHelper.clearHighLightSelectedMesh();
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
         if (this.pickInfo.hit) {
-
-            this.currentMesh = this.pickInfo.pickedMesh;
-            this.highLight.addMesh(this.currentMesh, BABYLON.Color3.Yellow());
-
+            CanvasHelper.setSelectedMesh(this.pickInfo.pickedMesh);
             this.startingPoint = this.getGroundPosition();
-            this.gizmoManager.attachToMesh(this.currentMesh);
+            
             if (this.startingPoint) { // we need to disconnect camera from canvas
                 setTimeout(() => {
                     this.camera.detachControl(this.canvas);
                 }, 0);
             }
-
             this.getCurrentMeshTransformation();
-            this.currentMesh$.next(this.currentMesh);
+            CanvasHelper.currentMeshSelected$.next(this.pickInfo.pickedMesh);
         }
     }
 
@@ -126,57 +121,68 @@ export class CanvasHelper {
 
     public onPointerMove = () => {
         if (!this.startingPoint) return;
-
         var current = this.getGroundPosition();
         if (!current) return;
 
         var diff = current.subtract(this.startingPoint);
-        this.currentMesh.position.addInPlace(diff);
+        CanvasHelper.currentMesh.position.addInPlace(diff);
         this.startingPoint = current;
     }
 
     // return currentMesh
-    public getCurrentMeshSelected(): Observable<Mesh> {
-        return this.currentMesh$;
+    static getCurrentMeshSelected(): Observable<Mesh> {
+        return CanvasHelper.currentMeshSelected$;
     }
 
-    sendMesh() {
-        if (this.currentMesh !== null) {
-            this.gizmoManager.attachToMesh(this.currentMesh);
-            this.currentMesh$.next(this.currentMesh);
+    setMeshToGizmo() {
+        if (CanvasHelper.currentMesh !== null) {
+            CanvasHelper.gizmoManager.attachToMesh(CanvasHelper.currentMesh);
+            CanvasHelper.setSelectedMesh(CanvasHelper.currentMesh);
         }
     }
+
     public getCurrentMeshTransformation() {
-        this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
+        CanvasHelper.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
         });
-        this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
+        CanvasHelper.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
         });
-        this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
-        });
-
-        this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
-        });
-        this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
-        });
-        this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
+        CanvasHelper.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
         });
 
-        this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
+        CanvasHelper.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
         });
-        this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
+        CanvasHelper.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
         });
-        this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.sendMesh();
+        CanvasHelper.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
         });
 
+        CanvasHelper.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
+        });
+        CanvasHelper.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
+        });
+        CanvasHelper.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
+            this.setMeshToGizmo();
+        });
+
+    }
+
+    static setSelectedMesh(mesh: Mesh) {
+        this.clearHighLightSelectedMesh();
+        CanvasHelper.currentMesh = mesh;
+        CanvasHelper.gizmoManager.attachToMesh(mesh);
+        CanvasHelper.highLight.addMesh(mesh, BABYLON.Color3.Yellow());
+    }
+
+    static clearHighLightSelectedMesh() {
+        CanvasHelper.highLight.removeAllMeshes();
     }
 
 }

@@ -37,6 +37,7 @@ $Odin-theme: mat-light-theme($Odin-primary, $Odin-accent, $Odin-warn);
   --main-menu-border: 1px solid #333;
   --console-debug-color: rgb(255, 187, 0);
   --highlight-color: rgb(255, 187, 0);
+  --highlight-color-hover: rgba(255, 187, 0, 0.1);
 }
 
 /* general */

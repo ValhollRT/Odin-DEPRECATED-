@@ -6,12 +6,15 @@ import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
 import { filter } from 'rxjs/operators';
+import { CanvasHelper } from 'src/app/engine/helpers/CanvasHelper';
+import { Mesh } from 'babylonjs/Meshes/mesh';
 
 export class ContainerFlatTreeNode {
   name: string;
   UUID: string;
   level: number;
   expandable: boolean;
+  selected: boolean;
 }
 
 @Component({
@@ -22,7 +25,9 @@ export class ContainerFlatTreeNode {
 export class TreeNodeComponent {
   flatNodeMap = new Map<ContainerFlatTreeNode, Container>();
   nestedNodeMap = new Map<Container, ContainerFlatTreeNode>();
+  nestedMeshMap = new Map<Mesh, ContainerFlatTreeNode>();
   selectedParent: ContainerFlatTreeNode | null = null;
+  lastSelectedTreeNode: ContainerFlatTreeNode | null = null;
 
   treeControl: FlatTreeControl<ContainerFlatTreeNode>;
   treeFlattener: MatTreeFlattener<Container, ContainerFlatTreeNode>;
@@ -51,10 +56,17 @@ export class TreeNodeComponent {
       .subscribe(c => {
         dataTree.inserNewtItem(c);
       });
+
+    engineService.getCurrentMeshSelected()
+      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
+      .subscribe((m: Mesh) => {
+        this.clickNodeContainer(null, this.nestedMeshMap.get(m));
+      });
   }
 
   getLevel = (node: ContainerFlatTreeNode) => node.level;
   isExpandable = (node: ContainerFlatTreeNode) => node.expandable;
+  isSelected = (node: ContainerFlatTreeNode) => node.selected;
   getChildren = (node: Container): Container[] => node.children;
   hasChild = (_: number, _nodeData: ContainerFlatTreeNode) => _nodeData.expandable;
   hasNoContent = (_: number, _nodeData: ContainerFlatTreeNode) => _nodeData.name === '';
@@ -67,8 +79,10 @@ export class TreeNodeComponent {
     flatNode.name = node.name;
     flatNode.UUID = node.UUID;
     flatNode.level = level;
+    flatNode.selected = node.selected;
     flatNode.expandable = (node.children && node.children.length > 0);
     this.flatNodeMap.set(flatNode, node);
+    this.nestedMeshMap.set(node.mesh, flatNode);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
   }
@@ -113,6 +127,7 @@ export class TreeNodeComponent {
       } else if (this.dragNodeExpandOverArea === 'below') {
         newItem = this.dataTree.below(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       } else {
+        3
         newItem = this.dataTree.moveContainer(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       }
       this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
@@ -126,5 +141,19 @@ export class TreeNodeComponent {
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;
     this.dragNodeExpandOverTime = 0;
+  }
+
+  clickNodeContainer(e: any, node: ContainerFlatTreeNode) {
+    if (this.lastSelectedTreeNode !== null) {
+      this.lastSelectedTreeNode.selected = false;
+      this.flatNodeMap.get(this.lastSelectedTreeNode).selected = false;
+    }
+
+    let selectedContainer: Container = this.flatNodeMap.get(node);
+    this.lastSelectedTreeNode = node;
+    node.selected = true;
+    selectedContainer.selected = true;
+    CanvasHelper.setSelectedMesh(selectedContainer.mesh);
+    console.log(selectedContainer.selected);
   }
 }

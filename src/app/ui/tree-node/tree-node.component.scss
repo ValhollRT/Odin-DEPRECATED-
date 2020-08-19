@@ -58,6 +58,13 @@ mat-tree-node {
     color: var(--console-debug-color);
 }
 
+/*Style Tree Node*/
+mat-tree-node {
+    &:hover {
+        background-color: var(--highlight-color-hover);
+    }
+  }
+
 .container-box {
     border: 1px solid var(--console-debug-color);
     width: 200px;
@@ -128,3 +135,9 @@ button {
     width: 175px;
     text-align: left;
 }
+
+.container-selected{
+    background: var(--highlight-color);
+    color: black;
+}
+

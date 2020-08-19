@@ -64,7 +64,7 @@ export class EngineService {
   }
 
   public getCurrentMeshSelected(): Observable<Mesh> {
-    return this.canvasHelper.getCurrentMeshSelected();
+    return CanvasHelper.getCurrentMeshSelected();
   }
 
   public createGeometry(type: string): Observable<Container> {

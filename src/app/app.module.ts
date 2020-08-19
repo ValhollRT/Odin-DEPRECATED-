@@ -7,6 +7,7 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
 import { TreeNodeComponent } from './ui/tree-node/tree-node.component';
 import { TransformMenuComponent } from './ui/transform-menu/transform-menu.component';
 import { ConsoleDebugComponent } from './ui/console-debug/console-debug.component';
+import { ContentPanelComponent } from './ui/content-panel/content-panel.component';
 import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
 
 //Service
@@ -17,7 +18,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 //Material
 import { AllAngularMaterialModule } from './all-angular-material.module';
 import { MatNativeDateModule } from '@angular/material/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +30,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     TransformMenuComponent,
     RotationPipe,
     TreeNodeComponent,
+    ContentPanelComponent
   ],
   imports: [
     FormsModule,

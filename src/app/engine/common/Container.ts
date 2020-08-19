@@ -1,18 +1,21 @@
 import { Utils } from '../Utils/Utils';
-import { Material, Mesh, Scene, MeshBuilder } from 'babylonjs';
+import { Mesh, Scene, MeshBuilder, StandardMaterial, Color3, HighlightLayer } from 'babylonjs';
 import { GEOM } from 'src/app/configuration/AppConstants';
 export class Container {
     public UUID: string;
     public name: string;
     public mesh: Mesh;
-    public material: Material
     public children: Container[] = [];
     public parent: Container;
     public level: number = 0;
     public expandable: boolean = false;
+    public selected: boolean;
+
+    private static highLight: HighlightLayer;
 
     constructor() {
         this.UUID = Utils.generatorUUID();
+        this.selected = false;
     }
 
     public setName(name: string): Container {
@@ -21,7 +24,16 @@ export class Container {
     }
 
     createGeometry(type: string, scene: Scene): Container {
+
+        // hightlight selected mesh    
+        Container.highLight = new HighlightLayer("highLight", scene);
+        Container.highLight.outerGlow = true;
+        Container.highLight.blurHorizontalSize = 1;
+        Container.highLight.blurVerticalSize = 1;
+        Container.highLight.innerGlow = false;
+
         this.mesh = this.setMesh(type, scene);
+        this.setFirstMaterial(scene);
         return this;
     }
 
@@ -43,15 +55,18 @@ export class Container {
             case GEOM.TORUS:
                 return MeshBuilder.CreateTorus("torus", {}, s);
             case GEOM.TUBE:
-                // return MeshBuilder.CreateTube("tube", {}, s);
                 break;
             case GEOM.RIBBON:
-                // return MeshBuilder.CreateRibbon("ribbon", { new Vector3()}, s);
                 break;
             case GEOM.SPHERE:
                 return MeshBuilder.CreateSphere("sphere", { diameter: 10 }, s);
         }
-
     }
 
+    setFirstMaterial(scene: Scene): Container {
+        let mat: StandardMaterial = new StandardMaterial("material", scene);
+        this.mesh.material = mat;
+        mat.diffuseColor = new Color3(.75, .75, .75);
+        return this;
+    }
 }
