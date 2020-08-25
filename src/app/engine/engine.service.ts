@@ -7,6 +7,7 @@ import {
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';

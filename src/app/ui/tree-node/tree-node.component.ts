@@ -5,7 +5,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { CanvasHelper } from 'src/app/engine/helpers/CanvasHelper';
 import { Mesh } from 'babylonjs/Meshes/mesh';
 
@@ -58,9 +58,9 @@ export class TreeNodeComponent {
       });
 
     engineService.getCurrentMeshSelected()
-      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
+      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined), distinctUntilChanged())
       .subscribe((m: Mesh) => {
-        this.clickNodeContainer(null, this.nestedMeshMap.get(m));
+        this.clickNodeContainer(null, this.nestedMeshMap.get(m), false);
       });
   }
 
@@ -143,17 +143,22 @@ export class TreeNodeComponent {
     this.dragNodeExpandOverTime = 0;
   }
 
-  clickNodeContainer(e: any, node: ContainerFlatTreeNode) {
+  clickNodeContainer(event: any, node: ContainerFlatTreeNode, emit: boolean = true) {
+
+  
+    let selectedContainer: Container = this.flatNodeMap.get(node);
+    if (selectedContainer === this.lastSelectedTreeNode) return;
+
+    console.log("clickNodeContainer");
+
     if (this.lastSelectedTreeNode !== null) {
       this.lastSelectedTreeNode.selected = false;
       this.flatNodeMap.get(this.lastSelectedTreeNode).selected = false;
     }
 
-    let selectedContainer: Container = this.flatNodeMap.get(node);
     this.lastSelectedTreeNode = node;
     node.selected = true;
     selectedContainer.selected = true;
-    CanvasHelper.setSelectedMesh(selectedContainer.mesh);
-    console.log(selectedContainer.selected);
+    if (emit) CanvasHelper.setSelectedMesh(selectedContainer.mesh);
   }
 }

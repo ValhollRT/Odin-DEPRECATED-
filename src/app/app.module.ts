@@ -9,11 +9,16 @@ import { TransformMenuComponent } from './ui/transform-menu/transform-menu.compo
 import { ConsoleDebugComponent } from './ui/console-debug/console-debug.component';
 import { ContentPanelComponent } from './ui/content-panel/content-panel.component';
 import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
+import { SidebarPropertiesComponent } from './ui/sidebar-properties/sidebar-properties.component';
+import { MaterialPanelComponent } from './ui/material-panel/material-panel.component';
 
 //Service
 import { ServiceModule } from './services/service.module';
-import { RotationPipe } from './pipes/rotation.pipe';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+//Pipes
+import { RotationPipe } from './pipes/rotation.pipe';
+import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
 
 //Material
 import { AllAngularMaterialModule } from './all-angular-material.module';
@@ -29,8 +34,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AboutOdinComponent,
     TransformMenuComponent,
     RotationPipe,
+    RgbToHexPipe,
     TreeNodeComponent,
-    ContentPanelComponent
+    ContentPanelComponent,
+    SidebarPropertiesComponent,
+    MaterialPanelComponent
   ],
   imports: [
     FormsModule,

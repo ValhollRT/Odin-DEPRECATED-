@@ -1,11 +1,21 @@
 .container {
-    position: relative;
+    position: absolute;
     top: 0px;
     right: 0px;
     background-color: var(--main-menu-background-color);
-    clear: both;
+    min-width: 300px;
 }
 
+input {
+    margin: 1px;
+    display: block;
+    width: 60px;
+    background-color: var(--input-background-color);
+    color: var(--console-debug-color);
+    font-size: bold;
+    border: 0;
+    outline: none;
+}
 
 label {
     float: left;
@@ -17,20 +27,14 @@ label {
 }
 
 .input-group {
-    padding: 5px;
-    margin: 5px;
     border: var(--main-menu-border);
-    position: relative;
-    top: 0px;
-    right: 0px;
+}
+
+.col-transform-menu {
     float: left;
 }
 
-.col-transform-menu{
-    // float: left;
-}
-
-.title-section-menu{
+.title-section-menu {
     font-size: 10px;
     color: var(--console-debug-color);
 }

@@ -152,8 +152,22 @@ body {
   mask-image: url("assets/icons/minim.svg");
 }
 
+.icon-axis {
+  mask-image: url("assets/icons/axis.svg");
+}
+
+.icon-material {
+  mask-image: url("assets/icons/material.svg");
+}
+
 .icon-color {
   background-color: var(--main-menu-color);
+}
+
+.icon-color:hover {
+  background-color: var(--highlight-color);
+  mix-blend-mode: multiply;
+  
 }
 
 .icon-xs {
@@ -163,3 +177,14 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+input {
+  margin: 1px;
+  display: block;
+  width: 60px;
+  background-color: var(--input-background-color);
+  color: var(--console-debug-color);
+  font-size:bold;
+  border: 0;
+  outline: none;
+}

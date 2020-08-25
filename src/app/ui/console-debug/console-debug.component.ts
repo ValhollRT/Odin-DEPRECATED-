@@ -9,12 +9,9 @@ import { LogService } from 'src/app/services/log.service';
 export class ConsoleDebugComponent implements OnInit {
   @ViewChild('scroller') scroller: ElementRef;
 
-  isExpanded: boolean = false;
   constructor(public logService: LogService) { }
 
   ngOnInit(): void { }
-
-  expand() { this.isExpanded = !this.isExpanded; }
 
   public onElementScroll(event) {
     this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;

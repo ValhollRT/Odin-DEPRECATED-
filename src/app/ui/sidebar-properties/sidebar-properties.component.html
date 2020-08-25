@@ -1,0 +1,15 @@
+<div #transformMenuValue class="container">
+  <div class="input-group">
+    <div class="title-section-menu"></div>
+    <content-panel [title]="'Transformation'" [icon]="'icon-axis'" [expand] = true>
+      <transform-menu></transform-menu>
+    </content-panel>
+    <content-panel [title]="'Material'" [icon]="'icon-material'">
+      <material-panel></material-panel>
+    </content-panel>
+    <content-panel [title]="'Console'" [icon]="'icon-console'">
+      <console-debug></console-debug>
+    </content-panel>
+  </div>
+</div>
+

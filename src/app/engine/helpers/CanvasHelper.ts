@@ -2,10 +2,10 @@ import { GizmoManager, HighlightLayer, Mesh, Scene, TargetCamera } from 'babylon
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export class CanvasHelper {
-    
+
     private pickInfo: any;
     private startingPoint: any;
-    
+
     private static currentMesh: Mesh;
     private static gizmoManager: GizmoManager;
     private static currentMeshSelected$: BehaviorSubject<Mesh> = new BehaviorSubject(undefined);
@@ -98,16 +98,16 @@ export class CanvasHelper {
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
         if (this.pickInfo.hit) {
+            console.log("onPointerDown");
             CanvasHelper.setSelectedMesh(this.pickInfo.pickedMesh);
             this.startingPoint = this.getGroundPosition();
-            
+
             if (this.startingPoint) { // we need to disconnect camera from canvas
                 setTimeout(() => {
                     this.camera.detachControl(this.canvas);
                 }, 0);
             }
             this.getCurrentMeshTransformation();
-            CanvasHelper.currentMeshSelected$.next(this.pickInfo.pickedMesh);
         }
     }
 
@@ -130,55 +130,55 @@ export class CanvasHelper {
     }
 
     // return currentMesh
-    static getCurrentMeshSelected(): Observable<Mesh> {
+    static getCurrentMeshSelected(): BehaviorSubject<Mesh> {
         return CanvasHelper.currentMeshSelected$;
     }
 
-    setMeshToGizmo() {
+    updateTransformCurrentMesh() {
         if (CanvasHelper.currentMesh !== null) {
-            CanvasHelper.gizmoManager.attachToMesh(CanvasHelper.currentMesh);
-            CanvasHelper.setSelectedMesh(CanvasHelper.currentMesh);
+            CanvasHelper.setSelectedMesh(CanvasHelper.currentMesh, false);
         }
     }
 
     public getCurrentMeshTransformation() {
         CanvasHelper.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
         CanvasHelper.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
         CanvasHelper.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
 
         CanvasHelper.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
         CanvasHelper.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
         CanvasHelper.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
 
         CanvasHelper.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
         CanvasHelper.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
         CanvasHelper.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.setMeshToGizmo();
+            this.updateTransformCurrentMesh();
         });
 
     }
 
-    static setSelectedMesh(mesh: Mesh) {
+    static setSelectedMesh(mesh: Mesh, emit: boolean = true) {
         this.clearHighLightSelectedMesh();
         CanvasHelper.currentMesh = mesh;
         CanvasHelper.gizmoManager.attachToMesh(mesh);
         CanvasHelper.highLight.addMesh(mesh, BABYLON.Color3.Yellow());
+        if (emit) CanvasHelper.getCurrentMeshSelected().next(mesh);
     }
 
     static clearHighLightSelectedMesh() {

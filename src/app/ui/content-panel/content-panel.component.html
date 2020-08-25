@@ -1,5 +1,15 @@
 <div #transformMenuValue class="container">
-    <div class="input-group">
-      <div class="title-section-menu">Title panel</div>
+  <div class="input-group">
+    <div style="display: flex; align-items: center; margin-bottom: 3px;">
+      <div style="flex: 0 auto" [ngClass]="[ this.icon ,'icon-color', 'icon-xs']"></div>
+      <div style="flex: 1" class="title-section-menu">{{title}}</div>
+      <div style="flex: 0" (click)='collapse()' class="float-right" style="cursor: pointer;">
+        <div *ngIf="!this.isExpanded" class="icon-color icon-expand icon-xs"></div>
+        <div *ngIf="this.isExpanded" class="icon-color icon-minimize icon-xs"></div>
+      </div>
+    </div>
+    <div *ngIf="this.isExpanded">
+      <ng-content></ng-content>
     </div>
   </div>
+</div>

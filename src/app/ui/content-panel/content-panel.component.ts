@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Input, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'content-panel',
@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContentPanelComponent implements OnInit {
 
+  @Input() title: string;
+  @Input() icon: string;
+  @Input() expand: boolean;
+
+  isExpanded: boolean = false;
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
+    this.isExpanded = this.expand;
   }
+
+  collapse() { this.isExpanded = !this.isExpanded; }
 
 }

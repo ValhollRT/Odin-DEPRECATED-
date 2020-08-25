@@ -1,6 +1,6 @@
 .container {
     position: absolute;
-    bottom: 25px;
+    bottom: 0px;
     left: 0px;
     background-color: var(--main-menu-background-color);
     width: 300px;
@@ -130,10 +130,13 @@ button {
 /*BOX NODE*/
 .box-node{
     border: var(--main-menu-border);
-    padding: 6px;
+    padding: 3px;
     margin: 2px;
-    width: 175px;
+    min-width: 175px;
     text-align: left;
+    display: flex;
+    align-items: center;
+
 }
 
 .container-selected{
@@ -141,3 +144,12 @@ button {
     color: black;
 }
 
+.attribute-box {
+    width: 20px;
+    height: 20px;
+    background: #3c3b3b;
+    display: inline-block;
+    margin: 0px 2px;
+    border: 1px solid rgba(0, 0, 0, 0.38);
+    box-sizing: border-box;
+}

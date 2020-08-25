@@ -1,22 +1,8 @@
 .container {
-    position: fixed;
-    bottom: 0px;
+    position: relative;
     width: 100%;
-    height: 25px;
+    height: 300px;
     background: #111;
-    z-index: 10;
-    opacity: .85;
-}
-
-.title {
-    border: var(--main-menu-border);
-    color: var(--main-menu-color);
-    background-color: var(--main-menu-background-color);
-    padding: 2px;
-}
-
-.title-min {
-    text-align: left;
 }
 
 .inner-text-console{
@@ -25,10 +11,6 @@
     text-align: left;
     color: var(--console-debug-color);
     list-style: none;
-}
-
-.container-collapse {
-    height: 200px;
 }
 
 .panel-scroll-child {
