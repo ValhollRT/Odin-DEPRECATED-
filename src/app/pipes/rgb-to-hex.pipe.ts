@@ -17,7 +17,6 @@ export class RgbToHexPipe implements PipeTransform {
     if (property === "EMISSIVECOLOR") { c = mat.emissiveColor; }
     if (property === "SPECULARCOLOR") { c = mat.specularColor; }
 
-    console.log(c);
     return this.rgbToHex(c.r * 255, c.g * 255, c.b * 255);
   }
 
