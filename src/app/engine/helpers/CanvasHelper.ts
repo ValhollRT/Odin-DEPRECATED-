@@ -98,7 +98,6 @@ export class CanvasHelper {
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
         if (this.pickInfo.hit) {
-            console.log("onPointerDown");
             CanvasHelper.setSelectedMesh(this.pickInfo.pickedMesh);
             this.startingPoint = this.getGroundPosition();
 

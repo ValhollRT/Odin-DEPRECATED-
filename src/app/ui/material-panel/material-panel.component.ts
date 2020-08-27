@@ -20,7 +20,6 @@ export class MaterialPanelComponent implements OnInit {
       .pipe(distinctUntilChanged())
       .subscribe((m: Mesh) => {
         this.currentMesh = m;
-        console.log(m.material);
       });
   }
 

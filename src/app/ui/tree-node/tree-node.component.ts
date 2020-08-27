@@ -41,6 +41,8 @@ export class TreeNodeComponent {
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
 
+  isReadOnly: boolean = true;
+
   constructor(public dataTree: DataTreeContainer, private engineService: EngineService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ContainerFlatTreeNode>(this.getLevel, this.isExpandable);
@@ -145,11 +147,9 @@ export class TreeNodeComponent {
 
   clickNodeContainer(event: any, node: ContainerFlatTreeNode, emit: boolean = true) {
 
-  
+
     let selectedContainer: Container = this.flatNodeMap.get(node);
     if (selectedContainer === this.lastSelectedTreeNode) return;
-
-    console.log("clickNodeContainer");
 
     if (this.lastSelectedTreeNode !== null) {
       this.lastSelectedTreeNode.selected = false;
@@ -160,5 +160,9 @@ export class TreeNodeComponent {
     node.selected = true;
     selectedContainer.selected = true;
     if (emit) CanvasHelper.setSelectedMesh(selectedContainer.mesh);
+  }
+
+  setContainerName($event, node) {
+    node.name = this.flatNodeMap.get(node).name = $event;
   }
 }
