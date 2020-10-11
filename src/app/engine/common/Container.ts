@@ -10,12 +10,14 @@ export class Container {
     public level: number = 0;
     public expandable: boolean = false;
     public selected: boolean;
+    public hidden: boolean;
 
     private static highLight: HighlightLayer;
 
     constructor() {
         this.UUID = Utils.generatorUUID();
         this.selected = false;
+        this.hidden = false;
     }
 
     public setName(name: string): Container {
@@ -69,4 +71,7 @@ export class Container {
         mat.diffuseColor = new Color3(.75, .75, .75);
         return this;
     }
+
+    unHide() { this.mesh.visibility = 1; this.hidden = false; }
+    hide() { this.mesh.visibility = 0; this.hidden = true; }
 }

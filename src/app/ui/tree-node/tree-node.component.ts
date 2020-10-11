@@ -15,6 +15,7 @@ export class ContainerFlatTreeNode {
   level: number;
   expandable: boolean;
   selected: boolean;
+  hidden: boolean;
 }
 
 @Component({
@@ -69,6 +70,7 @@ export class TreeNodeComponent {
   getLevel = (node: ContainerFlatTreeNode) => node.level;
   isExpandable = (node: ContainerFlatTreeNode) => node.expandable;
   isSelected = (node: ContainerFlatTreeNode) => node.selected;
+  isHidden = (node: ContainerFlatTreeNode) => node.hidden;
   getChildren = (node: Container): Container[] => node.children;
   hasChild = (_: number, _nodeData: ContainerFlatTreeNode) => _nodeData.expandable;
   hasNoContent = (_: number, _nodeData: ContainerFlatTreeNode) => _nodeData.name === '';
@@ -82,6 +84,7 @@ export class TreeNodeComponent {
     flatNode.UUID = node.UUID;
     flatNode.level = level;
     flatNode.selected = node.selected;
+    flatNode.hidden = node.hidden;
     flatNode.expandable = (node.children && node.children.length > 0);
     this.flatNodeMap.set(flatNode, node);
     this.nestedMeshMap.set(node.mesh, flatNode);
@@ -147,7 +150,6 @@ export class TreeNodeComponent {
 
   clickNodeContainer(event: any, node: ContainerFlatTreeNode, emit: boolean = true) {
 
-
     let selectedContainer: Container = this.flatNodeMap.get(node);
     if (selectedContainer === this.lastSelectedTreeNode) return;
 
@@ -165,4 +167,19 @@ export class TreeNodeComponent {
   setContainerName($event, node) {
     node.name = this.flatNodeMap.get(node).name = $event;
   }
+
+  clickHideNode($event, node: ContainerFlatTreeNode) {
+    console.log("hide action");
+    let container: Container = this.flatNodeMap.get(node);
+    
+    if (container.mesh.visibility === 1) {
+      container.hide();
+      node.hidden = true;
+    } else {
+      container.unHide();
+      node.hidden = false;
+    }
+
+  }
 }
+

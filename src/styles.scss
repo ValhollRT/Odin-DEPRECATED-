@@ -160,6 +160,18 @@ body {
   mask-image: url("assets/icons/material.svg");
 }
 
+.icon-trash {
+  mask-image: url("assets/icons/trash.svg");
+}
+
+.icon-unhide {
+  mask-image: url("assets/icons/eyeOpened.svg");
+}
+
+.icon-hide {
+  mask-image: url("assets/icons/eyeClosed.svg");
+}
+
 .icon-color {
   background-color: var(--main-menu-color);
 }
@@ -176,6 +188,7 @@ body {
   margin: 0px 5px;
 }
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 input {

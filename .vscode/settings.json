@@ -1,0 +1,10 @@
+{
+    "terminal.integrated.automationShell.linux": "",
+    "terminal.integrated.fontFamily": "JetBrains Mono",
+    "editor.fontSize": 14,
+    "editor.fontWeight": "400",
+    "editor.letterSpacing": 0.8,
+    "editor.lineHeight": 20,
+    "editor.fontLigatures": true,
+    "debug.console.fontFamily": "JetBrains Mono",
+}
