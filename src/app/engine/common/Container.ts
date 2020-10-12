@@ -74,4 +74,8 @@ export class Container {
 
     unHide() { this.mesh.visibility = 1; this.hidden = false; }
     hide() { this.mesh.visibility = 0; this.hidden = true; }
+
+    deleteMesh(scene: Scene) {
+        scene.removeMesh(this.mesh);
+    }
 }

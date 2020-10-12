@@ -1,6 +1,7 @@
 import { Container } from 'src/app/engine/common/Container';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { EngineService } from '../engine.service';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -13,7 +14,7 @@ export class DataTreeContainer {
     dataChange = new BehaviorSubject<Container[]>([]);
     root: Container;
 
-    constructor() {
+    constructor(public engineService: EngineService) {
         this.root = new Container();
         this.root.name = "VALHOLLRT_ROOT_CONTAINER"
     }
@@ -57,5 +58,21 @@ export class DataTreeContainer {
         let p: Container[];
         if (nodeToDelete.parent == null) this.root.children = this.root.children.filter(o => o.UUID !== nodeToDelete.UUID);
         else nodeToDelete.parent.children = nodeToDelete.parent.children.filter(o => o.UUID !== nodeToDelete.UUID);
+    }
+
+    deleteNodeAndChildren(node: Container) {
+        for (let i = 0; i < node.children.length; i++) {
+            if (node.children[i].children.length > 0) this.deleteNodeAndChildren(node.children[i]);
+            else this.deleteContainer(node.children[i]);
+        }
+        console.log("node", node.name);
+        this.deleteContainer(node);
+    }
+
+    deleteContainer(node: Container) {
+        this.deleteNode(node);
+        node.deleteMesh(this.engineService.getScene());
+        node = null;
+        this.updateNodeTree();
     }
 }

@@ -55,9 +55,7 @@ export class EngineService {
 
     // Event Canvas
     this.canvasHelper = new CanvasHelper(this.canvas, this.scene, this.camera);
-
     this.scene.registerAfterRender(() => { });
-
   }
 
   public getScene(): Scene {

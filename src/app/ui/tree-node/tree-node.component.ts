@@ -149,7 +149,6 @@ export class TreeNodeComponent {
   }
 
   clickNodeContainer(event: any, node: ContainerFlatTreeNode, emit: boolean = true) {
-
     let selectedContainer: Container = this.flatNodeMap.get(node);
     if (selectedContainer === this.lastSelectedTreeNode) return;
 
@@ -164,14 +163,12 @@ export class TreeNodeComponent {
     if (emit) CanvasHelper.setSelectedMesh(selectedContainer.mesh);
   }
 
-  setContainerName($event, node) {
-    node.name = this.flatNodeMap.get(node).name = $event;
+  setContainerName(event, node) {
+    node.name = this.flatNodeMap.get(node).name = event;
   }
 
-  clickHideNode($event, node: ContainerFlatTreeNode) {
-    console.log("hide action");
+  clickHideNode(event, node: ContainerFlatTreeNode) {
     let container: Container = this.flatNodeMap.get(node);
-    
     if (container.mesh.visibility === 1) {
       container.hide();
       node.hidden = true;
@@ -179,7 +176,13 @@ export class TreeNodeComponent {
       container.unHide();
       node.hidden = false;
     }
+  }
 
+  clickDeleteNode(event) {
+    console.log("delete action");
+    if (this.lastSelectedTreeNode === null) return;
+    let container: Container = this.flatNodeMap.get(this.lastSelectedTreeNode);
+    this.dataTree.deleteNodeAndChildren(container);
   }
 }
 

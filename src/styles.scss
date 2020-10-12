@@ -1,7 +1,6 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -35,6 +34,7 @@ $Odin-theme: mat-light-theme($Odin-primary, $Odin-accent, $Odin-warn);
   --input-background-color: #444;
   --main-menu-color-hover: #000;
   --main-menu-border: 1px solid #333;
+  --separator-border: #333;
   --console-debug-color: rgb(255, 187, 0);
   --highlight-color: rgb(255, 187, 0);
   --highlight-color-hover: rgba(255, 187, 0, 0.1);
@@ -49,18 +49,18 @@ a:link {
 a:hover {
   color: var(--console-debug-color);
   font-family: arial;
-  text-decoration: none
+  text-decoration: none;
 }
 
 a:visited {
   color: var(--console-debug-color);
   font-family: arial;
-  text-decoration: none
+  text-decoration: none;
 }
 
 * {
   outline: none !important;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   box-sizing: border-box;
 }
 
@@ -90,7 +90,7 @@ app-root {
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 12px;
   text-align: center;
 }
@@ -172,14 +172,19 @@ body {
   mask-image: url("assets/icons/eyeClosed.svg");
 }
 
-.icon-color {
+.icon-color,
+.icon-btn-color {
   background-color: var(--main-menu-color);
 }
 
 .icon-color:hover {
   background-color: var(--highlight-color);
   mix-blend-mode: multiply;
-  
+}
+
+.icon-btn-color:hover {
+  background-color: var(--highlight-color);
+  //mix-blend-mode: multiply;
 }
 
 .icon-xs {
@@ -187,9 +192,21 @@ body {
   height: 15px;
   margin: 0px 5px;
 }
-html, body { height: 100%; }
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.icon-btn-xs {
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+}
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 input {
   margin: 1px;
@@ -197,7 +214,15 @@ input {
   width: 60px;
   background-color: var(--input-background-color);
   color: var(--console-debug-color);
-  font-size:bold;
+  font-size: bold;
   border: 0;
   outline: none;
+}
+
+.separator {
+  margin: 0px 20px 10px 20px;
+  height: 1px;
+  border-width: 0;
+  color: gray;
+  background-color: var(--separator-border);
 }
