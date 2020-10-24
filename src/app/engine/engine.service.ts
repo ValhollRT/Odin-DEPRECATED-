@@ -2,22 +2,22 @@ import { ElementRef, Injectable } from '@angular/core';
 import {
   ArcRotateCamera, Color4, Engine,
   HemisphericLight,
+  Light,
   Mesh, PointLight, Scene,
   Vector3
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';
+import { ElementBuilder } from './common/ElementBuilder';
 import { AxisHelper } from './helpers/AxisHelper';
 import { CanvasHelper } from './helpers/CanvasHelper';
 import { Grid } from './helpers/Grid';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
+
 export class EngineService {
 
   private static grid: Grid;
@@ -45,8 +45,8 @@ export class EngineService {
     EngineService.axisHelper = new AxisHelper(10, this.scene);
 
     // Add lights to the scene
-    var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), this.scene);
-    var light2 = new PointLight("light2", new Vector3(0, 1, -1), this.scene);
+    // var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), this.scene);
+    // var light2 = new PointLight("light2", new Vector3(0, 1, -1), this.scene);
 
     this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(100, 0, 100), this.scene);
     this.camera.setTarget(Vector3.Zero());
@@ -66,11 +66,21 @@ export class EngineService {
     return CanvasHelper.getCurrentMeshSelected();
   }
 
-  public createGeometry(type: string): Observable<Container> {
-    let c = new Container().createGeometry(type, this.scene);
-    this.newContainer$.next(c);
-    return new Observable(o => { o.next(c); });
+  public getCurrentLightSelected(): Observable<Light> {
+    return CanvasHelper.getCurrentLightSelected();
   }
+
+  public createMesh(type: string): void {
+    let c = new Container(ElementBuilder.createMesh(type, this.getScene()));
+    this.saveContainerToDataTree(c);
+  }
+
+  public createLight(type: string): void {
+    let c = new Container(ElementBuilder.createLight(type, this.getScene()));
+    this.saveContainerToDataTree(c);
+  }
+
+  public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
 
   public animate(): void {
 

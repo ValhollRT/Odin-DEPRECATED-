@@ -8,6 +8,7 @@ import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { CanvasHelper } from 'src/app/engine/helpers/CanvasHelper';
 import { Mesh } from 'babylonjs/Meshes/mesh';
+import { Light } from 'babylonjs';
 
 export class ContainerFlatTreeNode {
   name: string;
@@ -26,7 +27,7 @@ export class ContainerFlatTreeNode {
 export class TreeNodeComponent {
   flatNodeMap = new Map<ContainerFlatTreeNode, Container>();
   nestedNodeMap = new Map<Container, ContainerFlatTreeNode>();
-  nestedMeshMap = new Map<Mesh, ContainerFlatTreeNode>();
+  nestedMeshMap = new Map<Mesh | Light, ContainerFlatTreeNode>();
   selectedParent: ContainerFlatTreeNode | null = null;
   lastSelectedTreeNode: ContainerFlatTreeNode | null = null;
 
@@ -87,7 +88,7 @@ export class TreeNodeComponent {
     flatNode.hidden = node.hidden;
     flatNode.expandable = (node.children && node.children.length > 0);
     this.flatNodeMap.set(flatNode, node);
-    this.nestedMeshMap.set(node.mesh, flatNode);
+    this.nestedMeshMap.set(node.get(), flatNode);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
   }
@@ -160,7 +161,7 @@ export class TreeNodeComponent {
     this.lastSelectedTreeNode = node;
     node.selected = true;
     selectedContainer.selected = true;
-    if (emit) CanvasHelper.setSelectedMesh(selectedContainer.mesh);
+    if (emit) CanvasHelper.setSelectedContainer(selectedContainer);
   }
 
   setContainerName(event, node) {
@@ -169,7 +170,7 @@ export class TreeNodeComponent {
 
   clickHideNode(event, node: ContainerFlatTreeNode) {
     let container: Container = this.flatNodeMap.get(node);
-    if (container.mesh.visibility === 1) {
+    if (!container.hidden) {
       container.hide();
       node.hidden = true;
     } else {

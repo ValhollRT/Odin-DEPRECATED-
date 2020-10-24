@@ -172,6 +172,10 @@ body {
   mask-image: url("assets/icons/eyeClosed.svg");
 }
 
+.icon-light {
+  mask-image: url("assets/icons/light.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);

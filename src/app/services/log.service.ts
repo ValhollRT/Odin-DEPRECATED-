@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { LogLevel } from '../models/logModels/logLevel';
 import { Container } from '../engine/common/Container';
 import { MeshLog } from '../models/logModels/meshLog';
+import { Mesh } from 'babylonjs/Meshes/mesh';
 
 @Injectable()
 export class LogService {
@@ -17,7 +18,7 @@ export class LogService {
     return new Date().getTime();
   }
   public log(msg: any) {
-    if (msg instanceof Container) msg = new MeshLog(msg.mesh);
+    if (msg instanceof Container) msg = new MeshLog(<Mesh>msg.get());
     let logMessage = + this.getDate() + ": " + JSON.stringify(msg);
     this.bufferLogConsole.push(logMessage);
   }

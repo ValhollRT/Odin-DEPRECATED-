@@ -10,3 +10,10 @@ export const GEOM = {
     RIBBON: 'RIBBON',
     SPHERE: 'SPHERE',
 };
+
+export const LIGHT = {
+    DIRECTIONAL: 'DIRECTIONAL',
+    SPOT: 'SPOT',
+    POINT: 'POINT',
+    HEMISPHERIC: 'HEMISPHERIC'
+};

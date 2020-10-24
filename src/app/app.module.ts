@@ -11,6 +11,7 @@ import { ContentPanelComponent } from './ui/content-panel/content-panel.componen
 import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
 import { SidebarPropertiesComponent } from './ui/sidebar-properties/sidebar-properties.component';
 import { MaterialPanelComponent } from './ui/material-panel/material-panel.component';
+import { LightPanelComponent } from './ui/light-panel/light-panel.component';
 
 //Service
 import { ServiceModule } from './services/service.module';
@@ -38,7 +39,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TreeNodeComponent,
     ContentPanelComponent,
     SidebarPropertiesComponent,
-    MaterialPanelComponent
+    MaterialPanelComponent,
+    LightPanelComponent
   ],
   imports: [
     FormsModule,

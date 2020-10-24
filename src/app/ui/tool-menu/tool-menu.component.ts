@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToolMenu } from 'src/app/models/toolMenu';
 import { AppService, EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
-import { GEOM } from '../../configuration/AppConstants';
+import { GEOM, LIGHT } from '../../configuration/AppConstants';
 
 @Component({
   selector: 'tool-menu',
@@ -25,7 +25,10 @@ export class ToolMenuComponent implements OnInit {
     switch (param) {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
-        this.createGeometry(param);
+        this.createMesh(param);
+        break;
+        case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
+        this.createLight(param);
         break;
       case 'ABOUTODIN':
         this.aboutOdin();
@@ -33,8 +36,13 @@ export class ToolMenuComponent implements OnInit {
         break;
     }
   }
-  createGeometry(param: string): void {
-    this.engine.createGeometry(param);
+
+  createMesh(param: string): void {
+    this.engine.createMesh(param);
+  }
+
+  createLight(param: string): void {
+    this.engine.createLight(param);
   }
 
   aboutOdin(): void {
@@ -59,8 +67,11 @@ export class ToolMenuComponent implements OnInit {
         ]
       },
       {
-        displayName: 'Materials', child: [
-          { displayName: 'Create new', param: "CREATENEW" }
+        displayName: 'Light', child: [
+          { displayName: 'Directional', param:  LIGHT.DIRECTIONAL},
+          { displayName: 'Spot', param: LIGHT.SPOT },
+          { displayName: 'Point', param: LIGHT.POINT },
+          { displayName: 'Hemispheric', param: LIGHT.HEMISPHERIC }
         ]
       },
       {

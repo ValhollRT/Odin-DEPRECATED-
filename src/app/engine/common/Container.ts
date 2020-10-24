@@ -1,81 +1,44 @@
 import { Utils } from '../Utils/Utils';
-import { Mesh, Scene, MeshBuilder, StandardMaterial, Color3, HighlightLayer } from 'babylonjs';
-import { GEOM } from 'src/app/configuration/AppConstants';
+import { Node, Mesh, Scene, MeshBuilder, StandardMaterial, Color3, HighlightLayer, PointLight, Light, HemisphericLight, DirectionalLight, Vector3, LightGizmo } from 'babylonjs';
+import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
 export class Container {
-    public UUID: string;
-    public name: string;
-    public mesh: Mesh;
-    public children: Container[] = [];
-    public parent: Container;
-    public level: number = 0;
-    public expandable: boolean = false;
-    public selected: boolean;
-    public hidden: boolean;
 
-    private static highLight: HighlightLayer;
+  public UUID: string;
+  public name: string;
+  public type: Mesh | Light = undefined;
+  public children: Container[] = [];
+  public parent: Container;
+  public level: number = 0;
+  public expandable: boolean = false;
+  public selected: boolean;
+  public hidden: boolean;
 
-    constructor() {
-        this.UUID = Utils.generatorUUID();
-        this.selected = false;
-        this.hidden = false;
-    }
+  constructor(type?: Mesh | Light) {
+    this.type = type;
+    this.UUID = Utils.generatorUUID();
+    this.selected = false;
+    this.hidden = false;
+    this.name = type instanceof Mesh ? type.name.toUpperCase() : "LIGHT";
+  }
 
-    public setName(name: string): Container {
-        this.name = name;
-        return this;
-    }
+  isMesh(): boolean { return this.type instanceof Mesh; }
 
-    createGeometry(type: string, scene: Scene): Container {
+  isLight(): boolean { return this.type instanceof Light; }
 
-        // hightlight selected mesh    
-        Container.highLight = new HighlightLayer("highLight", scene);
-        Container.highLight.outerGlow = true;
-        Container.highLight.blurHorizontalSize = 1;
-        Container.highLight.blurVerticalSize = 1;
-        Container.highLight.innerGlow = false;
+  unHide() { this.isMesh() ? (<Mesh>this.type).visibility = 1 : (<Light>this.type).intensity = 1; this.hidden = false; }
 
-        this.mesh = this.setMesh(type, scene);
-        this.setFirstMaterial(scene);
-        return this;
-    }
+  hide() { this.isMesh() ? (<Mesh>this.type).visibility = 0 : (<Light>this.type).intensity = 0; this.hidden = true; }
 
-    setMesh(type: string, s: Scene, options?: any): Mesh {
-        this.name = type;
-        switch (type) {
-            case GEOM.BOX:
-                return MeshBuilder.CreateBox("box", { height: 10, width: 10, depth: 10 }, s);
-            case GEOM.CYLINDER:
-                return MeshBuilder.CreateCylinder("cylinder", { diameter: 10 }, s);
-            case GEOM.DISC:
-                return MeshBuilder.CreateDisc("disc", { radius: 20, tessellation: 3 }, s);
-            case GEOM.ICOSPHERE:
-                return MeshBuilder.CreateIcoSphere("icosphere", {}, s);
-            case GEOM.PLANE:
-                return MeshBuilder.CreatePlane("plane", { size: 10, width: 10, height: 10 }, s);
-            case GEOM.POLYHEDRON:
-                return MeshBuilder.CreatePolyhedron("polyhedron", {}, s);
-            case GEOM.TORUS:
-                return MeshBuilder.CreateTorus("torus", {}, s);
-            case GEOM.TUBE:
-                break;
-            case GEOM.RIBBON:
-                break;
-            case GEOM.SPHERE:
-                return MeshBuilder.CreateSphere("sphere", { diameter: 10 }, s);
-        }
-    }
+  deleteMesh(scene: Scene) { scene.removeMesh(<Mesh>this.type); }
 
-    setFirstMaterial(scene: Scene): Container {
-        let mat: StandardMaterial = new StandardMaterial("material", scene);
-        this.mesh.material = mat;
-        mat.diffuseColor = new Color3(.75, .75, .75);
-        return this;
-    }
+  deleteLight(scene: Scene) { scene.removeLight(<Light>this.type); }
 
-    unHide() { this.mesh.visibility = 1; this.hidden = false; }
-    hide() { this.mesh.visibility = 0; this.hidden = true; }
+  getName(): string { return this.name; }
 
-    deleteMesh(scene: Scene) {
-        scene.removeMesh(this.mesh);
-    }
+  setName(name: string) { this.name = name; }
+
+  set(type: Mesh | Light) { this.type = type; }
+
+  get() { return this.type; }
+
 }

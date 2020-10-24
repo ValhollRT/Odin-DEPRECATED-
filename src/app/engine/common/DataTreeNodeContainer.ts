@@ -2,6 +2,7 @@ import { Container } from 'src/app/engine/common/Container';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { EngineService } from '../engine.service';
+import { Mesh } from 'babylonjs';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -71,7 +72,8 @@ export class DataTreeContainer {
 
     deleteContainer(node: Container) {
         this.deleteNode(node);
-        node.deleteMesh(this.engineService.getScene());
+        if (node.type instanceof Mesh) node.deleteMesh(this.engineService.getScene());
+        else node.deleteLight(this.engineService.getScene());
         node = null;
         this.updateNodeTree();
     }

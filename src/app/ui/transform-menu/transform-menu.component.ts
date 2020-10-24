@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Mesh, Vector3 } from 'babylonjs';
+import { Light, Mesh, ShadowLight, Vector3 } from 'babylonjs';
 import { filter } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { TransformMenu } from 'src/app/models/transformMenuModel';
@@ -13,7 +13,7 @@ import { LogService } from 'src/app/services/log.service';
 })
 export class TransformMenuComponent implements OnInit {
 
-  currentMeshSelected: Mesh;
+  currentMeshSelected: any;
   public tm: TransformMenu;
 
   @ViewChild('rx', { static: false }) rx: ElementRef;
@@ -44,6 +44,13 @@ export class TransformMenuComponent implements OnInit {
         this.currentMeshSelected = m;
         this.setTransformMenuSelectedMesh(this.currentMeshSelected);
       });
+      
+      this.engineService.getCurrentLightSelected()
+      .pipe(filter((light: Light) => light !== null && light !== undefined))
+      .subscribe((l: Light) => {
+        this.currentMeshSelected = l;
+        this.setTransformMenuSelectedLight(<ShadowLight>this.currentMeshSelected);
+      });
   }
 
   setTransformMenuSelectedMesh(m: Mesh) {
@@ -59,12 +66,17 @@ export class TransformMenuComponent implements OnInit {
     this.tm.center = m.getPivotPoint();
   }
 
+  setTransformMenuSelectedLight(l: ShadowLight) {
+    this.tm.position = l.position;
+    // this.tm.rotation = l.getRotation();
+  }
+
 
   updateRotation(event: any) {
     let x = Utils.degreeToRadians(this.rx.nativeElement.value);
     let y = Utils.degreeToRadians(this.ry.nativeElement.value);
     let z = Utils.degreeToRadians(this.rz.nativeElement.value);
-    this.currentMeshSelected.rotation = new Vector3(x, y, z);
+    // this.currentMeshSelected.rotation = new Vector3(x, y, z);
   }
 
   updateCenterAxis() {

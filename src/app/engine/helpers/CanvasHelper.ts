@@ -1,26 +1,31 @@
-import { GizmoManager, HighlightLayer, Mesh, Scene, TargetCamera } from 'babylonjs';
+import { GizmoManager, HighlightLayer, Light, LightGizmo, Mesh, PickingInfo, Scene, TargetCamera } from 'babylonjs';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Container } from '../common/Container';
 
 export class CanvasHelper {
 
-    private pickInfo: any;
+    private pickInfo: PickingInfo;
     private startingPoint: any;
 
     private static currentMesh: Mesh;
     private static gizmoManager: GizmoManager;
     private static currentMeshSelected$: BehaviorSubject<Mesh> = new BehaviorSubject(undefined);
+    private static currentLightSelected$: BehaviorSubject<Light> = new BehaviorSubject(undefined);
     private static highLight: HighlightLayer;
+    private static lightGizmo: LightGizmo;
 
     constructor(
         public canvas: HTMLCanvasElement,
         public scene: Scene,
         public camera: TargetCamera) {
+        //LightGizmo
+        CanvasHelper.lightGizmo = new LightGizmo();
 
         // hightlight selected mesh    
         CanvasHelper.highLight = new HighlightLayer("highLight", scene);
         CanvasHelper.highLight.outerGlow = true;
-        CanvasHelper.highLight.blurHorizontalSize = 1;
-        CanvasHelper.highLight.blurVerticalSize = 1;
+        CanvasHelper.highLight.blurHorizontalSize = 0;
+        CanvasHelper.highLight.blurVerticalSize = 0;
         CanvasHelper.highLight.innerGlow = false;
 
         // Initialize GizmoManager
@@ -97,6 +102,8 @@ export class CanvasHelper {
         CanvasHelper.clearHighLightSelectedMesh();
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+        if (!(this.pickInfo.pickedMesh instanceof Mesh)) return
+
         if (this.pickInfo.hit) {
             CanvasHelper.setSelectedMesh(this.pickInfo.pickedMesh);
             this.startingPoint = this.getGroundPosition();
@@ -131,6 +138,11 @@ export class CanvasHelper {
     // return currentMesh
     static getCurrentMeshSelected(): BehaviorSubject<Mesh> {
         return CanvasHelper.currentMeshSelected$;
+    }
+
+    // return currentMesh
+    static getCurrentLightSelected(): BehaviorSubject<Light> {
+        return CanvasHelper.currentLightSelected$;
     }
 
     updateTransformCurrentMesh() {
@@ -170,6 +182,20 @@ export class CanvasHelper {
             this.updateTransformCurrentMesh();
         });
 
+    }
+
+    static setSelectedContainer(container: Container, emit: boolean = true) {
+        if (container.get() instanceof Mesh) this.setSelectedMesh(<Mesh>container.get(), emit);
+        if (container.get() instanceof Light) this.setSelectedLight(<Light>container.get(), emit);
+    }
+
+    static setSelectedLight(light: Light, emit: boolean = true) {
+        this.clearHighLightSelectedMesh();
+        CanvasHelper.currentMesh = null;
+        this.lightGizmo.light = light;
+        CanvasHelper.lightGizmo._rootMesh.visibility = 1;
+        CanvasHelper.gizmoManager.attachToMesh(CanvasHelper.lightGizmo.attachedMesh)
+        if (emit) CanvasHelper.getCurrentLightSelected().next(light);
     }
 
     static setSelectedMesh(mesh: Mesh, emit: boolean = true) {
