@@ -230,3 +230,132 @@ input {
   color: gray;
   background-color: var(--separator-border);
 }
+
+/*PROPERTY PANEL*/
+/*MENU SIDEBAR*/
+
+.property-panel-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.property-panel-text {
+  font-size: 10px;
+  color: var(--console-debug-color);
+  min-width: 100px;
+  text-align: left;
+}
+
+.property-panel-group input[type="range"] {
+  width: 100%;
+  margin: 4px 0;
+  background-color: transparent;
+  -webkit-appearance: none;
+}
+
+.property-panel-group .separator {
+  width: 100%;
+  -webkit-appearance: none;
+}
+
+.property-panel-group input[type="range"]:focus {
+  outline: none;
+}
+
+.property-panel-group input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(25, 25, 25, 1);
+  border: 0px solid rgba(0, 0, 0, 0);
+  border: 0;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+
+.property-panel-group input[type="range"]::-webkit-slider-thumb {
+  margin-top: -4px;
+  width: 10px;
+  height: 10px;
+  background: #ffd100;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+.property-panel-group input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: #878787;
+}
+
+.property-panel-group input[type="range"]::-moz-range-track {
+  background: rgba(25, 25, 25, 1);
+  border: 0px solid rgba(0, 0, 0, 0);
+  border: 0;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+
+.property-panel-group input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: #ffd100;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.property-panel-group input[type="range"]::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  border-width: 5px 0;
+  color: transparent;
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+}
+
+.property-panel-group input[type="range"]::-ms-fill-lower {
+  background: #000000;
+  border: 0px solid rgba(0, 0, 0, 0);
+  border: 0;
+}
+
+.property-panel-group input[type="range"]::-ms-fill-upper {
+  background: rgba(25, 25, 25, 1);
+  border: 0px solid rgba(0, 0, 0, 0);
+  border: 0;
+}
+
+.property-panel-group input[type="range"]::-ms-thumb {
+  width: 10px;
+  height: 10px;
+  background: #ffd100;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0px;
+}
+
+.property-panel-group input[type="range"]:focus::-ms-fill-lower {
+  background: rgba(25, 25, 25, 1);
+}
+
+.property-panel-group input[type="range"]:focus::-ms-fill-upper {
+  background: #878787;
+}
+
+.property-panel-group input[type="color"] {
+  border: 0px;
+  appearance: none;
+  background-color: transparent;
+  padding: 0px;
+  margin-left: 10px;
+  width: 40px;
+  height: 20px;
+}
+
+.property-panel-group input[type="text"] {
+  width: 40px;
+  margin-left: 12px;
+}
