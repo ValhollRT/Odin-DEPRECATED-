@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Color3, DirectionalLight, HemisphericLight, Light, LightGizmo, Mesh, MeshBuilder, PointLight, Scene, StandardMaterial, Vector3 } from "babylonjs";
 import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
-import { EngineService } from '../engine.service';
-
 @Injectable({ providedIn: 'root' })
 
 export class ElementBuilder {
@@ -53,10 +51,9 @@ export class ElementBuilder {
     }
 
     static createLight(type: string, scene: Scene) {
-        let light =  this.setLight(type, scene);
+        let light = this.setLight(type, scene);
         let lightGizmo = new LightGizmo();
         lightGizmo.light = light;
-        lightGizmo._rootMesh.isPickable = true;
         return light;
     }
 

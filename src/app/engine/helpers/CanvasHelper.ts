@@ -147,7 +147,7 @@ export class CanvasHelper {
 
     updateTransformCurrentMesh() {
         if (CanvasHelper.currentMesh !== null) {
-            CanvasHelper.setSelectedMesh(CanvasHelper.currentMesh, false);
+            CanvasHelper.setSelectedMesh(CanvasHelper.currentMesh, true);
         }
     }
 

@@ -76,7 +76,7 @@ export class TransformMenuComponent implements OnInit {
     let x = Utils.degreeToRadians(this.rx.nativeElement.value);
     let y = Utils.degreeToRadians(this.ry.nativeElement.value);
     let z = Utils.degreeToRadians(this.rz.nativeElement.value);
-    // this.currentMeshSelected.rotation = new Vector3(x, y, z);
+    this.currentMeshSelected.rotation = new Vector3(x, y, z);
   }
 
   updateCenterAxis() {
