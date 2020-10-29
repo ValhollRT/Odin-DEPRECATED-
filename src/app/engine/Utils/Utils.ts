@@ -1,3 +1,5 @@
+import { Vector3 } from 'babylonjs';
+
 export class Utils {
 
     public static generateUID(str: String): Number {
@@ -18,6 +20,10 @@ export class Utils {
         return radians * (180 / Math.PI);
     }
 
+    public static radiansToDegreesVector(v: Vector3): Vector3 {
+        return new Vector3(this.radiansToDegrees(v.x), this.radiansToDegrees(v.y), this.radiansToDegrees(v.z))
+    }
+
     public static degreeToRadians(degrees: number): number {
         return degrees * (Math.PI / 180);
     }
@@ -28,5 +34,13 @@ export class Utils {
 
     public static S4(): string {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+
+    public static precision(num: number, n: number): number {
+        return Math.round(num * Math.pow(10, n)) / Math.pow(10, n);
+    }
+
+    public static precisionVector(num: Vector3, n: number): Vector3 {
+        return new Vector3(this.precision(num.x, n), this.precision(num.y, n), this.precision(num.z, n));
     }
 }

@@ -2,11 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Utils } from '../engine/Utils/Utils';
 
 @Pipe({
-  name: 'rotation'
+  name: 'precision'
 })
-export class RotationPipe implements PipeTransform {
+export class PrecisionPipe implements PipeTransform {
 
   transform(value: number): number {
-    return Utils.precision(Utils.radiansToDegrees(value), 3);
+    return Utils.precision(value, 3);
   }
+
 }

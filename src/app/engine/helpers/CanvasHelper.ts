@@ -1,18 +1,17 @@
-import { GizmoManager, HighlightLayer, Light, LightGizmo, Mesh, PickingInfo, Scene, TargetCamera } from 'babylonjs';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Container } from '../common/Container';
+import { HighlightLayer, Node, Light, LightGizmo, Mesh, PickingInfo, Scene, TargetCamera, ShadowLight, GizmoManager } from 'babylonjs';
+import { BehaviorSubject } from 'rxjs';
 
 export class CanvasHelper {
 
     private pickInfo: PickingInfo;
     private startingPoint: any;
 
-    private static currentMesh: Mesh;
+    private static current: Mesh | Light;
     private static gizmoManager: GizmoManager;
     private static currentMeshSelected$: BehaviorSubject<Mesh> = new BehaviorSubject(undefined);
     private static currentLightSelected$: BehaviorSubject<Light> = new BehaviorSubject(undefined);
     private static highLight: HighlightLayer;
-    private static lightGizmo: LightGizmo;
+    public static lightGizmo: LightGizmo;
 
     constructor(
         public canvas: HTMLCanvasElement,
@@ -32,6 +31,9 @@ export class CanvasHelper {
         CanvasHelper.gizmoManager = new GizmoManager(scene)
         CanvasHelper.gizmoManager.boundingBoxGizmoEnabled = true
         CanvasHelper.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
+        
+        //Trick to keep gizmo selected while orbiting viewport
+        CanvasHelper.gizmoManager.usePointerToAttachGizmos = false;
 
         this.canvas.addEventListener("pointerdown", this.onPointerDown, false);
         this.canvas.addEventListener("pointerup", this.onPointerUp, false);
@@ -42,7 +44,6 @@ export class CanvasHelper {
             this.canvas.removeEventListener("pointerup", this.onPointerUp);
             // this.canvas.removeEventListener("pointermove", this.onPointerMove);
         }
-
         this.canvas.onkeydown = (e) => {
             if (e.key == 'w') {
                 CanvasHelper.gizmoManager.positionGizmoEnabled = !CanvasHelper.gizmoManager.positionGizmoEnabled
@@ -102,12 +103,9 @@ export class CanvasHelper {
         CanvasHelper.clearHighLightSelectedMesh();
         // check if we are under a mesh
         this.pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
-        if (!(this.pickInfo.pickedMesh instanceof Mesh)) return
-
         if (this.pickInfo.hit) {
-            CanvasHelper.setSelectedMesh(this.pickInfo.pickedMesh);
+            CanvasHelper.setSelected(<Mesh | Light>this.pickInfo.pickedMesh);
             this.startingPoint = this.getGroundPosition();
-
             if (this.startingPoint) { // we need to disconnect camera from canvas
                 setTimeout(() => {
                     this.camera.detachControl(this.canvas);
@@ -131,7 +129,8 @@ export class CanvasHelper {
         if (!current) return;
 
         var diff = current.subtract(this.startingPoint);
-        CanvasHelper.currentMesh.position.addInPlace(diff);
+        if (CanvasHelper.current instanceof Mesh) CanvasHelper.current.position.addInPlace(diff);
+        if (CanvasHelper.current instanceof Light) (<ShadowLight>CanvasHelper.current).position.addInPlace(diff);
         this.startingPoint = current;
     }
 
@@ -145,65 +144,37 @@ export class CanvasHelper {
         return CanvasHelper.currentLightSelected$;
     }
 
-    updateTransformCurrentMesh() {
-        if (CanvasHelper.currentMesh !== null) {
-            CanvasHelper.setSelectedMesh(CanvasHelper.currentMesh, true);
+    updateTransformCurrent() {
+        if (CanvasHelper.current !== null) {
+            CanvasHelper.setSelected(CanvasHelper.current, true);
         }
     }
 
     public getCurrentMeshTransformation() {
-        CanvasHelper.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-        CanvasHelper.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-        CanvasHelper.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-
-        CanvasHelper.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-        CanvasHelper.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-        CanvasHelper.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-
-        CanvasHelper.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-        CanvasHelper.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-        CanvasHelper.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => {
-            this.updateTransformCurrentMesh();
-        });
-
+        CanvasHelper.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        CanvasHelper.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
     }
 
-    static setSelectedContainer(container: Container, emit: boolean = true) {
-        if (container.get() instanceof Mesh) this.setSelectedMesh(<Mesh>container.get(), emit);
-        if (container.get() instanceof Light) this.setSelectedLight(<Light>container.get(), emit);
-    }
-
-    static setSelectedLight(light: Light, emit: boolean = true) {
+    static setSelected(o: Mesh | Light, emit: boolean = true) {
         this.clearHighLightSelectedMesh();
-        CanvasHelper.currentMesh = null;
-        this.lightGizmo.light = light;
-        CanvasHelper.lightGizmo._rootMesh.visibility = 1;
-        CanvasHelper.gizmoManager.attachToMesh(CanvasHelper.lightGizmo.attachedMesh)
-        if (emit) CanvasHelper.getCurrentLightSelected().next(light);
-    }
+        CanvasHelper.current = o;
 
-    static setSelectedMesh(mesh: Mesh, emit: boolean = true) {
-        this.clearHighLightSelectedMesh();
-        CanvasHelper.currentMesh = mesh;
-        CanvasHelper.gizmoManager.attachToMesh(mesh);
-        CanvasHelper.highLight.addMesh(mesh, BABYLON.Color3.Yellow());
-        if (emit) CanvasHelper.getCurrentMeshSelected().next(mesh);
+        if (o instanceof Mesh) {
+            CanvasHelper.gizmoManager.attachToMesh(o);
+            CanvasHelper.highLight.addMesh(o, BABYLON.Color3.Yellow());
+            if (emit) CanvasHelper.getCurrentMeshSelected().next(o);
+        } else {
+            CanvasHelper.lightGizmo.light = o;
+            //CanvasHelper.gizmoManager.attachToMesh(CanvasHelper.lightGizmo.attachedMesh);
+            if (emit) CanvasHelper.getCurrentLightSelected().next(o);
+        }
     }
 
     static clearHighLightSelectedMesh() {

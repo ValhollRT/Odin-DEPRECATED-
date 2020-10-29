@@ -66,7 +66,6 @@ export class DataTreeContainer {
             if (node.children[i].children.length > 0) this.deleteNodeAndChildren(node.children[i]);
             else this.deleteContainer(node.children[i]);
         }
-        console.log("node", node.name);
         this.deleteContainer(node);
     }
 

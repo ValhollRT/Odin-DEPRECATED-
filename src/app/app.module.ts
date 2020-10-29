@@ -20,6 +20,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 //Pipes
 import { RotationPipe } from './pipes/rotation.pipe';
 import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
+import { PrecisionPipe } from './pipes/precision.pipe';
 
 //Material
 import { AllAngularMaterialModule } from './all-angular-material.module';
@@ -36,6 +37,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TransformMenuComponent,
     RotationPipe,
     RgbToHexPipe,
+    PrecisionPipe,
     TreeNodeComponent,
     ContentPanelComponent,
     SidebarPropertiesComponent,

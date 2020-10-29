@@ -1,56 +1,62 @@
-<div #transformMenuValue class="container">
+<div #transformMenuValue class="container" *ngIf="(currentSelected != undefined ) && (currentSelected != null)">
     <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Position</div>
             <label for="positionX">X</label>
-            <input type="number" [(ngModel)]="tm.position.x" min="-99999" max="99999" step="0.1">
+            <input type="number" [ngModel]="tm.position.x | precision"
+                (ngModelChange)="currentSelected.position.x = $event" min="-99999" max="99999" step="1">
             <label for="positionY">Y</label>
-            <input type="number" [(ngModel)]="tm.position.y" min="-99999" max="99999" step="0.1">
+            <input type="number" [ngModel]="tm.position.y | precision"
+                (ngModelChange)="currentSelected.position.y = $event" min="-99999" max="99999" step="1">
             <label for="positionZ">Z</label>
-            <input type="number" [(ngModel)]="tm.position.z" min="-99999" max="99999" step="0.1">
+            <input type="number" [ngModel]="tm.position.z | precision"
+                (ngModelChange)="currentSelected.position.z = $event" min="-99999" max="99999" step="1">
         </div>
         <div class="input-group">
             <div class="title-section-menu">Rotation</div>
             <label for="rotationX">X</label>
-            <input #rx type="number" [ngModel]="this.tm.rotation.x | rotation"
-                (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="0.1">
+            <input #rx type="number" [ngModel]="this.tm.rotation.x | rotation" (ngModelChange)=updateRotation($event)
+                min="-99999" max="99999" step="1">
             <label for="rotationY">Y</label>
-            <input #ry type="number" [ngModel]="this.tm.rotation.y | rotation"
-                (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="0.1">
+            <input #ry type="number" [ngModel]="this.tm.rotation.y | rotation" (ngModelChange)=updateRotation($event)
+                min="-99999" max="99999" step="1">
             <label for="rotationZ">Z</label>
-            <input #rz type="number" [ngModel]="this.tm.rotation.z | rotation"
-                (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="0.1">
+            <input #rz type="number" [ngModel]="this.tm.rotation.z | rotation" (ngModelChange)=updateRotation($event)
+                min="-99999" max="99999" step="1">
         </div>
         <div class="input-group">
             <div class="title-section-menu">Scaling</div>
             <label for="scalingX">X</label>
-            <input type="number" [(ngModel)]="tm.scaling.x" min="-99999" max="99999" step="0.1">
+            <input type="number" [ngModel]="tm.scaling.x | precision"
+                (ngModelChange)="currentSelected.scaling.x = $event" min="-99999" max="99999" step="1">
             <label for="scalingY">Y</label>
-            <input type="number" [(ngModel)]="tm.scaling.y" min="-99999" max="99999" step="0.1">
+            <input type="number" [ngModel]="tm.scaling.y | precision"
+                (ngModelChange)="currentSelected.scaling.y = $event" min="-99999" max="99999" step="1">
             <label for="scalingZ">Z</label>
-            <input type="number" [(ngModel)]="tm.scaling.z" min="-99999" max="99999" step="0.1">
+            <input type="number" [ngModel]="tm.scaling.z | precision"
+                (ngModelChange)="currentSelected.scaling.z = $event" min="-99999" max="99999" step="1">
         </div>
     </div>
     <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Center</div>
             <label for="centerX">X</label>
-            <input #cx type="number" [ngModel]="this.tm.center.x" (ngModelChange)="updateCenterAxis()" min="-99999"
-                max="99999" step="0.1">
+            <input #cx type="number" [ngModel]="this.tm.center.x | precision" (ngModelChange)="updateCenterAxis()"
+                min="-99999" max="99999" step="1">
             <label for="centerY">Y</label>
-            <input #cy type="number" [ngModel]="this.tm.center.y" (ngModelChange)="updateCenterAxis()" min="-99999"
-                max="99999" step="0.1">
+            <input #cy type="number" [ngModel]="this.tm.center.y | precision" (ngModelChange)="updateCenterAxis()"
+                min="-99999" max="99999" step="1">
             <label for="centerZ">Z</label>
-            <input #cz type="number" [ngModel]="this.tm.center.z" (ngModelChange)="updateCenterAxis()" min="-99999"
-                max="99999" step="0.1">
+            <input #cz type="number" [ngModel]="this.tm.center.z | precision" (ngModelChange)="updateCenterAxis()"
+                min="-99999" max="99999" step="1">
         </div>
-        <div class="input-group">
+        <!-- div class="input-group">
             <div class="title-section-menu">Screen position</div>
             <label for="screenPositionX">X</label>
-            <input type="number" [(ngModel)]="tm.screenPosition.x" min="-99999" max="99999" step="0.1" disabled style="color: grey">
+            <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
             <label for="screenPositionY">Y</label>
-            <input type="number" [(ngModel)]="tm.screenPosition.y" min="-99999" max="99999" step="0.1" disabled style="color: grey">
-        </div>
+            <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
+        </div -->
         <!-- <pre style="color:white">{{ tm | json }}</pre> -->
     </div>
     <div style="clear: both;"></div>

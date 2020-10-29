@@ -161,7 +161,7 @@ export class TreeNodeComponent {
     this.lastSelectedTreeNode = node;
     node.selected = true;
     selectedContainer.selected = true;
-    if (emit) CanvasHelper.setSelectedContainer(selectedContainer);
+    if (emit) CanvasHelper.setSelected(selectedContainer.get());
   }
 
   setContainerName(event, node) {
@@ -180,7 +180,6 @@ export class TreeNodeComponent {
   }
 
   clickDeleteNode(event) {
-    console.log("delete action");
     if (this.lastSelectedTreeNode === null) return;
     let container: Container = this.flatNodeMap.get(this.lastSelectedTreeNode);
     this.dataTree.deleteNodeAndChildren(container);
