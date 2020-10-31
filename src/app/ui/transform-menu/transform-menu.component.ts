@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DirectionalLight, Light, Mesh, ShadowLight, SpotLight, Vector2, Vector3 } from 'babylonjs';
+import { DirectionalLight, HemisphericLight, HemisphericParticleEmitter, Light, Mesh, PointLight, ShadowLight, SpotLight, Vector2, Vector3 } from 'babylonjs';
 import { filter } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { EngineService } from 'src/app/services/index.service';
@@ -36,22 +36,25 @@ export class TransformMenuComponent implements OnInit {
     public logService: LogService
   ) {
     this.tm = new TransformMenu();
-    this.tm.position = new Vector3(0, 0, 0);
-    this.tm.rotation = new Vector3(0, 0, 0);
-    this.tm.scaling = new Vector3(1, 1, 1);
-    this.tm.center = new Vector3(0, 0, 0);
-    this.tm.screenPosition = new Vector2(0, 0);
+    this.resetAll();
   }
 
   ngOnInit(): void {
     this.engineService.getCurrentSelected$()
       .pipe(filter((obj: any) => obj !== null && obj !== undefined))
-      .subscribe((o: Mesh | ShadowLight) => {
+      .subscribe((o: Mesh | Light) => {
         this.setTransformMenuSelected(o);
       });
   }
 
-  setTransformMenuSelected(o: Mesh | ShadowLight) {
+  setTransformMenuSelected(o: Mesh | Light) {
+    if (o instanceof HemisphericLight) {
+      this.resetAll();
+      // This is important to hide the transform panel
+      this.currentSelected = null;
+      return;
+    }
+
     this.currentSelected = o;
     if (o instanceof Mesh) {
       this.tm.position = o.position;
@@ -65,17 +68,19 @@ export class TransformMenuComponent implements OnInit {
 
       this.tm.scaling = o.scaling;
       this.tm.center = o.getPivotPoint();
-    } else {
+      return;
+    }
+    if (o instanceof ShadowLight) {
       this.tm.position = o.position;
       if (o.direction !== undefined && (o instanceof DirectionalLight || SpotLight)) {
         this.tm.rotation = Utils.radiansToDegreesVector(o.direction);
-      }
-      else {
+      } else {
         this.tm.rotation = new Vector3(0, 0, 0);
       }
       this.tm.scaling = new Vector3(1, 1, 1);
       this.tm.center = new Vector3(0, 0, 0);
       this.tm.screenPosition = new Vector2(0, 0);
+      return;
     }
   }
 
@@ -87,7 +92,6 @@ export class TransformMenuComponent implements OnInit {
       this.currentSelected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
     } else if (this.currentSelected instanceof DirectionalLight || SpotLight) {
       this.currentSelected.direction = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
-      console.log("direction" , this.currentSelected.direction);
     }
   }
 
@@ -95,5 +99,14 @@ export class TransformMenuComponent implements OnInit {
     this.currentSelected.showSubMeshesBoundingBox = true;
     this.currentSelected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, this.cz.nativeElement.value));
   }
+
+  resetAll() {
+    this.tm.position = new Vector3(0, 0, 0);
+    this.tm.rotation = new Vector3(0, 0, 0);
+    this.tm.scaling = new Vector3(1, 1, 1);
+    this.tm.center = new Vector3(0, 0, 0);
+    this.tm.screenPosition = new Vector2(0, 0);
+  }
+
 
 }

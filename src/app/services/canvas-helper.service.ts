@@ -14,7 +14,6 @@ export class CanvasHelperService {
     public lightGizmo: LightGizmo;
 
     constructor(public es: EngineService) {
-        console.log("canvas helper");
         let camera = es.getCamera();
         let canvas = es.getCanvas();
         //LightGizmo
