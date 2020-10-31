@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Color3, Light } from 'babylonjs';
+import { Color3, Light, Mesh } from 'babylonjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { EngineService } from 'src/app/engine/engine.service';
 
@@ -13,9 +13,11 @@ export class LightPanelComponent implements OnInit {
   public currentLight: Light;
   constructor(public engineService: EngineService) {
 
-    this.engineService.getCurrentLightSelected()
-      .pipe(filter((light: Light) => light !== null && light !== undefined))
-      .pipe(distinctUntilChanged())
+    this.engineService.getCurrentSelected$()
+      .pipe(
+        filter((o: any) => o instanceof Light),
+        filter((light: Light) => light !== null && light !== undefined),
+        distinctUntilChanged())
       .subscribe((l: Light) => {
         this.currentLight = l;
       });

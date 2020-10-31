@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Color3, Material, Mesh, StandardMaterial } from 'babylonjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { EngineService } from 'src/app/engine/engine.service';
-import { CanvasHelper } from 'src/app/engine/helpers/CanvasHelper';
 
 @Component({
   selector: 'material-panel',
@@ -15,9 +14,11 @@ export class MaterialPanelComponent implements OnInit {
 
   constructor(private engineService: EngineService) {
 
-    this.engineService.getCurrentMeshSelected()
-      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
-      .pipe(distinctUntilChanged())
+    this.engineService.getCurrentSelected$()
+      .pipe(
+        filter((o: any) => o instanceof Mesh),
+        filter((mesh: Mesh) => mesh !== null && mesh !== undefined),
+        distinctUntilChanged())
       .subscribe((m: Mesh) => {
         this.currentMesh = m;
       });

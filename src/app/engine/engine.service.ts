@@ -1,3 +1,5 @@
+import { Injector } from '@angular/core';
+import { Optional } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
 import {
   ArcRotateCamera, Color4, Engine,
@@ -8,12 +10,12 @@ import {
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { CanvasHelperService } from '../services/index.service';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';
 import { ElementBuilder } from './common/ElementBuilder';
 import { AxisHelper } from './helpers/AxisHelper';
-import { CanvasHelper } from './helpers/CanvasHelper';
 import { Grid } from './helpers/Grid';
 
 @Injectable({ providedIn: 'root' })
@@ -27,13 +29,16 @@ export class EngineService {
   private engine: Engine;
   private camera: ArcRotateCamera;
   private scene: Scene;
-  private canvasHelper: CanvasHelper;
+
+  private currentSelected: Mesh | Light;
+  private currentSelected$: BehaviorSubject<Mesh | Light> = new BehaviorSubject(undefined);
+
   public newContainer$ = new BehaviorSubject<Container>(undefined);
 
   public constructor(
     public windowService: WindowService,
     public logService: LogService,
-  ) { }
+    public injector: Injector) { }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
@@ -44,31 +49,17 @@ export class EngineService {
     EngineService.grid = new Grid(this.scene);
     EngineService.axisHelper = new AxisHelper(10, this.scene);
 
-    // Add lights to the scene
-    // var light1 = new HemisphericLight("light1", new Vector3(1, 1, 0), this.scene);
-    // var light2 = new PointLight("light2", new Vector3(0, 1, -1), this.scene);
-
     this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(100, 0, 100), this.scene);
     this.camera.setTarget(Vector3.Zero());
     this.camera.attachControl(this.canvas, false);
     this.camera.panningSensibility = 100;
 
-    // Event Canvas
-    this.canvasHelper = new CanvasHelper(this.canvas, this.scene, this.camera);
     this.scene.registerAfterRender(() => { });
+    let canvasHelper = this.injector.get(CanvasHelperService);
   }
-
-  public getScene(): Scene {
-    return this.scene
-  }
-
-  public getCurrentMeshSelected(): Observable<Mesh> {
-    return CanvasHelper.getCurrentMeshSelected();
-  }
-
-  public getCurrentLightSelected(): Observable<Light> {
-    return CanvasHelper.getCurrentLightSelected();
-  }
+  public getCanvas() { return this.canvas; }
+  public getCamera() { return this.camera; }
+  public getScene(): Scene { return this.scene }
 
   public createMesh(type: string): void {
     let c = new Container(ElementBuilder.createMesh(type, this.getScene()));
@@ -81,6 +72,16 @@ export class EngineService {
   }
 
   public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
+
+  public setCurrentSelected(o: Mesh | Light, fire: boolean) {
+    this.currentSelected = o;
+  
+    if (fire) this.currentSelected$.next(o);
+  }
+
+  // return currentMesh
+  public getCurrentSelected$(): BehaviorSubject<Mesh | Light> { return this.currentSelected$; }
+  public getCurrentSelected(): Mesh | Light { return this.currentSelected; }
 
   public animate(): void {
 

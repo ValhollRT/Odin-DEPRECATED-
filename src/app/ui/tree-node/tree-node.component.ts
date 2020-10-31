@@ -6,7 +6,6 @@ import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { CanvasHelper } from 'src/app/engine/helpers/CanvasHelper';
 import { Mesh } from 'babylonjs/Meshes/mesh';
 import { Light } from 'babylonjs';
 
@@ -61,7 +60,7 @@ export class TreeNodeComponent {
         dataTree.inserNewtItem(c);
       });
 
-    engineService.getCurrentMeshSelected()
+    engineService.getCurrentSelected$()
       .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined), distinctUntilChanged())
       .subscribe((m: Mesh) => {
         this.clickNodeContainer(null, this.nestedMeshMap.get(m), false);
@@ -161,7 +160,7 @@ export class TreeNodeComponent {
     this.lastSelectedTreeNode = node;
     node.selected = true;
     selectedContainer.selected = true;
-    if (emit) CanvasHelper.setSelected(selectedContainer.get());
+    this.engineService.setCurrentSelected(selectedContainer.get(), emit);
   }
 
   setContainerName(event, node) {

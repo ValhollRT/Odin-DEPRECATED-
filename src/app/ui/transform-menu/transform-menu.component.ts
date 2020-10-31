@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DirectionalLight, Light, Mesh, ShadowLight, SpotLight, Vector2, Vector3 } from 'babylonjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
@@ -44,17 +44,10 @@ export class TransformMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.engineService.getCurrentMeshSelected()
-      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
-      .subscribe((m: Mesh) => {
-        this.setTransformMenuSelected(m);
-      });
-
-    this.engineService.getCurrentLightSelected()
-      .pipe(filter((light: ShadowLight) => light !== null && light !== undefined))
-      .subscribe((l: ShadowLight) => {
-        this.setTransformMenuSelected(<ShadowLight>l);
+    this.engineService.getCurrentSelected$()
+      .pipe(filter((obj: any) => obj !== null && obj !== undefined))
+      .subscribe((o: Mesh | ShadowLight) => {
+        this.setTransformMenuSelected(o);
       });
   }
 
@@ -74,8 +67,8 @@ export class TransformMenuComponent implements OnInit {
       this.tm.center = o.getPivotPoint();
     } else {
       this.tm.position = o.position;
-      if (o instanceof DirectionalLight || SpotLight) {
-        this.tm.rotation = Utils.radiansToDegreesVector(o.getRotation());
+      if (o.direction !== undefined && (o instanceof DirectionalLight || SpotLight)) {
+        this.tm.rotation = Utils.radiansToDegreesVector(o.direction);
       }
       else {
         this.tm.rotation = new Vector3(0, 0, 0);
@@ -94,6 +87,7 @@ export class TransformMenuComponent implements OnInit {
       this.currentSelected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
     } else if (this.currentSelected instanceof DirectionalLight || SpotLight) {
       this.currentSelected.direction = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
+      console.log("direction" , this.currentSelected.direction);
     }
   }
 
