@@ -44,6 +44,7 @@ export class TransformMenuComponent implements OnInit {
       .pipe(filter((obj: any) => obj !== null && obj !== undefined))
       .subscribe((o: Mesh | Light) => {
         this.setTransformMenuSelected(o);
+        this.logService.log(this.tm, "edited transform", "TransformMenuComponent");
       });
   }
 

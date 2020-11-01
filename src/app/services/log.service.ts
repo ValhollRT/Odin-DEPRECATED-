@@ -10,16 +10,17 @@ export class LogService {
   level: LogLevel = LogLevel.All;
   logWithDate: boolean = true;
 
-  public bufferLogConsole: String[] = [];
+  public bufferLogConsole: string[] = [];
 
   constructor() { }
 
-  getDate(): number {
-    return new Date().getTime();
+  getDate(): string {
+    return new Date().toTimeString();
   }
-  public log(msg: any) {
+  public log(msg: any, _class: string, _action: string) {
     if (msg instanceof Container) msg = new MeshLog(<Mesh>msg.get());
-    let logMessage = + this.getDate() + ": " + JSON.stringify(msg);
+    let logMessage = new Date().toLocaleTimeString() + " - " + JSON.stringify(msg) + " - [" + + _action + "] - " + _class;
+    console.log(logMessage);
     this.bufferLogConsole.push(logMessage);
   }
 

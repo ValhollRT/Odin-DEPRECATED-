@@ -7,10 +7,11 @@
 
 .inner-text-console{
     margin: 0px;
-    font-size: 12px;
+    font-size: 10px;
     text-align: left;
     color: var(--console-debug-color);
     list-style: none;
+    padding: 1px;
 }
 
 .panel-scroll-child {

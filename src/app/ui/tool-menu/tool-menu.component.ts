@@ -26,9 +26,11 @@ export class ToolMenuComponent implements OnInit {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
         this.createMesh(param);
+        this.logService.log(param, "created", "ToolMenuComponent")
         break;
       case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
         this.createLight(param);
+        this.logService.log(param, "created", "ToolMenuComponent")
         break;
       case 'ABOUTODIN':
         this.aboutOdin();
@@ -46,7 +48,7 @@ export class ToolMenuComponent implements OnInit {
   }
 
   aboutOdin(): void {
-    this.logService.log("Open About Odin");
+    this.logService.log("About Odin", "ToolMenuComponent", "open");
     this.appService.openAboutOdin();
   }
 

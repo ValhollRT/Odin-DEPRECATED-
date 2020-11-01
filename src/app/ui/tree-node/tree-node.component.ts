@@ -8,6 +8,7 @@ import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Mesh } from 'babylonjs/Meshes/mesh';
 import { Light } from 'babylonjs';
+import { LogService } from 'src/app/services/log.service';
 
 export class ContainerFlatTreeNode {
   name: string;
@@ -44,7 +45,7 @@ export class TreeNodeComponent {
 
   isReadOnly: boolean = true;
 
-  constructor(public dataTree: DataTreeContainer, private engineService: EngineService) {
+  constructor(public dataTree: DataTreeContainer, private engineService: EngineService, public logService: LogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ContainerFlatTreeNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -61,7 +62,7 @@ export class TreeNodeComponent {
       });
 
     engineService.getCurrentSelected$()
-      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined), distinctUntilChanged())
+      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
       .subscribe((m: Mesh) => {
         this.clickNodeContainer(null, this.nestedMeshMap.get(m), false);
       });
@@ -161,6 +162,7 @@ export class TreeNodeComponent {
     node.selected = true;
     selectedContainer.selected = true;
     this.engineService.setCurrentSelected(selectedContainer.get(), emit);
+    this.logService.log(node, "container clicked", "TreeNodeComponent")
   }
 
   setContainerName(event, node) {

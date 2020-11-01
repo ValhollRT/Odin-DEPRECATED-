@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Color3, Light, Mesh } from 'babylonjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { EngineService } from 'src/app/engine/engine.service';
+import { LogService } from 'src/app/services/log.service';
 
 @Component({
   selector: 'light-panel',
@@ -11,17 +12,17 @@ import { EngineService } from 'src/app/engine/engine.service';
 export class LightPanelComponent implements OnInit {
 
   public currentLight: Light;
-  constructor(public engineService: EngineService) {
+  constructor(public engineService: EngineService, public logService: LogService) {
 
     this.engineService.getCurrentSelected$()
       .pipe(
         filter((o: any) => o instanceof Light),
-        filter((light: Light) => light !== null && light !== undefined),
-        distinctUntilChanged())
+        filter((light: Light) => light !== null && light !== undefined))
       .subscribe((l: Light) => {
+        console.log(l);
         this.currentLight = l;
+        this.logService.log(l.name, "light selected", "LightPanelComponent")
       });
-
   }
 
   ngOnInit(): void { }

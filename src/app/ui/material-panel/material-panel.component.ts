@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Color3, Material, Mesh, StandardMaterial } from 'babylonjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { EngineService } from 'src/app/engine/engine.service';
+import { LogService } from 'src/app/services/log.service';
 
 @Component({
   selector: 'material-panel',
@@ -12,15 +13,15 @@ export class MaterialPanelComponent implements OnInit {
 
   public currentMesh: Mesh;
 
-  constructor(private engineService: EngineService) {
+  constructor(private engineService: EngineService, private logService: LogService) {
 
     this.engineService.getCurrentSelected$()
       .pipe(
         filter((o: any) => o instanceof Mesh),
-        filter((mesh: Mesh) => mesh !== null && mesh !== undefined),
-        distinctUntilChanged())
+        filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
       .subscribe((m: Mesh) => {
         this.currentMesh = m;
+        this.logService.log(m.material.name, "edited material", "MaterialPanelComponent")
       });
   }
 
