@@ -23,7 +23,7 @@
             <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
             <div class="icon-color icon-axis icon-xs float-left"></div>
-            <div class="icon-color icon-material icon-xs float-left"></div>
+            <div class="icon-color icon-geometry icon-xs float-left"></div>
           </div>
         </div>
 
@@ -49,7 +49,7 @@
             <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
             <div class="icon-color icon-axis icon-xs float-left"></div>
-            <div class="icon-color icon-material icon-xs float-left"></div>
+            <div class="icon-color icon-geometry icon-xs float-left"></div>
           </div>
         </div>
 
@@ -58,3 +58,4 @@
     <span #emptyItem></span>
   </div>
 </div>
+<tool-menu></tool-menu>

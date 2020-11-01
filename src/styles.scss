@@ -160,6 +160,10 @@ body {
   mask-image: url("assets/icons/material.svg");
 }
 
+.icon-geometry {
+  mask-image: url("assets/icons/geometry.svg");
+}
+
 .icon-trash {
   mask-image: url("assets/icons/trash.svg");
 }
@@ -176,6 +180,10 @@ body {
   mask-image: url("assets/icons/light.svg");
 }
 
+.icon-info {
+  mask-image: url("assets/icons/info.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);
@@ -183,18 +191,23 @@ body {
 
 .icon-color:hover {
   background-color: var(--highlight-color);
-  mix-blend-mode: multiply;
+  mix-blend-mode: difference;
 }
 
 .icon-btn-color:hover {
   background-color: var(--highlight-color);
-  //mix-blend-mode: multiply;
+  mix-blend-mode: difference;
 }
 
 .icon-xs {
   width: 15px;
   height: 15px;
   margin: 0px 5px;
+}
+
+.icon-m {
+  width: 20px;
+  height: 20px;
 }
 
 .icon-btn-xs {

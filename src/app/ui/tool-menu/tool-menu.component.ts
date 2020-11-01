@@ -27,7 +27,7 @@ export class ToolMenuComponent implements OnInit {
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
         this.createMesh(param);
         break;
-        case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
+      case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
         this.createLight(param);
         break;
       case 'ABOUTODIN':
@@ -53,7 +53,7 @@ export class ToolMenuComponent implements OnInit {
   setMenu() {
     this.menus = [
       {
-        displayName: 'Geometry', child: [
+        displayName: 'Geometry', icon: 'icon-geometry', child: [
           { displayName: 'Box', param: GEOM.BOX },
           { displayName: 'Cylinder', param: GEOM.CYLINDER },
           { displayName: 'Disc', param: GEOM.DISC },
@@ -61,21 +61,20 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Plane', param: GEOM.PLANE },
           { displayName: 'Polyhedron', param: GEOM.POLYHEDRON },
           { displayName: 'Torus', param: GEOM.TORUS },
-          { displayName: 'Tube', param: GEOM.TUBE },
-          { displayName: 'Ribbon', param: GEOM.RIBBON },
           { displayName: 'Sphere', param: GEOM.SPHERE },
         ]
       },
       {
-        displayName: 'Light', child: [
-          { displayName: 'Directional', param:  LIGHT.DIRECTIONAL},
+        displayName: 'Light', icon: 'icon-light', child: [
+          { displayName: 'Directional', param: LIGHT.DIRECTIONAL },
           { displayName: 'Spot', param: LIGHT.SPOT },
           { displayName: 'Point', param: LIGHT.POINT },
           { displayName: 'Hemispheric', param: LIGHT.HEMISPHERIC }
         ]
       },
+      /*
       {
-        displayName: 'Functions', child: [
+        displayName: 'Functions', icon: 'icon-light', child: [
           { displayName: 'TextBox', param: "TEXTBOX" },
           { displayName: 'FollowUp', param: "FOLLOWUP" },
           { displayName: 'ScreenSize', param: "SCREENSIZE" },
@@ -84,7 +83,8 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Mask', param: "MASK" }
         ]
       },
-      { displayName: "About Odin", param: "ABOUTODIN" }
+      */
+      { displayName: "About Odin", icon: 'icon-info', param: "ABOUTODIN" }
     ];
   }
 

@@ -1,39 +1,64 @@
+:host {
+  position: relative;
+  top: 0px;
+  left: 305px;
+}
+
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  position: relative;
+  top: 0px;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--main-menu-background-color);
+}
+
+.input-group {
+  padding: 2px;
+  margin: 2px;
+  border: var(--main-menu-border);
+  top: 2px;
+  position: relative;
 }
 
 li {
-    list-style-type: none;
-    position: relative;
-    width: 100px;
+  list-style-type: none;
+  position: relative;
+  width: 30px;
 }
 
 li a {
-    text-decoration: none;
-    display: inline-block;
-    padding: 2px;
-    width: 100px;
-    height: 22px;
-    border: var(--main-menu-border);
-    color: var(--console-debug-color);
-    background-color: var(--main-menu-background-color);
+  text-decoration: none;
+  display: inline-block;
+  padding: 2px;
+  margin: 0px 2px;
+  min-width: 100px;
+  height: 30px;
+  line-height: 27px;
+  border: var(--main-menu-border);
+  color: var(--console-debug-color);
+  background-color: var(--main-menu-background-color);
 }
 
 li a:hover {
-    color: var(--main-menu-color-hover);
-    background-color: var(--main-menu-background-color-hover);
-
+  color: var(--main-menu-color-hover);
+  background-color: var(--main-menu-background-color-hover);
 }
 
 li ul {
-    display: none;
-    position: absolute;
-    top: 0px;
-    left: 100px;
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 30px;
+  width: 200px;
 }
 
 li:hover ul {
-    display: block;
+  display: block;
 }

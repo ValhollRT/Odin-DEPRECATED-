@@ -44,7 +44,7 @@ export class EngineService {
     this.canvas = canvas.nativeElement;
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);
-    this.scene.clearColor = new Color4(0, 0, 0, 1);
+    this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);
 
     EngineService.grid = new Grid(this.scene);
     EngineService.axisHelper = new AxisHelper(10, this.scene);

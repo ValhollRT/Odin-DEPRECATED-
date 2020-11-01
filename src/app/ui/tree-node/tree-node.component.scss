@@ -1,9 +1,10 @@
 .container {
   position: absolute;
-  bottom: 0px;
+  top: 0px;
   left: 0px;
   background-color: var(--main-menu-background-color);
   width: 300px;
+  height: 100%;
 }
 
 input {
@@ -27,6 +28,7 @@ label {
 }
 
 .input-group {
+  height: 99%;
   padding: 5px;
   margin: 5px;
   border: var(--main-menu-border);
@@ -43,12 +45,12 @@ label {
 
 mat-tree {
   font-size: 12px;
-  min-height: 0px;
+  min-height: 93%;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: var(--main-menu-background-color);
   color: var(--console-debug-color);
-  height: 590px;
+  height: 93%;
 }
 
 mat-tree-node {
@@ -136,14 +138,13 @@ button {
   text-align: left;
   display: flex;
   align-items: center;
-
 }
 
 .container-selected {
   background: var(--highlight-color);
   color: black;
 
-  input[type=text] {
+  input[type="text"] {
     color: black;
   }
 }
@@ -158,12 +159,12 @@ button {
   box-sizing: border-box;
 }
 
-input[type=text] {
+input[type="text"] {
   background-color: transparent;
   min-width: 100px;
   cursor: default;
 }
 
-.btn-tree-header{
+.btn-tree-header {
   border: var(--main-menu-border);
 }
