@@ -16,6 +16,7 @@ import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';
 import { ElementBuilder } from './common/ElementBuilder';
 import { AxisHelper } from './helpers/AxisHelper';
+import { GizmoHelper } from './helpers/GizmoHelper';
 import { Grid } from './helpers/Grid';
 
 @Injectable({ providedIn: 'root' })
@@ -23,12 +24,13 @@ import { Grid } from './helpers/Grid';
 export class EngineService {
 
   private static grid: Grid;
-  private static axisHelper: AxisHelper;
 
   private canvas: HTMLCanvasElement;
   private engine: Engine;
   private camera: ArcRotateCamera;
   private scene: Scene;
+  private gizmoHelper: GizmoHelper;
+  private canvasHelper: CanvasHelperService;
 
   private currentSelected: Mesh | Light;
   private currentSelected$: BehaviorSubject<Mesh | Light> = new BehaviorSubject(undefined);
@@ -47,16 +49,23 @@ export class EngineService {
     this.scene.clearColor = new Color4(0.09, 0.09, 0.1, 1);
 
     EngineService.grid = new Grid(this.scene);
-    EngineService.axisHelper = new AxisHelper(10, this.scene);
-
-    this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(100, 0, 100), this.scene);
+    this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(0, 0, 0), this.scene);
     this.camera.setTarget(Vector3.Zero());
-    this.camera.attachControl(this.canvas, false);
+    this.camera.attachControl(this.canvas, true, true);
     this.camera.panningSensibility = 100;
 
     this.scene.registerAfterRender(() => { });
-    let canvasHelper = this.injector.get(CanvasHelperService);
+    this.canvasHelper = this.injector.get(CanvasHelperService);
+    this.gizmoHelper = new GizmoHelper(this.engine);
+
+    this.camera.onViewMatrixChangedObservable.add(() => {
+      this.gizmoHelper.cameraGizmo.position = this.camera.position;
+
+    });
+
   }
+
+  public getGizmoHelper() { return this.gizmoHelper; }
   public getCanvas() { return this.canvas; }
   public getCamera() { return this.camera; }
   public getScene(): Scene { return this.scene }
@@ -75,7 +84,7 @@ export class EngineService {
 
   public setCurrentSelected(o: Mesh | Light, fire: boolean) {
     this.currentSelected = o;
-  
+
     if (fire) this.currentSelected$.next(o);
   }
 
@@ -87,6 +96,7 @@ export class EngineService {
 
     const rendererLoopCallback = () => {
       this.scene.render();
+      this.gizmoHelper.getScene().render();
     };
 
     if (this.windowService.document.readyState !== 'loading') {

@@ -20,7 +20,6 @@ export class LogService {
   public log(msg: any, _class: string, _action: string) {
     if (msg instanceof Container) msg = new MeshLog(<Mesh>msg.get());
     let logMessage = new Date().toLocaleTimeString() + " - " + JSON.stringify(msg) + " - [" + + _action + "] - " + _class;
-    console.log(logMessage);
     this.bufferLogConsole.push(logMessage);
   }
 

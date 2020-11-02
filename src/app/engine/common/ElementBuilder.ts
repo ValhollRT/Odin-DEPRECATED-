@@ -39,16 +39,6 @@ export class ElementBuilder {
         }
     }
 
-    setHighLight() {
-        /*
-        Container.highLight = new HighlightLayer("highLight", scene);
-        Container.highLight.outerGlow = true;
-        Container.highLight.blurHorizontalSize = 1;
-        Container.highLight.blurVerticalSize = 1;
-        Container.highLight.innerGlow = false;
-        */
-    }
-
     static createLight(type: string, scene: Scene) {
         let light = this.setLight(type, scene);
         return light;

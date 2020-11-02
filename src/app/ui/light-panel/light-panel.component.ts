@@ -19,7 +19,6 @@ export class LightPanelComponent implements OnInit {
         filter((o: any) => o instanceof Light),
         filter((light: Light) => light !== null && light !== undefined))
       .subscribe((l: Light) => {
-        console.log(l);
         this.currentLight = l;
         this.logService.log(l.name, "light selected", "LightPanelComponent")
       });
