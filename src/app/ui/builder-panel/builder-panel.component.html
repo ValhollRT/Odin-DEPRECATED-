@@ -1,0 +1,12 @@
+<div *ngIf="this.current !== null && this.current !== undefined ">
+	<div *ngFor="let p of this.current.panel.properties">
+		<div style="display: flex; flex-direction: row; justify-content: space-between;">
+			<span class="property-panel-text">{{p.label}}</span>
+			<div [ngSwitch]="p.controlType">
+				<input style="display: inline-block;" *ngSwitchCase="'number'" [id]="p.key" type="number" min="0"
+					max="9999" [(ngModel)]=this.current.panel.values[p.key]
+					(change) = updateGeom()>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,42 +1,82 @@
-import { Injectable } from '@angular/core';
-import { Color3, DirectionalLight, HemisphericLight, Light, LightGizmo, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3 } from "babylonjs";
+
+import { Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3, VertexData } from "babylonjs";
 import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
+import { BoxPanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
+import { Container } from "./Container";
 
 export class ElementBuilder {
 
     constructor() { }
 
-    static createMesh(type: string, scene: Scene): Mesh {
-        let mesh = this.setMesh(type, scene);
-        let mat: StandardMaterial = new StandardMaterial("material", scene);
-        mesh.material = mat;
-        mat.diffuseColor = new Color3(.75, .75, .75);
-        return mesh;
-    }
-
-    static setMesh(type: string, s: Scene, options?: any): Mesh {
+    static createContainerMesh(type: string, s: Scene): Container {
+        let options = {};
+        let container;
+        let gp: GeometryPanel;
+        let mesh;
         switch (type) {
             case GEOM.BOX:
-                return MeshBuilder.CreateBox("box", { height: 10, width: 10, depth: 10 }, s);
-            case GEOM.CYLINDER:
-                return MeshBuilder.CreateCylinder("cylinder", { diameter: 10 }, s);
-            case GEOM.DISC:
-                return MeshBuilder.CreateDisc("disc", { radius: 20, tessellation: 3 }, s);
-            case GEOM.ICOSPHERE:
-                return MeshBuilder.CreateIcoSphere("icosphere", {}, s);
-            case GEOM.PLANE:
-                return MeshBuilder.CreatePlane("plane", { size: 10, width: 10, height: 10 }, s);
-            case GEOM.POLYHEDRON:
-                return MeshBuilder.CreatePolyhedron("polyhedron", {}, s);
-            case GEOM.TORUS:
-                return MeshBuilder.CreateTorus("torus", {}, s);
-            case GEOM.TUBE:
+                gp = new BoxPanel();
+                mesh = MeshBuilder.CreateBox("box", (<BoxPanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateBox;
                 break;
-            case GEOM.RIBBON:
+            case GEOM.CYLINDER:
+                gp = new CylinderPanel();
+                mesh = MeshBuilder.CreateCylinder("Cylinder", (<CylinderPanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateCylinder;
+                break;
+            case GEOM.DISC:
+                gp = new DiscPanel();
+                mesh = MeshBuilder.CreateDisc("Disc", (<DiscPanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateDisc;
+                break;
+            case GEOM.ICOSPHERE:
+                gp = new IcoSpherePanel();
+                mesh = MeshBuilder.CreateIcoSphere("IcoSphere", (<IcoSpherePanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateIcoSphere;
+                break;
+            case GEOM.PLANE:
+                gp = new PlanePanel();
+                mesh = MeshBuilder.CreatePlane("Plane", (<PlanePanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreatePlane;
+                break;
+            case GEOM.POLYHEDRON:
+                gp = new PolyhedronPanel();
+                mesh = MeshBuilder.CreatePolyhedron("Polyhedron", (<PolyhedronPanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreatePolyhedron;
+                break;
+            case GEOM.TORUS:
+                gp = new TorusPanel();
+                mesh = MeshBuilder.CreateTorus("Torus", (<TorusPanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateTorus;
                 break;
             case GEOM.SPHERE:
-                return MeshBuilder.CreateSphere("sphere", { diameter: 10 }, s);
+                gp = new SpherePanel();
+                mesh = MeshBuilder.CreateSphere("Sphere", (<SpherePanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateSphere;
+                break;
         }
+        // Default material
+        let mat: StandardMaterial = new StandardMaterial("material", s);
+        mat.diffuseColor = new Color3(.75, .75, .75);
+        (<Mesh>container.type).material = mat;
+
+        return container;
     }
 
     static createLight(type: string, scene: Scene) {

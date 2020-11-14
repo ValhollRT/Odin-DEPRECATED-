@@ -59,11 +59,12 @@ export class TransformMenuComponent implements OnInit {
     this.currentSelected = o;
     if (o instanceof Mesh) {
       this.tm.position = o.position;
-      if (o.rotationQuaternion !== null) {
+
+      if (o.rotationQuaternion !== null && o.rotationQuaternion !== undefined) {
         o.rotation = o.rotationQuaternion.toEulerAngles();
         o.rotationQuaternion = null;
         this.tm.rotation = o.rotation;
-      } else if (o.rotation !== null) {
+      } else if (o.rotation !== null && o.rotation !== undefined) {
         this.tm.rotation = o.rotation;
       }
 

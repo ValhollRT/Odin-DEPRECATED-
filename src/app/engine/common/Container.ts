@@ -1,17 +1,21 @@
 import { Utils } from '../Utils/Utils';
-import { Node, Mesh, Scene, MeshBuilder, StandardMaterial, Color3, HighlightLayer, PointLight, Light, HemisphericLight, DirectionalLight, Vector3, LightGizmo } from 'babylonjs';
+import { Node, Mesh, Scene, MeshBuilder, StandardMaterial, Color3, HighlightLayer, PointLight, Light, HemisphericLight, DirectionalLight, Vector3, LightGizmo, VertexData } from 'babylonjs';
 import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
+import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
 export class Container {
 
   public UUID: string;
   public name: string;
   public type: Mesh | Light = undefined;
+  public rebuildMesh: (options: any) => VertexData;
   public children: Container[] = [];
   public parent: Container;
+  public panel: GeometryPanel;
   public level: number = 0;
   public expandable: boolean = false;
   public selected: boolean;
   public hidden: boolean;
+
 
   constructor(type?: Mesh | Light) {
     this.type = type;

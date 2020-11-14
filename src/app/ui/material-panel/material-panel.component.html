@@ -1,4 +1,4 @@
-<div *ngIf="this.currentMesh!=null || this.currentMesh!=undefined">
+<div *ngIf="this.currentMesh!==null && this.currentMesh !==undefined">
     <div class="property-panel-group">
         <span class="property-panel-text">Name</span>
         <input style="width: 100%" type="text" [(ngModel)]="this.currentMesh.material.name">
@@ -27,11 +27,13 @@
         <span class="property-panel-text">Specular Power</span>
         <input type="range" min="0" max="1024" value="0" step="0.001"
             [(ngModel)]="$any(this.currentMesh.material).specularPower">
-        <input type="text" min="0" max="1" value={{$any(this.currentMesh.material).specularPower}} [(ngModel)]="$any(this.currentMesh.material).specularPower">
+        <input type="text" min="0" max="1" value={{$any(this.currentMesh.material).specularPower}}
+            [(ngModel)]="$any(this.currentMesh.material).specularPower">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Alpha</span>
         <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.currentMesh.material).alpha">
-        <input type="text" min="0" max="1" value={{this.currentMesh.material.alpha}} [(ngModel)]="$any(this.currentMesh.material).alpha">
+        <input type="text" min="0" max="1" value={{this.currentMesh.material.alpha}}
+            [(ngModel)]="$any(this.currentMesh.material).alpha">
     </div>
 </div>

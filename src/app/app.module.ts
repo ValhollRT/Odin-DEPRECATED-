@@ -26,6 +26,7 @@ import { PrecisionPipe } from './pipes/precision.pipe';
 import { AllAngularMaterialModule } from './all-angular-material.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ContentPanelComponent,
     SidebarPropertiesComponent,
     MaterialPanelComponent,
-    LightPanelComponent
+    LightPanelComponent,
+    BuilderPanelComponent
   ],
   imports: [
     FormsModule,

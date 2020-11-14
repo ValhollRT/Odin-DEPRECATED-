@@ -22,7 +22,7 @@ export class GizmoHelper {
 		this.cameraGizmo = new ArcRotateCamera("cameraGizmo", 0, 0, 100, new Vector3(0, 0, 0), this.sceneGizmo);
 		this.cameraGizmo.lowerRadiusLimit = 100;
 		this.cameraGizmo.upperRadiusLimit = 100;
-		this.cameraGizmo.viewport = new Viewport(0.85, 0, 0.2, 0.2);
+		this.cameraGizmo.viewport = new Viewport(0.865, -.04, 0.2, 0.2);
 		let light = new HemisphericLight("HemisphericLight", new Vector3(0, 0, 0), this.sceneGizmo);
 		light.intensity = 1.5;
 

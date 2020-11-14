@@ -5,6 +5,7 @@ import {
   ArcRotateCamera, Color4, Engine,
   HemisphericLight,
   Light,
+  LightBlock,
   Mesh, PointLight, Scene,
   Vector3
 } from 'babylonjs';
@@ -37,6 +38,8 @@ export class EngineService {
 
   public newContainer$ = new BehaviorSubject<Container>(undefined);
 
+  flatMeshContainer = new Map<Mesh | Light, Container>();
+
   public constructor(
     public windowService: WindowService,
     public logService: LogService,
@@ -60,9 +63,7 @@ export class EngineService {
 
     this.camera.onViewMatrixChangedObservable.add(() => {
       this.gizmoHelper.cameraGizmo.position = this.camera.position;
-
     });
-
   }
 
   public getGizmoHelper() { return this.gizmoHelper; }
@@ -71,7 +72,8 @@ export class EngineService {
   public getScene(): Scene { return this.scene }
 
   public createMesh(type: string): void {
-    let c = new Container(ElementBuilder.createMesh(type, this.getScene()));
+    let c = ElementBuilder.createContainerMesh(type, this.getScene());
+    this.flatMeshContainer.set(c.type, c);
     this.saveContainerToDataTree(c);
   }
 
@@ -84,7 +86,6 @@ export class EngineService {
 
   public setCurrentSelected(o: Mesh | Light, fire: boolean) {
     this.currentSelected = o;
-
     if (fire) this.currentSelected$.next(o);
   }
 

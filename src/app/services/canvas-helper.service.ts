@@ -45,15 +45,13 @@ export class CanvasHelperService {
         }
 
         es.getCurrentSelected$()
-            .pipe(filter((obj: any) => obj !== null && obj !== undefined),
-                distinctUntilChanged())
-            .subscribe((o: any) => {
-                this.setSelected(o);
-            });
+            .pipe(filter((obj: any) => obj !== null && obj !== undefined), distinctUntilChanged())
+            .subscribe((o: any) => { this.setSelected(o); });
 
         canvas.onkeydown = (e) => {
             if (e.key == 'w') {
                 this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
+                this.gizmoManager.gizmos.positionGizmo.snapDistance = 0.001;
                 this.gizmoManager.rotationGizmoEnabled = false;
                 this.gizmoManager.scaleGizmoEnabled = false;
                 this.gizmoManager.boundingBoxGizmoEnabled = false;
@@ -61,6 +59,7 @@ export class CanvasHelperService {
             if (e.key == 'e') {
                 this.gizmoManager.positionGizmoEnabled = false;
                 this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled
+                this.gizmoManager.gizmos.rotationGizmo.snapDistance = 0.001;
                 this.gizmoManager.scaleGizmoEnabled = false;
                 this.gizmoManager.boundingBoxGizmoEnabled = false;
             }
@@ -68,6 +67,7 @@ export class CanvasHelperService {
                 this.gizmoManager.positionGizmoEnabled = false;
                 this.gizmoManager.rotationGizmoEnabled = false;
                 this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled
+                this.gizmoManager.gizmos.scaleGizmo.snapDistance = 0.001;
                 this.gizmoManager.boundingBoxGizmoEnabled = false;
             }
             if (e.key == 'q') {
@@ -161,7 +161,7 @@ export class CanvasHelperService {
 
     setSelected(o: Mesh | Light, emit: boolean = true) {
         this.clearHighLightSelectedMesh();
-        this.es.setCurrentSelected(o, true);
+        this.es.setCurrentSelected(o, emit);
 
         if (o instanceof Mesh) {
             this.gizmoManager.attachToMesh(o);
