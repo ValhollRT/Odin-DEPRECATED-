@@ -30,12 +30,15 @@ export class GizmoHelper {
 		// this.cameraGizmo.attachControl(engine.getRenderingCanvas(), true, true);
 		// var boxGizmo = MeshBuilder.CreateBox("cubeGizmo", { size: 25 }, this.sceneGizmo);
 		var redMat = new StandardMaterial("redMat", this.sceneGizmo);
+		redMat.freeze();
 		redMat.diffuseColor = new Color3(1, 0, 0);
 		redMat.specularColor = new Color3(0.1, 0.1, 0.1);
 		var greenMat = new StandardMaterial("greenMat", this.sceneGizmo);
+		greenMat.freeze();
 		greenMat.diffuseColor = new Color3(0, 1, 0);
 		greenMat.specularColor = new Color3(0.1, 0.1, 0.1);
 		var blueMat = new StandardMaterial("blueMat", this.sceneGizmo);
+		blueMat.freeze();
 		blueMat.diffuseColor = new Color3(0, 0, 1);
 		blueMat.specularColor = new Color3(0.1, 0.1, 0.1);
 

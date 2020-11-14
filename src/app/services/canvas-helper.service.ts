@@ -86,6 +86,50 @@ export class CanvasHelperService {
         this.gizmoManager.rotationGizmoEnabled = false;
         this.gizmoManager.scaleGizmoEnabled = false;
         this.gizmoManager.boundingBoxGizmoEnabled = false;
+        this.onDragObservableGizmo();
+        this.onDragStartObservableGizmo();
+        this.onDragEndObservableGizmo();
+    }
+
+    public lock: boolean = false;
+    updateTransformCurrent() { }
+    startTransformCurrent() { this.lock = true; }
+    endTransformCurrent() { this.lock = false; }
+
+    public onDragObservableGizmo() {
+        this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    }
+
+    public onDragStartObservableGizmo() {
+        this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    }
+
+    public onDragEndObservableGizmo() {
+        this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+        this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
     }
 
     getGroundPosition() {
@@ -98,6 +142,7 @@ export class CanvasHelperService {
     }
 
     public onPointerDown = (ev) => {
+        if (this.lock) return;
         if (ev.button !== 0) return;
         this.clearHighLightSelectedMesh();
         // check if we are under a mesh
@@ -110,7 +155,6 @@ export class CanvasHelperService {
                     this.es.getCamera().detachControl(this.es.getCanvas());
                 }, 0);
             }
-            this.getCurrentMeshTransformation();
         }
     }
 
@@ -134,36 +178,22 @@ export class CanvasHelperService {
         this.startingPoint = current;
     }
 
-    updateTransformCurrent() {
-        let cs = this.es.getCurrentSelected();
-        if (cs !== null) { this.setSelected(cs, false); }
-    }
-
-    public getCurrentMeshTransformation() {
-        this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-        this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    }
-
     setSelected(o: Mesh | Light, emit: boolean = true) {
         this.clearHighLightSelectedMesh();
         this.es.setCurrentSelected(o, emit);
 
         if (o instanceof Mesh) {
             this.gizmoManager.attachToMesh(o);
-            o.enableEdgesRendering();
-            o.edgesColor.copyFromFloats(0, 1, .5, 0.5);
-            o.edgesWidth = 10;
+            this.updateEdgedRendering(o);
         } else {
             this.lightGizmo.light = o;
-            //this.gizmoManager.attachToMesh(this.lightGizmo.attachedMesh);
         }
+    }
+
+    updateEdgedRendering(m: Mesh) {
+        m.enableEdgesRendering();
+        m.edgesColor.copyFromFloats(0, 1, .5, 0.5);
+        m.edgesWidth = 10;
     }
 
     clearHighLightSelectedMesh() {

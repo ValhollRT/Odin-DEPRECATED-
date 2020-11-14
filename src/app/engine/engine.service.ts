@@ -47,8 +47,9 @@ export class EngineService {
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
-    this.engine = new Engine(this.canvas, true);
+    this.engine = new Engine(this.canvas, true, null, true);
     this.scene = new Scene(this.engine);
+    this.scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
     this.scene.clearColor = new Color4(0.09, 0.09, 0.1, 1);
 
     EngineService.grid = new Grid(this.scene);
@@ -70,6 +71,7 @@ export class EngineService {
   public getCanvas() { return this.canvas; }
   public getCamera() { return this.camera; }
   public getScene(): Scene { return this.scene }
+  public getCanvasHelper() { return this.canvasHelper; }
 
   public createMesh(type: string): void {
     let c = ElementBuilder.createContainerMesh(type, this.getScene());

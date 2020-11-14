@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
 import { BoxPanel } from 'src/app/models/geometry/geometry-panels';
+import { CanvasHelperService } from 'src/app/services/index.service';
 
 @Component({
   selector: 'builder-panel',
@@ -14,7 +15,9 @@ import { BoxPanel } from 'src/app/models/geometry/geometry-panels';
 export class BuilderPanelComponent implements OnInit {
 
   public current: Container;
-  constructor(public engineService: EngineService) { }
+  constructor(
+    public engineService: EngineService
+  ) { }
 
   ngOnInit(): void {
     this.engineService.getCurrentSelected$()
@@ -27,6 +30,8 @@ export class BuilderPanelComponent implements OnInit {
   updateGeom() {
     let vd = this.current.rebuildMesh(this.current.panel.values);
     vd.applyToMesh(<Mesh>this.current.type, true);
+    this.engineService.getCanvasHelper().updateEdgedRendering(<Mesh>(this.current.type));
+
   }
 
 }

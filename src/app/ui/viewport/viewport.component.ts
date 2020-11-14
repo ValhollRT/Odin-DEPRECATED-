@@ -2,7 +2,8 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild
+  ViewChild,
+  NgZone
 } from '@angular/core';
 import { EngineService } from '../../engine/engine.service';
 @Component({
@@ -15,11 +16,15 @@ export class ViewportComponent implements OnInit {
   @ViewChild('rendererCanvas', { static: true })
   public rendererCanvas: ElementRef<HTMLCanvasElement>;
 
-  public constructor(private engServ: EngineService) { }
+  public constructor(
+    public ngZone: NgZone,
+    private engServ: EngineService) { }
 
   public ngOnInit(): void {
     this.engServ.createScene(this.rendererCanvas);
-    this.engServ.animate();
+    this.ngZone.runOutsideAngular(() => {
+      this.engServ.animate();
+    });
   }
 
 }
