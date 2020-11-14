@@ -3,20 +3,17 @@ import { Optional } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
 import {
   ArcRotateCamera, Color4, Engine,
-  HemisphericLight,
   Light,
-  LightBlock,
-  Mesh, PointLight, Scene,
+  Mesh, Scene,
   Vector3
 } from 'babylonjs';
 import 'babylonjs-materials';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CanvasHelperService } from '../services/index.service';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
 import { Container } from './common/Container';
 import { ElementBuilder } from './common/ElementBuilder';
-import { AxisHelper } from './helpers/AxisHelper';
 import { GizmoHelper } from './helpers/GizmoHelper';
 import { Grid } from './helpers/Grid';
 
@@ -55,7 +52,6 @@ export class EngineService {
     EngineService.grid = new Grid(this.scene);
     this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(0, 0, 0), this.scene);
     this.camera.setTarget(Vector3.Zero());
-    this.camera.attachControl(this.canvas, true, true);
     this.camera.panningSensibility = 100;
 
     this.scene.registerAfterRender(() => { });

@@ -72,6 +72,17 @@ export class CanvasHelperService {
                 this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
                 this.gizmoManager.gizmos.positionGizmo.updateScale = true;
             }
+            if (e.key == 'Alt') {
+                this.lock = true;
+                this.es.getCamera().attachControl(canvas, true, true);
+            }
+        }
+
+        canvas.onkeyup = (e) => {
+            if (e.key == 'Alt') {
+                this.lock = false;
+                this.es.getCamera().detachControl(this.es.getCanvas());
+            }
         }
 
         this.initializeGizmo();
