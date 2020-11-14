@@ -1,6 +1,7 @@
 <div class="container">
     <div #scroller (scroll)=onElementScroll($event) class="panel-scroll">
         <div class="panel-scroll-child">
+            <div (click)="clearConsole()" style="margin: 5px;" class="icon-btn-color icon-close icon-xs"></div>
             <ul *ngFor="let blc of logService.bufferLogConsole" class="inner-text-console">
                 <li>{{blc}}</li>
             </ul>

@@ -184,6 +184,10 @@ body {
   mask-image: url("assets/icons/info.svg");
 }
 
+.icon-close {
+  mask-image: url("assets/icons/close.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);

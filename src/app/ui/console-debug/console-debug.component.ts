@@ -16,6 +16,7 @@ export class ConsoleDebugComponent implements OnInit {
   public onElementScroll(event) {
     this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;
   }
-
-
+  clearConsole(){
+    this.logService.bufferLogConsole = [];
+  }
 }
