@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HighlightLayer, Light, LightGizmo, Mesh, PickingInfo, Scene, TargetCamera, ShadowLight, GizmoManager } from 'babylonjs';
+import { Light, LightGizmo, Mesh, PickingInfo, ShadowLight, GizmoManager } from 'babylonjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { EngineService } from '../engine/engine.service';
 
@@ -10,7 +10,6 @@ export class CanvasHelperService {
     private startingPoint: any;
 
     public gizmoManager: GizmoManager;
-    private highLight: HighlightLayer;
     public lightGizmo: LightGizmo;
 
     constructor(public es: EngineService) {
@@ -18,13 +17,6 @@ export class CanvasHelperService {
         let canvas = es.getCanvas();
         //LightGizmo
         this.lightGizmo = new LightGizmo();
-
-        // hightlight selected mesh    
-        this.highLight = new HighlightLayer("highLight", es.getScene());
-        this.highLight.outerGlow = true;
-        this.highLight.blurHorizontalSize = 0.5;
-        this.highLight.blurVerticalSize = 0.5;
-        this.highLight.innerGlow = false;
 
         // Initialize GizmoManager
         this.gizmoManager = new GizmoManager(es.getScene())
@@ -165,7 +157,9 @@ export class CanvasHelperService {
 
         if (o instanceof Mesh) {
             this.gizmoManager.attachToMesh(o);
-            this.highLight.addMesh(o, BABYLON.Color3.Yellow());
+            o.enableEdgesRendering();
+            o.edgesColor.copyFromFloats(0, 1, .5, 0.5);
+            o.edgesWidth = 10;
         } else {
             this.lightGizmo.light = o;
             //this.gizmoManager.attachToMesh(this.lightGizmo.attachedMesh);
@@ -173,7 +167,12 @@ export class CanvasHelperService {
     }
 
     clearHighLightSelectedMesh() {
-        this.highLight.removeAllMeshes();
+        let selected = this.es.getCurrentSelected();
+        if (selected instanceof Mesh) {
+            selected.disableEdgesRendering();
+            selected.edgesWidth = 0;
+        }
+
     }
 
 }

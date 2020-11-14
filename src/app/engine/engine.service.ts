@@ -85,6 +85,11 @@ export class EngineService {
   public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
 
   public setCurrentSelected(o: Mesh | Light, fire: boolean) {
+    if (this.currentSelected instanceof Mesh) {
+      this.currentSelected.disableEdgesRendering();
+      this.currentSelected.edgesWidth = 0;
+    }
+
     this.currentSelected = o;
     if (fire) this.currentSelected$.next(o);
   }
