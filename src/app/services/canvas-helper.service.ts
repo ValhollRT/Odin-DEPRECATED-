@@ -171,7 +171,7 @@ export class CanvasHelperService {
 
     public onPointerUp = () => {
         if (this.startingPoint) {
-            this.es.getCamera().attachControl(this.es.getCanvas(), true);
+            this.es.getCamera().attachControl(this.es.getCanvas(), true, true);
             this.startingPoint = null;
             return;
         }
