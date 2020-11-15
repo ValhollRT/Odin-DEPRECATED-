@@ -45,11 +45,11 @@ export class GizmoHelper {
 		// X Axi
 		var xplus = MeshBuilder.CreateCylinder("xplus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
 		var xminus = MeshBuilder.CreateCylinder("xminus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
-		xplus.rotation.x = BABYLON.Tools.ToRadians(90);
-		xplus.position.z = -8;
+		xplus.rotation.z = BABYLON.Tools.ToRadians(-90);
+		xplus.position.x = -8;
 		xplus.material = redMat;
-		xminus.rotation.x = BABYLON.Tools.ToRadians(-90);
-		xminus.position.z = 8;
+		xminus.rotation.z = BABYLON.Tools.ToRadians(90);
+		xminus.position.x = 8;
 		xminus.material = redMat;
 
 		// Y Axi
@@ -65,11 +65,11 @@ export class GizmoHelper {
 		// Z Axi
 		var zplus = MeshBuilder.CreateCylinder("zplus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
 		var zminus = MeshBuilder.CreateCylinder("zminus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
-		zplus.rotation.z = BABYLON.Tools.ToRadians(90);
-		zplus.position.x = 8;
+		zplus.rotation.x = BABYLON.Tools.ToRadians(-90);
+		zplus.position.z = 8;
 		zplus.material = blueMat;
-		zminus.rotation.z = BABYLON.Tools.ToRadians(-90);
-		zminus.position.x = -8;
+		zminus.rotation.x = BABYLON.Tools.ToRadians(90);
+		zminus.position.z = -8;
 		zminus.material = blueMat;
 	}
 
