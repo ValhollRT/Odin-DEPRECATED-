@@ -18,8 +18,8 @@
 
           <div (click)="clickNodeContainer($event, node)" class="box-node"
             [ngClass]="{'container-selected': node.selected == true}">
-            <div [ngClass]="node.hidden ? 'icon-hide' : 'icon-unhide'" 
-            (click)="clickHideNode($event, node)" class="icon-color icon-xs float-left"></div>
+            <div [ngClass]="node.hidden ? 'icon-hide' : 'icon-unhide'" (click)="clickHideNode($event, node)"
+              class="icon-color icon-xs float-left"></div>
             <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
             <div class="icon-color icon-axis icon-xs float-left"></div>
@@ -44,8 +44,8 @@
 
           <div (click)="clickNodeContainer($event, node)" class="box-node"
             [ngClass]="{'container-selected': node.selected == true}">
-            <div [ngClass]="node.hidden ? 'icon-hide' : 'icon-unhide'" 
-            (click)="clickHideNode($event, node)" class="icon-color icon-xs float-left"></div>
+            <div [ngClass]="node.hidden ? 'icon-hide' : 'icon-unhide'" (click)="clickHideNode($event, node)"
+              class="icon-color icon-xs float-left"></div>
             <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
             <div class="icon-color icon-axis icon-xs float-left"></div>
@@ -59,3 +59,13 @@
   </div>
 </div>
 <tool-menu></tool-menu>
+<div style="
+position: absolute;
+bottom: 6px;
+color: rgb(255, 187, 0);
+z-index: 3;
+left: 305px;
+text-align: left;
+opacity: .6;
+">Odin Ver. 0.0.6   [Q select, W Move, E Rotate, R Scale, T Local Global Move]   [Camera Viewport - 'Atl' + (LMB - WMB - RMB)]
+</div>
