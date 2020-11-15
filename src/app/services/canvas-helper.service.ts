@@ -41,6 +41,7 @@ export class CanvasHelperService {
             .subscribe((o: any) => { this.setSelected(o); });
 
         canvas.onkeydown = (e) => {
+            this.lock = true;
             if (e.key == 'w') {
                 this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
                 this.gizmoManager.gizmos.positionGizmo.snapDistance = 0.001;
@@ -73,7 +74,6 @@ export class CanvasHelperService {
                 this.gizmoManager.gizmos.positionGizmo.updateScale = true;
             }
             if (e.key == 'Alt') {
-                this.lock = true;
                 this.es.getCamera().attachControl(canvas, true, true);
             }
         }
@@ -171,7 +171,6 @@ export class CanvasHelperService {
 
     public onPointerUp = () => {
         if (this.startingPoint) {
-            this.es.getCamera().attachControl(this.es.getCanvas(), true, true);
             this.startingPoint = null;
             return;
         }
