@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Light, LightGizmo, Mesh, PickingInfo, ShadowLight, GizmoManager } from 'babylonjs';
+import { Light, LightGizmo, Mesh, PickingInfo, ShadowLight, GizmoManager, Vector3 } from 'babylonjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { EngineService } from '../engine/engine.service';
 
@@ -42,6 +42,12 @@ export class CanvasHelperService {
 
         canvas.onkeydown = (e) => {
             this.lock = true;
+            /*FIT VIEW*/
+            if (e.key == 'f') {
+                let mesh = this.es.getCurrentSelected();
+                let pMesh = mesh.getAbsolutePosition();
+                if (mesh instanceof Mesh) camera.setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
+            }
             if (e.key == 'w') {
                 this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
                 this.gizmoManager.gizmos.positionGizmo.snapDistance = 0.001;
