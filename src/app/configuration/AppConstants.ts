@@ -8,6 +8,7 @@ export const GEOM = {
     TORUS: 'TORUS',
     TUBE: 'TUBE',
     RIBBON: 'RIBBON',
+    CAPSULE: 'CAPSULE',
     SPHERE: 'SPHERE',
 };
 

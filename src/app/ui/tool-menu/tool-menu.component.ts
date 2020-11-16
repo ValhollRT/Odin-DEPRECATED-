@@ -25,6 +25,7 @@ export class ToolMenuComponent implements OnInit {
     switch (param) {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
+      case GEOM.CAPSULE:
         this.createMesh(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
@@ -63,6 +64,7 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Plane', param: GEOM.PLANE },
           { displayName: 'Polyhedron', param: GEOM.POLYHEDRON },
           { displayName: 'Torus', param: GEOM.TORUS },
+          { displayName: 'Capsule', param: GEOM.CAPSULE },
           { displayName: 'Sphere', param: GEOM.SPHERE },
         ]
       },

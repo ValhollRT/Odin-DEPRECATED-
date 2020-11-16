@@ -1,7 +1,7 @@
 
 import { Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3, VertexData } from "babylonjs";
 import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
-import { BoxPanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
+import { BoxPanel, CapsulePanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
 import { Container } from "./Container";
 
 export class ElementBuilder {
@@ -62,6 +62,13 @@ export class ElementBuilder {
                 container = new Container(mesh);
                 container.panel = gp;
                 container.rebuildMesh = VertexData.CreateTorus;
+                break;
+            case GEOM.CAPSULE:
+                gp = new CapsulePanel();
+                mesh = MeshBuilder.CreateCapsule("Capsule", (<CapsulePanel>gp).values, s);
+                container = new Container(mesh);
+                container.panel = gp;
+                container.rebuildMesh = VertexData.CreateCapsule;
                 break;
             case GEOM.SPHERE:
                 gp = new SpherePanel();
