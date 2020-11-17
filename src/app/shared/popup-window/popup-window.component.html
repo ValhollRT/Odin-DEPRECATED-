@@ -1,0 +1,11 @@
+<div #transformMenuValue class="container" [ngClass]="{'open-modal': this.isOpen}" cdkDrag>
+    <div class="input-group">
+        <div style="display: flex; align-items: center; margin-bottom: 3px;">
+            <div style="flex: 1" class="title-section-menu">{{title}}</div>
+            <div (click)="closeDialog()" style="flex: 0" class="float-right" style="cursor: pointer;">
+                <div class="icon-color icon-close icon-xs"></div>
+            </div>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>

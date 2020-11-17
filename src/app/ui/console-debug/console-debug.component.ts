@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AppService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
 
 @Component({
@@ -7,16 +8,25 @@ import { LogService } from 'src/app/services/log.service';
   styleUrls: ['./console-debug.component.scss']
 })
 export class ConsoleDebugComponent implements OnInit {
+
   @ViewChild('scroller') scroller: ElementRef;
 
-  constructor(public logService: LogService) { }
+  isOpen = false;
 
-  ngOnInit(): void { }
+  constructor(public appService: AppService, public logService: LogService) { }
 
+  ngOnInit() {
+    console.log("console init");
+    this.appService.isOpenConsole.subscribe(isOpen => {
+      this.isOpen = isOpen;
+    });
+  }
   public onElementScroll(event) {
     this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;
   }
-  clearConsole(){
+  clearConsole() {
     this.logService.bufferLogConsole = [];
   }
+
+  closeDialog() { console.log("close console"); this.appService.isOpenConsole.next(false); }
 }

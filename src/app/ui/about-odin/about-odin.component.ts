@@ -17,5 +17,4 @@ export class AboutOdinComponent implements OnInit {
     });
   }
   closeDialog() { this.appService.isOpenAboutUs.next(false); }
-
 }

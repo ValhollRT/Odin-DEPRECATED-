@@ -27,6 +27,7 @@ import { AllAngularMaterialModule } from './all-angular-material.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.component';
+import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.componen
     SidebarPropertiesComponent,
     MaterialPanelComponent,
     LightPanelComponent,
-    BuilderPanelComponent
+    BuilderPanelComponent,
+    PopupWindowComponent
   ],
   imports: [
     FormsModule,

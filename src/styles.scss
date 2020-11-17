@@ -50,6 +50,7 @@ a:hover {
   color: var(--console-debug-color);
   font-family: arial;
   text-decoration: none;
+  cursor: pointer;
 }
 
 a:visited {
@@ -76,6 +77,10 @@ input:focus {
 a {
   text-decoration: none !important;
   outline: none !important;
+}
+
+h3, p {
+  color: var(--main-menu-color);
 }
 
 /* engine style */

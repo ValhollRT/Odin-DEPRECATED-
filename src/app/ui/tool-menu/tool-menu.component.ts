@@ -33,8 +33,12 @@ export class ToolMenuComponent implements OnInit {
         this.createLight(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
+      case 'CONSOLE':
+        this.openConsole();
+        break;
       case 'ABOUTODIN':
         this.aboutOdin();
+        break;
       default:
         break;
     }
@@ -46,6 +50,11 @@ export class ToolMenuComponent implements OnInit {
 
   createLight(param: string): void {
     this.engine.createLight(param);
+  }
+
+  openConsole(): void {
+    this.logService.log("Console", "ToolMenuComponent", "open");
+    this.appService.openConsole();
   }
 
   aboutOdin(): void {
@@ -88,6 +97,7 @@ export class ToolMenuComponent implements OnInit {
         ]
       },
       */
+      { displayName: "Console", icon: 'icon-console', param: "CONSOLE" },
       { displayName: "About Odin", icon: 'icon-info', param: "ABOUTODIN" }
     ];
   }
