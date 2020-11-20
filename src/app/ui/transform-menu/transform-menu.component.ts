@@ -20,7 +20,8 @@ class TransformMenu {
 })
 export class TransformMenuComponent implements OnInit {
 
-  currentSelected: any;
+  selected: any;
+  isMeshSelected: Boolean = false;
   tm: TransformMenu;
 
   @ViewChild('rx', { static: false }) rx: ElementRef;
@@ -43,6 +44,7 @@ export class TransformMenuComponent implements OnInit {
     this.engineService.getCurrentSelected$()
       .pipe(filter((obj: any) => obj !== null && obj !== undefined))
       .subscribe((o: Mesh | Light) => {
+        if (o instanceof Mesh) this.isMeshSelected = true; else this.isMeshSelected = false;
         this.setTransformMenuSelected(o);
         this.logService.log(this.tm, "edited transform", "TransformMenuComponent");
       });
@@ -52,14 +54,12 @@ export class TransformMenuComponent implements OnInit {
     if (o instanceof HemisphericLight) {
       this.resetAll();
       // This is important to hide the transform panel
-      this.currentSelected = null;
+      this.selected = null;
       return;
     }
 
-    this.currentSelected = o;
+    this.selected = o;
     if (o instanceof Mesh) {
-      this.tm.position = o.position;
-
       if (o.rotationQuaternion !== null && o.rotationQuaternion !== undefined) {
         o.rotation = o.rotationQuaternion.toEulerAngles();
         o.rotationQuaternion = null;
@@ -67,13 +67,10 @@ export class TransformMenuComponent implements OnInit {
       } else if (o.rotation !== null && o.rotation !== undefined) {
         this.tm.rotation = o.rotation;
       }
-
-      this.tm.scaling = o.scaling;
-      this.tm.center = o.getPivotPoint();
       return;
     }
     if (o instanceof ShadowLight) {
-      this.tm.position = o.position;
+
       if (o.direction !== undefined && (o instanceof DirectionalLight || SpotLight)) {
         this.tm.rotation = Utils.radiansToDegreesVector(o.direction);
       } else {
@@ -90,16 +87,16 @@ export class TransformMenuComponent implements OnInit {
     let x = Utils.degreeToRadians(this.rx.nativeElement.value);
     let y = Utils.degreeToRadians(this.ry.nativeElement.value);
     let z = Utils.degreeToRadians(this.rz.nativeElement.value);
-    if (this.currentSelected instanceof Mesh) {
-      this.currentSelected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
-    } else if (this.currentSelected instanceof DirectionalLight || SpotLight) {
-      this.currentSelected.direction = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
+    if (this.selected instanceof Mesh) {
+      this.selected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
+    } else if (this.selected instanceof DirectionalLight || SpotLight) {
+      this.selected.direction = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
     }
   }
 
   updateCenterAxis() {
-    this.currentSelected.showSubMeshesBoundingBox = true;
-    this.currentSelected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, this.cz.nativeElement.value));
+    this.selected.showSubMeshesBoundingBox = true;
+    this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, this.cz.nativeElement.value));
   }
 
   resetAll() {
