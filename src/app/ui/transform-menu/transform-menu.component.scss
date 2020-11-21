@@ -8,7 +8,6 @@
 
 
 label {
-    float: left;
     color: white;
     margin: 0px 5px;
     width: 5px;
@@ -26,11 +25,32 @@ label {
     float: left;
 }
 
-.col-transform-menu{
-    // float: left;
-}
-
 .title-section-menu{
     font-size: 10px;
     color: var(--console-debug-color);
 }
+
+.resetButton {
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	background-color:#768d87;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+    padding: 2px 2px;
+    height: 17px;
+    margin: 0px 0px 0px 5px;
+}
+
+.resetButton:hover {
+	background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+	background-color:#6c7c7c;
+}
+
+
+.input-group > div {
+    display: flex;
+    margin: 1px 0px;
+    justify-content: center;
+}
+
+        

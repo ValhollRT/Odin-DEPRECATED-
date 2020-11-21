@@ -99,6 +99,16 @@ export class TransformMenuComponent implements OnInit {
     this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, this.cz.nativeElement.value));
   }
 
+  resetPivotX() { this.selected.setPivotPoint(new Vector3(0, this.cy.nativeElement.value, this.cz.nativeElement.value)); }
+  resetPivotY() { this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, 0, this.cz.nativeElement.value)); }
+  resetPivotZ() { this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, 0)); }
+
+  resetPositions() { this.selected.position = new Vector3(0, 0, 0); }
+  resetRotations() { this.selected.rotation = new Vector3(0, 0, 0); }
+  resetDirections() { this.selected.direction = new Vector3(0, 0, 0); }
+  resetScalings() { this.selected.scaling = new Vector3(1, 1, 1); }
+  resetCenters() { this.selected.setPivotPoint(new Vector3(0, 0, 0)); }
+
   resetAll() {
     this.tm.position = new Vector3(0, 0, 0);
     this.tm.rotation = new Vector3(0, 0, 0);

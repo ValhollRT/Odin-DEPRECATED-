@@ -2,72 +2,127 @@
     <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Position</div>
-            <label for="positionX">X</label>
-            <input type="number" [ngModel]="selected.position.x | precision"
-                (ngModelChange)="selected.position.x = $event" min="-99999" max="99999" step="1">
-            <label for="positionY">Y</label>
-            <input type="number" [ngModel]="selected.position.y | precision"
-                (ngModelChange)="selected.position.y = $event" min="-99999" max="99999" step="1">
-            <label for="positionZ">Z</label>
-            <input type="number" [ngModel]="selected.position.z | precision"
-                (ngModelChange)="selected.position.z = $event" min="-99999" max="99999" step="1">
+            <div>
+                <label for="positionX">X</label>
+                <input type="number" [ngModel]="selected.position.x | precision"
+                    (ngModelChange)="selected.position.x = $event" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetPositions()" (click)="selected.position.x = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+            <div>
+                <label for="positionY">Y</label>
+                <input type="number" [ngModel]="selected.position.y | precision"
+                    (ngModelChange)="selected.position.y = $event" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetPositions()" (click)="selected.position.y = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+            <div>
+                <label for="positionZ">Z</label>
+                <input type="number" [ngModel]="selected.position.z | precision"
+                    (ngModelChange)="selected.position.z = $event" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetPositions()" (click)="selected.position.z = 0" href="#" class="resetButton">R
+                </div>
+            </div>
         </div>
 
         <div class="input-group" *ngIf="isMeshSelected===true">
             <div class="title-section-menu">Rotation</div>
-            <label for="rotationX">X</label>
-            <input #rx type="number" [ngModel]="selected.rotation.x | rotation" (ngModelChange)=updateRotation($event)
-                min="-99999" max="99999" step="1">
-            <label for="rotationY">Y</label>
-            <input #ry type="number" [ngModel]="selected.rotation.y | rotation" (ngModelChange)=updateRotation($event)
-                min="-99999" max="99999" step="1">
-            <label for="rotationZ">Z</label>
-            <input #rz type="number" [ngModel]="selected.rotation.z | rotation" (ngModelChange)=updateRotation($event)
-                min="-99999" max="99999" step="1">
+            <div>
+                <label for="rotationX">X</label>
+                <input #rx type="number" [ngModel]="selected.rotation.x | rotation"
+                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <div (dblclick)="resetRotations()" (click)="selected.rotation.x = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+            <div>
+                <label for="rotationY">Y</label>
+                <input #ry type="number" [ngModel]="selected.rotation.y | rotation"
+                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <div (dblclick)="resetRotations()" (click)="selected.rotation.y = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+            <div>
+                <label for="rotationZ">Z</label>
+                <input #rz type="number" [ngModel]="selected.rotation.z | rotation"
+                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <div (dblclick)="resetRotations()" (click)="selected.rotation.z = 0" href="#" class="resetButton">R
+                </div>
+            </div>
         </div>
         <div class="input-group" *ngIf="isMeshSelected===false">
             <div class="title-section-menu">Rotation</div>
-            <label for="rotationX">X</label>
-            <input #rx type="number" [ngModel]="selected.direction.x | rotation" (ngModelChange)=updateRotation($event)
-                min="-99999" max="99999" step="1">
-            <label for="rotationY">Y</label>
-            <input #ry type="number" [ngModel]="selected.direction.y | rotation" (ngModelChange)=updateRotation($event)
-                min="-99999" max="99999" step="1">
-            <label for="rotationZ">Z</label>
-            <input #rz type="number" [ngModel]="selected.direction.z | rotation" (ngModelChange)=updateRotation($event)
-                min="-99999" max="99999" step="1">
+            <div>
+                <label for="rotationX">X</label>
+                <input #rx type="number" [ngModel]="selected.direction.x | rotation"
+                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <div (dblclick)="resetDirections()" (click)="selected.direction.x = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+            <div>
+                <label for="rotationY">Y</label>
+                <input #ry type="number" [ngModel]="selected.direction.y | rotation"
+                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <div (dblclick)="resetDirections()" (click)="selected.direction.y = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+            <div>
+                <label for="rotationZ">Z</label>
+                <input #rz type="number" [ngModel]="selected.direction.z | rotation"
+                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <div (dblclick)="resetDirections()" (click)="selected.direction.z = 0" href="#" class="resetButton">R
+                </div>
+            </div>
+
         </div>
         <div class="input-group" *ngIf="isMeshSelected===true">
             <div class="title-section-menu">Scaling</div>
-            <label for="scalingX">X</label>
-            <input type="number" [ngModel]="selected.scaling.x | precision"
-                (ngModelChange)="selected.scaling.x = $event" min="-99999" max="99999" step="1">
-            <label for="scalingY">Y</label>
-            <input type="number" [ngModel]="selected.scaling.y | precision"
-                (ngModelChange)="selected.scaling.y = $event" min="-99999" max="99999" step="1">
-            <label for="scalingZ">Z</label>
-            <input type="number" [ngModel]="selected.scaling.z | precision"
-                (ngModelChange)="selected.scaling.z = $event" min="-99999" max="99999" step="1">
+            <div>
+                <label for="scalingX">X</label>
+                <input type="number" [ngModel]="selected.scaling.x | precision"
+                    (ngModelChange)="selected.scaling.x = $event" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetScalings()" (click)="selected.scaling.x = 1" href="#" class="resetButton">R</div>
+            </div>
+            <div>
+                <label for="scalingY">Y</label>
+                <input type="number" [ngModel]="selected.scaling.y | precision"
+                    (ngModelChange)="selected.scaling.y = $event" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetScalings()" (click)="selected.scaling.y = 1" href="#" class="resetButton">R</div>
+            </div>
+            <div>
+                <label for="scalingZ">Z</label>
+                <input type="number" [ngModel]="selected.scaling.z | precision"
+                    (ngModelChange)="selected.scaling.z = $event" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetScalings()" (click)="selected.scaling.z = 1" href="#" class="resetButton">R</div>
+            </div>
         </div>
     </div>
     <div class="col-transform-menu" *ngIf="isMeshSelected===true">
         <div class="input-group">
             <div class="title-section-menu">Center</div>
-            <label for="centerX">X</label>
-            <input #cx type="number" [ngModel]="selected.getPivotPoint().x | precision"
-                (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
-            <label for="centerY">Y</label>
-            <input #cy type="number" [ngModel]="selected.getPivotPoint().y | precision"
-                (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
-            <label for="centerZ">Z</label>
-            <input #cz type="number" [ngModel]="selected.getPivotPoint().z | precision"
-                (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
+            <div>
+                <label for="centerX">X</label>
+                <input #cx type="number" [ngModel]="selected.getPivotPoint().x | precision"
+                    (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetCenters()" (click)="resetPivotX()" href="#" class="resetButton">R</div>
+            </div>
+            <div>
+                <label for="centerY">Y</label>
+                <input #cy type="number" [ngModel]="selected.getPivotPoint().y | precision"
+                    (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetCenters()" (click)="resetPivotY()" href="#" class="resetButton">R</div>
+            </div>
+            <div>
+                <label for="centerZ">Z</label>
+                <input #cz type="number" [ngModel]="selected.getPivotPoint().z | precision"
+                    (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
+                <div (dblclick)="resetCenters()" (click)="resetPivotZ()" href="#" class="resetButton">R</div>
+            </div>
         </div>
         <!-- div class="input-group">
             <div class="title-section-menu">Screen position</div>
-            <label for="screenPositionX">X</label>
+            <div for="screenPositionX">X</div>
             <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
-            <label for="screenPositionY">Y</label>
+            <div for="screenPositionY">Y</label>
             <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
         </div -->
         <!-- <pre style="color:white">{{ tm | json }}</pre> -->
