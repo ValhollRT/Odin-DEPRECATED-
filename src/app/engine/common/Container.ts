@@ -22,7 +22,8 @@ export class Container {
     this.UUID = Utils.generatorUUID();
     this.selected = false;
     this.hidden = false;
-    this.name = type instanceof Mesh ? type.name.toUpperCase() : "LIGHT";
+    if (type !== undefined) this.name = type.name.toUpperCase();
+    else this.name = "ROOT";
   }
 
   isMesh(): boolean { return this.type instanceof Mesh; }
@@ -44,5 +45,10 @@ export class Container {
   set(type: Mesh | Light) { this.type = type; }
 
   get() { return this.type; }
+
+  getIconType(): string {
+    if (this.isMesh()) return 'icon-geometry';
+    if (this.isLight()) return 'icon-light';
+  }
 
 }
