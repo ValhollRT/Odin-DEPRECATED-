@@ -18,7 +18,6 @@ import { GizmoHelper } from './helpers/GizmoHelper';
 import { Grid } from './helpers/Grid';
 
 @Injectable({ providedIn: 'root' })
-
 export class EngineService {
 
   private static grid: Grid;
@@ -56,7 +55,7 @@ export class EngineService {
 
     this.scene.registerAfterRender(() => { });
     this.canvasHelper = this.injector.get(CanvasHelperService);
-    this.gizmoHelper = new GizmoHelper(this.engine);
+    this.gizmoHelper = new GizmoHelper(this);
 
     this.camera.onViewMatrixChangedObservable.add(() => {
       this.gizmoHelper.cameraGizmo.position = this.camera.position;
@@ -70,6 +69,7 @@ export class EngineService {
   public getCamera() { return this.camera; }
   public getScene(): Scene { return this.scene }
   public getCanvasHelper() { return this.canvasHelper; }
+  public getEngine() { return this.engine; }
 
   public createMesh(type: string): void {
     let c = ElementBuilder.createContainerMesh(type, this.getScene());
