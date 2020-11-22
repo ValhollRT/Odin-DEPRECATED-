@@ -9,6 +9,7 @@ import {
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { BehaviorSubject } from 'rxjs';
+import { LIGHT } from '../configuration/AppConstants';
 import { CanvasHelperService } from '../services/index.service';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
@@ -47,7 +48,7 @@ export class EngineService {
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);
     this.scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
-    this.scene.clearColor = new Color4(0.09, 0.09, 0.1, 1);
+    this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);
 
     EngineService.grid = new Grid(this.scene);
     this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(0, 0, 0), this.scene);
@@ -61,6 +62,8 @@ export class EngineService {
     this.camera.onViewMatrixChangedObservable.add(() => {
       this.gizmoHelper.cameraGizmo.position = this.camera.position;
     });
+
+    this.createDefaultScene();
   }
 
   public getGizmoHelper() { return this.gizmoHelper; }
@@ -95,6 +98,10 @@ export class EngineService {
   // return currentMesh
   public getCurrentSelected$(): BehaviorSubject<Mesh | Light> { return this.currentSelected$; }
   public getCurrentSelected(): Mesh | Light { return this.currentSelected; }
+
+  public createDefaultScene() {
+    this.createLight(LIGHT.DIRECTIONAL);
+  }
 
   public animate(): void {
 
