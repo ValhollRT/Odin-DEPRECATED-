@@ -53,22 +53,22 @@
             <div class="title-section-menu">Position Target</div>
             <div>
                 <label for="positionX">X</label>
-                <input #rx type="number" [ngModel]="selected.direction.x | rotation"
-                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <input #rx type="number" [ngModel]="selected.direction.x | precision" min="-99999" max="99999" step="1"
+                    (ngModelChange)="selected.direction.x = $event">
                 <div (dblclick)="resetDirections()" (click)="selected.direction.x = 0" href="#" class="resetButton">R
                 </div>
             </div>
             <div>
                 <label for="positionY">Y</label>
-                <input #ry type="number" [ngModel]="selected.direction.y | rotation"
-                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <input #ry type="number" [ngModel]="selected.direction.y | precision" min="-99999" max="99999" step="1"
+                    (ngModelChange)="selected.direction.y = $event">
                 <div (dblclick)="resetDirections()" (click)="selected.direction.y = 0" href="#" class="resetButton">R
                 </div>
             </div>
             <div>
                 <label for="positionZ">Z</label>
-                <input #rz type="number" [ngModel]="selected.direction.z | rotation"
-                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
+                <input #rz type="number" [ngModel]="selected.direction.z | precision" min="-99999" max="99999" step="1"
+                    (ngModelChange)="selected.direction.z = $event">
                 <div (dblclick)="resetDirections()" (click)="selected.direction.z = 0" href="#" class="resetButton">R
                 </div>
             </div>

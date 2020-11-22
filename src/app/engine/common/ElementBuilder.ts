@@ -94,7 +94,7 @@ export class ElementBuilder {
     static setLight(type: string, s: Scene, options?: any): Light {
         switch (type) {
             case LIGHT.DIRECTIONAL:
-                return new DirectionalLight("DirectionalLight", new Vector3(-0.25, -1, -0.25), s);
+                return new DirectionalLight("DirectionalLight", new Vector3(-1, -1, -1), s);
             case LIGHT.SPOT:
                 return new SpotLight("SpotLight", Vector3.Zero(), new Vector3(0, -1, 0), 20, 1, s);
             case LIGHT.POINT:
