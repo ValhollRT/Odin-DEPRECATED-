@@ -1,5 +1,4 @@
 import { Injector } from '@angular/core';
-import { Optional } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
 import {
   ArcRotateCamera, Color4, Engine,

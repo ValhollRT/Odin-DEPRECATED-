@@ -5,7 +5,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Mesh } from 'babylonjs/Meshes/mesh';
 import { Light } from 'babylonjs';
 import { LogService } from 'src/app/services/log.service';

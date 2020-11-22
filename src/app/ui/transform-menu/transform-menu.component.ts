@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DirectionalLight, HemisphericLight, HemisphericParticleEmitter, Light, Mesh, PointLight, ShadowLight, SpotLight, Vector2, Vector3 } from 'babylonjs';
+import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, Vector2, Vector3 } from 'babylonjs';
 import { filter } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { EngineService } from 'src/app/services/index.service';

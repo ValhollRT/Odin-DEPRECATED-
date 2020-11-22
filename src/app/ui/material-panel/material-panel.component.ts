@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Color3, Material, Mesh, StandardMaterial } from 'babylonjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { Color3, Mesh, StandardMaterial } from 'babylonjs';
+import { filter } from 'rxjs/operators';
 import { EngineService } from 'src/app/engine/engine.service';
 import { LogService } from 'src/app/services/log.service';
 

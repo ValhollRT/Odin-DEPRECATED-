@@ -1,6 +1,5 @@
 import { Utils } from '../Utils/Utils';
-import { Node, Mesh, Scene, MeshBuilder, StandardMaterial, Color3, HighlightLayer, PointLight, Light, HemisphericLight, DirectionalLight, Vector3, LightGizmo, VertexData } from 'babylonjs';
-import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
+import { Mesh, Scene, Light, VertexData } from 'babylonjs';
 import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
 export class Container {
 

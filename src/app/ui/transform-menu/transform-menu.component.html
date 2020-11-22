@@ -50,23 +50,23 @@
             </div>
         </div>
         <div class="input-group" *ngIf="isMeshSelected===false">
-            <div class="title-section-menu">Rotation</div>
+            <div class="title-section-menu">Position Target</div>
             <div>
-                <label for="rotationX">X</label>
+                <label for="positionX">X</label>
                 <input #rx type="number" [ngModel]="selected.direction.x | rotation"
                     (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
                 <div (dblclick)="resetDirections()" (click)="selected.direction.x = 0" href="#" class="resetButton">R
                 </div>
             </div>
             <div>
-                <label for="rotationY">Y</label>
+                <label for="positionY">Y</label>
                 <input #ry type="number" [ngModel]="selected.direction.y | rotation"
                     (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
                 <div (dblclick)="resetDirections()" (click)="selected.direction.y = 0" href="#" class="resetButton">R
                 </div>
             </div>
             <div>
-                <label for="rotationZ">Z</label>
+                <label for="positionZ">Z</label>
                 <input #rz type="number" [ngModel]="selected.direction.z | rotation"
                     (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
                 <div (dblclick)="resetDirections()" (click)="selected.direction.z = 0" href="#" class="resetButton">R
