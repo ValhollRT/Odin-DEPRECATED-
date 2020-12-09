@@ -57,6 +57,7 @@ import { PopupWindowComponent } from './shared/popup-window/popup-window.compone
     MatNativeDateModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

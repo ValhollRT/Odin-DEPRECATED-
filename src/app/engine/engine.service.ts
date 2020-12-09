@@ -29,19 +29,22 @@ export class EngineService {
   private gizmoHelper: GizmoHelper;
   private canvasHelper: CanvasHelperService;
 
+
   private currentSelected: Mesh | Light;
   private currentSelected$: BehaviorSubject<Mesh | Light> = new BehaviorSubject(undefined);
-
   public newContainer$ = new BehaviorSubject<Container>(undefined);
-
   flatMeshContainer = new Map<Mesh | Light, Container>();
+
 
   public constructor(
     public windowService: WindowService,
     public logService: LogService,
     public injector: Injector) { }
 
-  public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
+  public createScene(
+    canvas: ElementRef<HTMLCanvasElement>
+    
+    ): void {
     this.canvas = canvas.nativeElement;
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);
