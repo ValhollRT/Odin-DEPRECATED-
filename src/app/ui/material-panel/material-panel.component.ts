@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Color3, Mesh, StandardMaterial } from 'babylonjs';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+import { AppState } from 'src/app/app.reducer';
 import { EngineService } from 'src/app/engine/engine.service';
 import { LogService } from 'src/app/services/log.service';
 
@@ -13,16 +15,17 @@ export class MaterialPanelComponent implements OnInit {
 
   public currentMesh: Mesh;
 
-  constructor(private engineService: EngineService, private logService: LogService) {
+  constructor(private engineService: EngineService, store: Store<AppState>, private logService: LogService) {
 
-    this.engineService.getCurrentSelected$()
-      .pipe(
-        filter((o: any) => o instanceof Mesh),
-        filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
+    store.pipe(select('engine'),
+      filter(selection => selection.UUIDCsSelected.length > 0),
+      filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
+      map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((m: Mesh) => {
         this.currentMesh = m;
         this.logService.log(m.material.name, "edited material", "MaterialPanelComponent")
       });
+
   }
 
   ngOnInit(): void { }

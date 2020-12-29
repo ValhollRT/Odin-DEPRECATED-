@@ -9,6 +9,9 @@ import { filter } from 'rxjs/operators';
 import { Mesh } from 'babylonjs/Meshes/mesh';
 import { Light } from 'babylonjs';
 import { LogService } from 'src/app/services/log.service';
+import { Store } from '@ngrx/store';
+import { oneSelection } from 'src/app/engine/engine.action';
+import { AppState } from 'src/app/app.reducer';
 
 export class ContainerFlatTreeNode {
   name: string;
@@ -45,7 +48,10 @@ export class TreeNodeComponent {
 
   isReadOnly: boolean = true;
 
-  constructor(public dataTree: DataTreeContainer, private engineService: EngineService, public logService: LogService) {
+  constructor(
+    private store: Store<AppState>,
+    public dataTree: DataTreeContainer,
+    private engineService: EngineService, public logService: LogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ContainerFlatTreeNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -60,18 +66,10 @@ export class TreeNodeComponent {
       .subscribe(c => {
         dataTree.inserNewtItem(c);
       });
-
-    engineService.getCurrentSelected$()
-      .pipe(filter((mesh: Mesh) => mesh !== null && mesh !== undefined))
-      .subscribe((m: Mesh) => {
-        this.clickNodeContainer(null, this.nestedMeshMap.get(m), false);
-      });
   }
 
   getLevel = (node: ContainerFlatTreeNode) => node.level;
   isExpandable = (node: ContainerFlatTreeNode) => node.expandable;
-  isSelected = (node: ContainerFlatTreeNode) => node.selected;
-  isHidden = (node: ContainerFlatTreeNode) => node.hidden;
   getChildren = (node: Container): Container[] => node.children;
   hasChild = (_: number, _nodeData: ContainerFlatTreeNode) => _nodeData.expandable;
   hasNoContent = (_: number, _nodeData: ContainerFlatTreeNode) => _nodeData.name === '';
@@ -82,8 +80,8 @@ export class TreeNodeComponent {
       ? existingNode
       : new ContainerFlatTreeNode();
     flatNode.name = node.name;
-    flatNode.UUID = node.UUID;
     flatNode.level = level;
+    flatNode.UUID = node.UUID;
     flatNode.selected = node.selected;
     flatNode.hidden = node.hidden;
     flatNode.expandable = (node.children && node.children.length > 0);
@@ -133,7 +131,6 @@ export class TreeNodeComponent {
       } else if (this.dragNodeExpandOverArea === 'below') {
         newItem = this.dataTree.below(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       } else {
-        3
         newItem = this.dataTree.moveContainer(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
       }
       this.treeControl.expandDescendants(this.nestedNodeMap.get(newItem));
@@ -149,25 +146,14 @@ export class TreeNodeComponent {
     this.dragNodeExpandOverTime = 0;
   }
 
-  clickNodeContainer(event: any, node: ContainerFlatTreeNode, emit: boolean = true) {
-    let selectedContainer: Container = this.flatNodeMap.get(node);
-    if (selectedContainer === this.lastSelectedTreeNode) return;
-
-    if (this.lastSelectedTreeNode !== null) {
-      this.lastSelectedTreeNode.selected = false;
-      this.flatNodeMap.get(this.lastSelectedTreeNode).selected = false;
-    }
-
-    this.lastSelectedTreeNode = node;
-    node.selected = true;
-    selectedContainer.selected = true;
-    this.engineService.setCurrentSelected(selectedContainer.get(), emit);
-    this.logService.log(node, "container clicked", "TreeNodeComponent")
+  clickNodeContainer(event, node: ContainerFlatTreeNode, emit: boolean = true) {
+    event.preventDefault();
+    let containersSelected: Container = this.flatNodeMap.get(node);
+    this.logService.log(node, "container clicked", "TreeNodeComponent");
+    this.store.dispatch(oneSelection({ UUID: containersSelected.UUID }));
   }
 
-  setContainerName(event, node) {
-    node.name = this.flatNodeMap.get(node).name = event;
-  }
+  setContainerName(event, node) { node.name = this.flatNodeMap.get(node).name = event; }
 
   clickHideNode(event, node: ContainerFlatTreeNode) {
     let container: Container = this.flatNodeMap.get(node);

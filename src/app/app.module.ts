@@ -29,6 +29,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.component';
 import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
 
+// NgRx
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { appReducers } from './app.reducer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,7 +63,11 @@ import { PopupWindowComponent } from './shared/popup-window/popup-window.compone
     MatNativeDateModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

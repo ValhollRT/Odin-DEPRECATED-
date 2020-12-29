@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, Vector2, Vector3 } from 'babylonjs';
-import { filter } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
+import { AppState } from 'src/app/app.reducer';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
@@ -34,21 +36,22 @@ export class TransformMenuComponent implements OnInit {
 
   constructor(
     public engineService: EngineService,
+    public store: Store<AppState>,
     public logService: LogService
   ) {
     this.tm = new TransformMenu();
     this.resetAll();
-  }
-
-  ngOnInit(): void {
-    this.engineService.getCurrentSelected$()
-      .pipe(filter((obj: any) => obj !== null && obj !== undefined))
+    this.store
+      .pipe(select('engine'), filter(selection => selection.UUIDCsSelected.length > 0))
+      .pipe(map(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type))
       .subscribe((o: Mesh | Light) => {
         if (o instanceof Mesh) this.isMeshSelected = true; else this.isMeshSelected = false;
         this.setTransformMenuSelected(o);
         this.logService.log(this.tm, "edited transform", "TransformMenuComponent");
       });
   }
+
+  ngOnInit(): void { }
 
   setTransformMenuSelected(o: Mesh | Light) {
     if (o instanceof HemisphericLight) {
@@ -116,6 +119,4 @@ export class TransformMenuComponent implements OnInit {
     this.tm.center = new Vector3(0, 0, 0);
     this.tm.screenPosition = new Vector2(0, 0);
   }
-
-
 }

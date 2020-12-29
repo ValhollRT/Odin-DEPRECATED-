@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Light, LightGizmo, Mesh, PickingInfo, ShadowLight, GizmoManager, Vector3 } from 'babylonjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take } from 'rxjs/operators';
+import { AppState } from '../app.reducer';
 import { EngineService } from '../engine/engine.service';
+import { engineReducer, State } from '../engine/engine.reducer';
+import { clearSelection, oneSelection } from '../engine/engine.action';
 
 @Injectable({ providedIn: 'root' })
 export class CanvasHelperService {
@@ -12,7 +16,10 @@ export class CanvasHelperService {
     public gizmoManager: GizmoManager;
     public lightGizmo: LightGizmo;
 
-    constructor(public es: EngineService) {
+    constructor(
+        public store: Store<AppState>,
+        public es: EngineService
+    ) {
         let camera = es.getCamera();
         let canvas = es.getCanvas();
         //LightGizmo
@@ -28,7 +35,6 @@ export class CanvasHelperService {
 
         canvas.addEventListener("pointerdown", this.onPointerDown, false);
         canvas.addEventListener("pointerup", this.onPointerUp, false);
-        // this.canvas.addEventListener("pointermove", this.onPointerMove, false);
 
         es.getScene().onDispose = () => {
             canvas.removeEventListener("pointerdown", this.onPointerDown);
@@ -36,17 +42,24 @@ export class CanvasHelperService {
             // this.canvas.removeEventListener("pointermove", this.onPointerMove);
         }
 
-        es.getCurrentSelected$()
-            .pipe(filter((obj: any) => obj !== null && obj !== undefined), distinctUntilChanged())
-            .subscribe((o: any) => { this.setSelected(o); });
+        store.select('engine').subscribe(en => {
+            if (en.prevUUIDCsSelected.length > 0) {
+                this.clearHighLightSelected(<Mesh>this.es.UUIDToContainer.get(en.prevUUIDCsSelected[0]).type);
+            }
+            if (en.UUIDCsSelected.length > 0) {
+                this.setSelected(this.es.UUIDToContainer.get(en.UUIDCsSelected[0]).type);
+            }
+        });
 
         canvas.onkeydown = (e) => {
             this.lock = true;
             /*FIT VIEW*/
             if (e.key == 'f') {
-                let mesh = this.es.getCurrentSelected();
-                let pMesh = mesh.getAbsolutePosition();
-                if (mesh instanceof Mesh) camera.setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
+                this.store.pipe(select('engine'), take(1)).subscribe(s => {
+                    let mesh = this.es.getContainerFromUUID(s.UUIDCsSelected[0]).type;
+                    let pMesh = mesh.getAbsolutePosition();
+                    if (mesh instanceof Mesh) camera.setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
+                });
             }
             if (e.key == 'w') {
                 this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
@@ -90,7 +103,6 @@ export class CanvasHelperService {
                 this.es.getCamera().detachControl(this.es.getCanvas());
             }
         }
-
         this.initializeGizmo();
     }
 
@@ -161,17 +173,23 @@ export class CanvasHelperService {
     public onPointerDown = (ev) => {
         if (this.lock) return;
         if (ev.button !== 0) return;
-        this.clearHighLightSelectedMesh();
+
         // check if we are under a mesh
         this.pickInfo = this.es.getScene().pick(this.es.getScene().pointerX, this.es.getScene().pointerY);
         if (this.pickInfo.hit) {
             this.setSelected(<Mesh | Light>this.pickInfo.pickedMesh);
             this.startingPoint = this.getGroundPosition();
+            this.store.dispatch(oneSelection({ UUID: this.es.getContainerFromType(<Mesh>this.pickInfo.pickedMesh).UUID }));
             if (this.startingPoint) { // we need to disconnect camera from canvas
                 setTimeout(() => {
                     this.es.getCamera().detachControl(this.es.getCanvas());
                 }, 0);
             }
+        } else {
+            this.store.dispatch(clearSelection());
+            this.gizmoManager.positionGizmoEnabled = false;
+            this.gizmoManager.rotationGizmoEnabled = false;
+            this.gizmoManager.scaleGizmoEnabled = false;
         }
     }
 
@@ -183,7 +201,8 @@ export class CanvasHelperService {
     }
 
     public onPointerMove = () => {
-        let cs = this.es.getCurrentSelected();
+        let cs;
+        this.store.pipe(select('engine'), take(1)).subscribe(s => cs = this.es.getContainerFromUUID(s.UUIDCsSelected[0]).type);
         if (!this.startingPoint) return;
         var current = this.getGroundPosition();
         if (!current) return;
@@ -194,10 +213,7 @@ export class CanvasHelperService {
         this.startingPoint = current;
     }
 
-    setSelected(o: Mesh | Light, emit: boolean = true) {
-        this.clearHighLightSelectedMesh();
-        this.es.setCurrentSelected(o, emit);
-
+    setSelected(o: Mesh | Light) {
         if (o instanceof Mesh) {
             this.gizmoManager.attachToMesh(o);
             this.updateEdgedRendering(o);
@@ -212,13 +228,10 @@ export class CanvasHelperService {
         m.edgesWidth = 10;
     }
 
-    clearHighLightSelectedMesh() {
-        let selected = this.es.getCurrentSelected();
-        if (selected instanceof Mesh) {
-            selected.disableEdgesRendering();
-            selected.edgesWidth = 0;
+    clearHighLightSelected(o: Mesh | Light) {
+        if (o instanceof Mesh) {
+            o.disableEdgesRendering();
+            o.edgesWidth = 0;
         }
-
     }
-
 }

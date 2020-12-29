@@ -17,7 +17,7 @@ export class PopupWindowComponent implements OnInit {
 
   ngOnInit() { }
 
-  closeDialog() { console.log("title", this.title); this.isOpen = false; this.emitCloseDialog.emit(this.isOpen); }
+  closeDialog() { this.isOpen = false; this.emitCloseDialog.emit(this.isOpen); }
   openDialog() { this.isOpen = true; }
 
 }

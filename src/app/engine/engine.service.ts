@@ -1,5 +1,6 @@
 import { Injector } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {
   ArcRotateCamera, Color4, Engine,
   Light,
@@ -8,6 +9,7 @@ import {
 } from 'babylonjs';
 import 'babylonjs-materials';
 import { BehaviorSubject } from 'rxjs';
+import { AppState } from '../app.reducer';
 import { LIGHT } from '../configuration/AppConstants';
 import { CanvasHelperService } from '../services/index.service';
 import { LogService } from '../services/log.service';
@@ -28,23 +30,22 @@ export class EngineService {
   private scene: Scene;
   private gizmoHelper: GizmoHelper;
   private canvasHelper: CanvasHelperService;
-
-
-  private currentSelected: Mesh | Light;
-  private currentSelected$: BehaviorSubject<Mesh | Light> = new BehaviorSubject(undefined);
+  public typeToContainer = new Map<Mesh | Light, Container>();
+  public UUIDToContainer = new Map<string, Container>();
   public newContainer$ = new BehaviorSubject<Container>(undefined);
-  flatMeshContainer = new Map<Mesh | Light, Container>();
-
 
   public constructor(
     public windowService: WindowService,
+    public store: Store<AppState>,
     public logService: LogService,
-    public injector: Injector) { }
+    public injector: Injector) {
+    // store.select('engine').subscribe();
+  }
 
   public createScene(
     canvas: ElementRef<HTMLCanvasElement>
-    
-    ): void {
+
+  ): void {
     this.canvas = canvas.nativeElement;
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);
@@ -76,37 +77,24 @@ export class EngineService {
 
   public createMesh(type: string): void {
     let c = ElementBuilder.createContainerMesh(type, this.getScene());
-    this.flatMeshContainer.set(c.type, c);
+    this.typeToContainer.set(c.type, c);
+    this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);
   }
 
   public createLight(type: string): void {
     let c = new Container(ElementBuilder.createLight(type, this.getScene()));
+    this.typeToContainer.set(c.type, c);
+    this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);
   }
 
   public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
-
-  public setCurrentSelected(o: Mesh | Light, fire: boolean) {
-    if (this.currentSelected instanceof Mesh) {
-      this.currentSelected.disableEdgesRendering();
-      this.currentSelected.edgesWidth = 0;
-    }
-
-    this.currentSelected = o;
-    if (fire) this.currentSelected$.next(o);
-  }
-
-  // return currentMesh
-  public getCurrentSelected$(): BehaviorSubject<Mesh | Light> { return this.currentSelected$; }
-  public getCurrentSelected(): Mesh | Light { return this.currentSelected; }
-
-  public createDefaultScene() {
-    this.createLight(LIGHT.DIRECTIONAL);
-  }
+  public getContainerFromUUID(UUID: string): Container { return this.UUIDToContainer.get(UUID) }
+  public getContainerFromType(type: Mesh | Light): Container { return this.typeToContainer.get(type) }
+  public createDefaultScene() { this.createLight(LIGHT.DIRECTIONAL); }
 
   public animate(): void {
-
     const rendererLoopCallback = () => {
       this.scene.render();
       this.gizmoHelper.getScene().render();

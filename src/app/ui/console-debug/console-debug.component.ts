@@ -16,7 +16,6 @@ export class ConsoleDebugComponent implements OnInit {
   constructor(public appService: AppService, public logService: LogService) { }
 
   ngOnInit() {
-    console.log("console init");
     this.appService.isOpenConsole.subscribe(isOpen => {
       this.isOpen = isOpen;
     });
@@ -28,5 +27,5 @@ export class ConsoleDebugComponent implements OnInit {
     this.logService.bufferLogConsole = [];
   }
 
-  closeDialog() { console.log("close console"); this.appService.isOpenConsole.next(false); }
+  closeDialog() { this.appService.isOpenConsole.next(false); }
 }

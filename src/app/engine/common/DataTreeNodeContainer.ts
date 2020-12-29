@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { EngineService } from '../engine.service';
 import { Mesh } from 'babylonjs';
+import { AppState } from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -15,9 +17,16 @@ export class DataTreeContainer {
     dataChange = new BehaviorSubject<Container[]>([]);
     root: Container;
 
-    constructor(public engineService: EngineService) {
+    constructor(public engineService: EngineService,
+        public store: Store<AppState>,) {
         this.root = new Container();
         this.root.name = "VALHOLLRT_ROOT_CONTAINER"
+
+        store.select('engine').subscribe(en => {
+            if (en.prevUUIDCsSelected.length > 0) this.engineService.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
+            if (en.UUIDCsSelected.length > 0) this.engineService.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
+            this.updateNodeTree();
+        });
     }
 
     updateNodeTree() { this.dataChange.next(this.root.children); }
