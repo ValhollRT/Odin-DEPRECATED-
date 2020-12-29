@@ -33,13 +33,14 @@ export class EngineService {
   public typeToContainer = new Map<Mesh | Light, Container>();
   public UUIDToContainer = new Map<string, Container>();
   public newContainer$ = new BehaviorSubject<Container>(undefined);
+  private selectedUUIDContainers: string[];
 
   public constructor(
     public windowService: WindowService,
     public store: Store<AppState>,
     public logService: LogService,
     public injector: Injector) {
-    // store.select('engine').subscribe();
+    store.select('engine').subscribe(en => this.selectedUUIDContainers = [...en.UUIDCsSelected]);
   }
 
   public createScene(
@@ -93,6 +94,11 @@ export class EngineService {
   public getContainerFromUUID(UUID: string): Container { return this.UUIDToContainer.get(UUID) }
   public getContainerFromType(type: Mesh | Light): Container { return this.typeToContainer.get(type) }
   public createDefaultScene() { this.createLight(LIGHT.DIRECTIONAL); }
+
+  // Get Selections methods
+  public getSelectedContainers(): string[] { return this.selectedUUIDContainers }
+  public nothingSelected(): boolean { return this.selectedUUIDContainers.length < 1 }
+  public getFirstSelected(): Container { return this.getContainerFromUUID(this.selectedUUIDContainers[0]); }
 
   public animate(): void {
     const rendererLoopCallback = () => {

@@ -13,11 +13,11 @@ export const initialState: State = {
 let _engineReducer = createReducer(
   initialState,
   on(oneSelection, (state, { UUID }) => {
-    return ({ prevUUIDCsSelected: [...state.UUIDCsSelected], UUIDCsSelected: [UUID] });
+    return ({ ...state, prevUUIDCsSelected: [...state.UUIDCsSelected], UUIDCsSelected: [UUID] });
   }),
   on(addSelection, (state, { UUID }) => ({ ...state, UUIDCsSelected: [...state.UUIDCsSelected, UUID] })),
   on(removeSelection, (state, { UUID }) => ({ ...state, UUIDCsSelected: [UUID] })),
-  on(clearSelection, (state) => ({ prevUUIDCsSelected: [...state.UUIDCsSelected], UUIDCsSelected: [] })),
+  on(clearSelection, (state) => ({ ...state, prevUUIDCsSelected: [...state.UUIDCsSelected], UUIDCsSelected: [] })),
 );
 
 export function engineReducer(state, action) {

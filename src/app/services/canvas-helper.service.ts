@@ -59,11 +59,11 @@ export class CanvasHelperService {
             this.lock = true;
             /*FIT VIEW*/
             if (e.key == 'f') {
-                this.store.pipe(select('engine'), take(1)).subscribe(s => {
-                    let mesh = this.es.getContainerFromUUID(s.UUIDCsSelected[0]).type;
-                    let pMesh = mesh.getAbsolutePosition();
-                    if (mesh instanceof Mesh) camera.setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
-                });
+                let obj = this.es.getFirstSelected().type;
+                if (!this.es.nothingSelected() && obj instanceof Mesh) {
+                    let pMesh = obj.getAbsolutePosition();
+                    camera.setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
+                }
             }
             if (e.key == 'w') {
                 this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled

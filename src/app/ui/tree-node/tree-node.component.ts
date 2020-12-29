@@ -51,7 +51,7 @@ export class TreeNodeComponent {
   constructor(
     private store: Store<AppState>,
     public dataTree: DataTreeContainer,
-    private engineService: EngineService, public logService: LogService) {
+    private es: EngineService, public logService: LogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ContainerFlatTreeNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -61,7 +61,7 @@ export class TreeNodeComponent {
       this.dataSource.data = data;
     });
 
-    engineService.newContainer$
+    es.newContainer$
       .pipe(filter((cont: Container) => cont != undefined))
       .subscribe(c => {
         dataTree.inserNewtItem(c);
@@ -167,12 +167,10 @@ export class TreeNodeComponent {
   }
 
   clickDeleteNode(event) {
-    this.store.pipe(select('engine'), filter(selection => selection.UUIDCsSelected.length > 0), take(1))
-      .subscribe(s => {
-        let container = this.engineService.getContainerFromUUID(s.UUIDCsSelected[0])
-        this.dataTree.deleteNodeAndChildren(container);
-        this.store.dispatch(clearSelection());
-      });
+    if (!this.es.nothingSelected()) {
+      this.dataTree.deleteNodeAndChildren(this.es.getFirstSelected());
+      this.store.dispatch(clearSelection());
+    }
   }
 }
 
