@@ -48,6 +48,10 @@ export class CanvasHelperService {
             }
             if (en.UUIDCsSelected.length > 0) {
                 this.setSelected(this.es.UUIDToContainer.get(en.UUIDCsSelected[0]).type);
+            } else {
+                this.gizmoManager.positionGizmoEnabled = false;
+                this.gizmoManager.rotationGizmoEnabled = false;
+                this.gizmoManager.scaleGizmoEnabled = false;
             }
         });
 
@@ -187,9 +191,6 @@ export class CanvasHelperService {
             }
         } else {
             this.store.dispatch(clearSelection());
-            this.gizmoManager.positionGizmoEnabled = false;
-            this.gizmoManager.rotationGizmoEnabled = false;
-            this.gizmoManager.scaleGizmoEnabled = false;
         }
     }
 

@@ -10,7 +10,7 @@ import { Mesh } from 'babylonjs/Meshes/mesh';
 import { Light } from 'babylonjs';
 import { LogService } from 'src/app/services/log.service';
 import { select, Store } from '@ngrx/store';
-import { oneSelection } from 'src/app/engine/engine.action';
+import { clearSelection, oneSelection } from 'src/app/engine/engine.action';
 import { AppState } from 'src/app/app.reducer';
 
 export class ContainerFlatTreeNode {
@@ -171,6 +171,7 @@ export class TreeNodeComponent {
       .subscribe(s => {
         let container = this.engineService.getContainerFromUUID(s.UUIDCsSelected[0])
         this.dataTree.deleteNodeAndChildren(container);
+        this.store.dispatch(clearSelection());
       });
   }
 }
