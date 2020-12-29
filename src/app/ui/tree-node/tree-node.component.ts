@@ -5,11 +5,11 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { Mesh } from 'babylonjs/Meshes/mesh';
 import { Light } from 'babylonjs';
 import { LogService } from 'src/app/services/log.service';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { oneSelection } from 'src/app/engine/engine.action';
 import { AppState } from 'src/app/app.reducer';
 
@@ -167,9 +167,11 @@ export class TreeNodeComponent {
   }
 
   clickDeleteNode(event) {
-    if (this.lastSelectedTreeNode === null) return;
-    let container: Container = this.flatNodeMap.get(this.lastSelectedTreeNode);
-    this.dataTree.deleteNodeAndChildren(container);
+    this.store.pipe(select('engine'), filter(selection => selection.UUIDCsSelected.length > 0), take(1))
+      .subscribe(s => {
+        let container = this.engineService.getContainerFromUUID(s.UUIDCsSelected[0])
+        this.dataTree.deleteNodeAndChildren(container);
+      });
   }
 }
 
