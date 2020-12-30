@@ -50,7 +50,11 @@ export class DataTreeContainer {
 
     above(from: Container, to: Container) {
         this.deleteNode(from);
-        to.parent.children.push(from);
+
+        // get position target
+        let targetIdx = to.parent.children.indexOf(to);
+        to.parent.children.splice(targetIdx, 0, from);
+
         from.parent = to.parent;
         this.updateNodeTree();
         return to;
@@ -58,7 +62,11 @@ export class DataTreeContainer {
 
     below(from: Container, to: Container) {
         this.deleteNode(from);
-        to.parent.children.push(from);
+
+        // get position target
+        let targetIdx = to.parent.children.indexOf(to);
+        to.parent.children.splice(targetIdx + 1, 0, from);
+
         from.parent = to.parent;
         this.updateNodeTree();
         return to;
@@ -83,6 +91,7 @@ export class DataTreeContainer {
         if (node.type instanceof Mesh) node.deleteMesh(this.engineService.getScene());
         else node.deleteLight(this.engineService.getScene());
         node = null;
+        this.engineService.deleteContainerRef(node);
         this.updateNodeTree();
     }
 }

@@ -100,7 +100,7 @@ export class TreeNodeComponent {
 
   handleDragOver(event, node) {
     event.preventDefault();
-
+    
     if (node === this.dragNodeExpandOverNode) {
       if (this.dragNode !== node && !this.treeControl.isExpanded(node)) {
         if ((new Date().getTime() - this.dragNodeExpandOverTime) > this.dragNodeExpandOverWaitTimeMs) {
@@ -150,6 +150,7 @@ export class TreeNodeComponent {
     event.preventDefault();
     let containersSelected: Container = this.flatNodeMap.get(node);
     this.logService.log(node, "container clicked", "TreeNodeComponent");
+    if (containersSelected.selected) return;
     this.store.dispatch(oneSelection({ UUID: containersSelected.UUID }));
   }
 

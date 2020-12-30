@@ -30,8 +30,11 @@ export class EngineService {
   private scene: Scene;
   private gizmoHelper: GizmoHelper;
   private canvasHelper: CanvasHelperService;
+
+  // References Containers for engine
   public typeToContainer = new Map<Mesh | Light, Container>();
   public UUIDToContainer = new Map<string, Container>();
+
   public newContainer$ = new BehaviorSubject<Container>(undefined);
   private selectedUUIDContainers: string[];
 
@@ -99,6 +102,11 @@ export class EngineService {
   public getSelectedContainers(): string[] { return this.selectedUUIDContainers }
   public nothingSelected(): boolean { return this.selectedUUIDContainers.length < 1 }
   public getFirstSelected(): Container { return this.getContainerFromUUID(this.selectedUUIDContainers[0]); }
+
+  public deleteContainerRef(container: Container) {
+    this.typeToContainer.delete(container.type)
+    this.UUIDToContainer.delete(container.UUID)
+  }
 
   public animate(): void {
     const rendererLoopCallback = () => {
