@@ -3,8 +3,10 @@ import {
 	ActionManager,
 	ArcRotateCamera,
 	Color3,
+	DynamicTexture,
 	ExecuteCodeAction,
 	HemisphericLight,
+	Mesh,
 	MeshBuilder,
 	Scene,
 	StandardMaterial,
@@ -30,22 +32,35 @@ export class GizmoHelper {
 		let light = new HemisphericLight("HemisphericLight", new Vector3(0, 0, 0), this.sceneGizmo);
 		light.intensity = 1.5;
 
-		var redMat = new StandardMaterial("redMat", this.sceneGizmo);
+		let redMat = new StandardMaterial("redMat", this.sceneGizmo);
 		redMat.freeze();
 		redMat.diffuseColor = new Color3(1, 0, 0);
 		redMat.specularColor = new Color3(0.1, 0.1, 0.1);
-		var greenMat = new StandardMaterial("greenMat", this.sceneGizmo);
+		let greenMat = new StandardMaterial("greenMat", this.sceneGizmo);
 		greenMat.freeze();
 		greenMat.diffuseColor = new Color3(0, 1, 0);
 		greenMat.specularColor = new Color3(0.1, 0.1, 0.1);
-		var blueMat = new StandardMaterial("blueMat", this.sceneGizmo);
+		let blueMat = new StandardMaterial("blueMat", this.sceneGizmo);
 		blueMat.freeze();
-		blueMat.diffuseColor = new Color3(0, 0, 1);
+		blueMat.diffuseColor = new Color3(0.2, .7, 1);
 		blueMat.specularColor = new Color3(0.1, 0.1, 0.1);
+		let boxMat = new StandardMaterial("blueMat", this.sceneGizmo);
+		boxMat.freeze();
+		boxMat.diffuseColor = new Color3(.5, .5, .6);
+		boxMat.specularColor = new Color3(0.1, 0.1, 0.2);
+
+		let box = Mesh.CreateBox("box", 8, this.sceneGizmo);
+		box.material = boxMat;
 
 		// X Axi
-		var xplus = MeshBuilder.CreateCylinder("xplus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
-		var xminus = MeshBuilder.CreateCylinder("xminus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
+		var xplus = MeshBuilder.CreateCylinder("xplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		var xminus = MeshBuilder.CreateCylinder("xminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+
+		let pxChar = this.makeTextPlane("+X", "red", 7, this.sceneGizmo);
+		pxChar.position = new Vector3(18, 0, 0);
+		let mxChar = this.makeTextPlane("-X", "red", 7, this.sceneGizmo);
+		mxChar.position = new Vector3(-18, 0, 0);
+
 		xplus.rotation.z = BABYLON.Tools.ToRadians(-90);
 		xplus.position.x = -8;
 		xplus.material = redMat;
@@ -54,8 +69,14 @@ export class GizmoHelper {
 		xminus.material = redMat;
 
 		// Y Axi
-		var yminus = MeshBuilder.CreateCylinder("yplus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
-		var yplus = MeshBuilder.CreateCylinder("yminus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
+		var yminus = MeshBuilder.CreateCylinder("yplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		var yplus = MeshBuilder.CreateCylinder("yminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+
+		let pyChar = this.makeTextPlane("+Y", "lime", 7, this.sceneGizmo);
+		pyChar.position = new Vector3(0, 18, 0);
+		let myChar = this.makeTextPlane("-Y", "lime", 7, this.sceneGizmo);
+		myChar.position = new Vector3(0, -18, 0);
+
 		yminus.rotation.x = BABYLON.Tools.ToRadians(0);
 		yminus.position.y = -8;
 		yminus.material = greenMat;
@@ -64,8 +85,14 @@ export class GizmoHelper {
 		yplus.material = greenMat;
 
 		// Z Axi
-		var zplus = MeshBuilder.CreateCylinder("zplus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
-		var zminus = MeshBuilder.CreateCylinder("zminus", { diameterBottom: 10, diameterTop: 0, tessellation: 3, height: 15 }, this.sceneGizmo);
+		var zplus = MeshBuilder.CreateCylinder("zplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		var zminus = MeshBuilder.CreateCylinder("zminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+
+		let pzChar = this.makeTextPlane("+Z", "cyan", 7, this.sceneGizmo);
+		pzChar.position = new Vector3(0, 0, 18);
+		let mzChar = this.makeTextPlane("-Z", "cyan", 7, this.sceneGizmo);
+		mzChar.position = new Vector3(0, 0, -18);
+
 		zplus.rotation.x = BABYLON.Tools.ToRadians(-90);
 		zplus.position.z = 8;
 		zplus.material = blueMat;
@@ -94,6 +121,20 @@ export class GizmoHelper {
 		});
 
 	}
+
+	makeTextPlane(text, color, size, scene: Scene) {
+		let dynamicTexture = new DynamicTexture("DynamicTexture", 50, scene, true);
+		dynamicTexture.hasAlpha = true;
+		dynamicTexture.drawText(text, 5, 40, "bold 36px Arial", color, "transparent", true);
+		let plane = Mesh.CreatePlane("TextPlane", size, scene, true);
+		let material = new StandardMaterial("TextPlaneMaterial", scene);
+		material.backFaceCulling = false;
+		material.specularColor = new Color3(0, 0, 0);
+		material.diffuseTexture = dynamicTexture;
+		plane.material = material;
+		plane.billboardMode = 3;
+		return plane;
+	};
 
 	getScene() { return this.sceneGizmo; }
 
