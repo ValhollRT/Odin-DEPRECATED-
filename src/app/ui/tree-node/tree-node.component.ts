@@ -20,6 +20,7 @@ export class ContainerFlatTreeNode {
   expandable: boolean;
   selected: boolean;
   hidden: boolean;
+  locked: boolean;
 }
 
 @Component({
@@ -100,7 +101,7 @@ export class TreeNodeComponent {
 
   handleDragOver(event, node) {
     event.preventDefault();
-    
+
     if (node === this.dragNodeExpandOverNode) {
       if (this.dragNode !== node && !this.treeControl.isExpanded(node)) {
         if ((new Date().getTime() - this.dragNodeExpandOverTime) > this.dragNodeExpandOverWaitTimeMs) {
@@ -164,6 +165,17 @@ export class TreeNodeComponent {
     } else {
       container.unHide();
       node.hidden = false;
+    }
+  }
+
+  clickLockNode(event, node: ContainerFlatTreeNode) {
+    let container: Container = this.flatNodeMap.get(node);
+    if (!container.locked) {
+      container.lock();
+      node.locked = true;
+    } else {
+      container.unlock();
+      node.locked = false;
     }
   }
 

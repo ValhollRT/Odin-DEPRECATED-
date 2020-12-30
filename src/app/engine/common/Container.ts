@@ -14,6 +14,7 @@ export class Container {
   public expandable: boolean = false;
   public selected: boolean;
   public hidden: boolean;
+  public locked: boolean;
 
 
   constructor(type?: Mesh | Light) {
@@ -30,8 +31,10 @@ export class Container {
   isLight(): boolean { return this.type instanceof Light; }
 
   unHide() { this.isMesh() ? (<Mesh>this.type).visibility = 1 : (<Light>this.type).intensity = 1; this.hidden = false; }
-
   hide() { this.isMesh() ? (<Mesh>this.type).visibility = 0 : (<Light>this.type).intensity = 0; this.hidden = true; }
+
+  lock() { this.locked = true; }
+  unlock() { this.locked = false; }
 
   deleteMesh(scene: Scene) { scene.removeMesh(<Mesh>this.type); }
 

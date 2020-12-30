@@ -47,11 +47,14 @@ export class CanvasHelperService {
                 this.clearHighLightSelected(<Mesh>this.es.UUIDToContainer.get(en.prevUUIDCsSelected[0]).type);
             }
             if (en.UUIDCsSelected.length > 0) {
-                this.setSelected(this.es.UUIDToContainer.get(en.UUIDCsSelected[0]).type);
+                let container = this.es.UUIDToContainer.get(en.UUIDCsSelected[0]);
+                if (container.locked) return
+                this.setSelected(container.type);
             } else {
                 this.gizmoManager.positionGizmoEnabled = false;
                 this.gizmoManager.rotationGizmoEnabled = false;
                 this.gizmoManager.scaleGizmoEnabled = false;
+                this.gizmoManager.attachToMesh(null);
             }
         });
 
@@ -181,7 +184,9 @@ export class CanvasHelperService {
         // check if we are under a mesh
         this.pickInfo = this.es.getScene().pick(this.es.getScene().pointerX, this.es.getScene().pointerY);
         if (this.pickInfo.hit) {
-            this.setSelected(<Mesh | Light>this.pickInfo.pickedMesh);
+            let mesh = <Mesh | Light>this.pickInfo.pickedMesh;
+            if (this.es.getContainerFromType(mesh).locked) return;
+            this.setSelected(mesh);
             this.startingPoint = this.getGroundPosition();
             this.store.dispatch(oneSelection({ UUID: this.es.getContainerFromType(<Mesh>this.pickInfo.pickedMesh).UUID }));
             if (this.startingPoint) { // we need to disconnect camera from canvas
