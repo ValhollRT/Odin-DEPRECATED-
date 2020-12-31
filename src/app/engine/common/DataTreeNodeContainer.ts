@@ -91,7 +91,6 @@ export class DataTreeContainer {
         if (node.type instanceof Mesh) node.deleteMesh(this.engineService.getScene());
         else node.deleteLight(this.engineService.getScene());
         node = null;
-        this.engineService.deleteContainerRef(node);
         this.updateNodeTree();
     }
 }
