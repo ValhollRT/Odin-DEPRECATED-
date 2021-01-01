@@ -38,6 +38,7 @@ $Odin-theme: mat-light-theme($Odin-primary, $Odin-accent, $Odin-warn);
   --console-debug-color: rgb(255, 187, 0);
   --highlight-color: rgb(255, 187, 0);
   --highlight-color-hover: rgba(255, 187, 0, 0.1);
+  --active-color-button: rgb(255, 230, 125);
 }
 
 /* general */
@@ -79,7 +80,8 @@ a {
   outline: none !important;
 }
 
-h3, p {
+h3,
+p {
   color: var(--main-menu-color);
 }
 
@@ -250,6 +252,25 @@ input {
   color: var(--console-debug-color);
   border: 0;
   outline: none;
+}
+
+button {
+  height: 20px;
+  display: block;
+  background-color: var(--input-background-color);
+  color: var(--console-debug-color);
+  border: 0;
+  outline: none;
+}
+
+button:hover {
+  background-color: var(--console-debug-color);
+  color: var(--input-background-color);
+}
+
+button:active {
+  background-color: var(--active-color-button);
+  color: var(--input-background-color);
 }
 
 .separator {

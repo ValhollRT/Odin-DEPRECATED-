@@ -7,5 +7,8 @@
             </div>
         </div>
         <ng-content></ng-content>
+        <div style="display: flex; align-items: center; margin: 10px;" *ngFor="let bf of buttonsFooter">
+            <button style="margin-right: 5px" (click)='bf.event()'>{{bf.name}}</button>
+        </div>
     </div>
 </div>
