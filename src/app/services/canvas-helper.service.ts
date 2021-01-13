@@ -6,6 +6,7 @@ import { AppState } from '../app.reducer';
 import { EngineService } from '../engine/engine.service';
 import { engineReducer, State } from '../engine/engine.reducer';
 import { clearSelection, oneSelection } from '../engine/engine.action';
+import { Container } from '../engine/common/Container';
 
 @Injectable({ providedIn: 'root' })
 export class CanvasHelperService {
@@ -35,10 +36,12 @@ export class CanvasHelperService {
 
         canvas.addEventListener("pointerdown", this.onPointerDown, false);
         canvas.addEventListener("pointerup", this.onPointerUp, false);
+        canvas.addEventListener("onmouseenter", this.onPointerDown, false);
 
         es.getScene().onDispose = () => {
             canvas.removeEventListener("pointerdown", this.onPointerDown);
             canvas.removeEventListener("pointerup", this.onPointerUp);
+            canvas.removeEventListener("onmouseenter", this.onPointerDown, false);
             // this.canvas.removeEventListener("pointermove", this.onPointerMove);
         }
 
@@ -49,7 +52,7 @@ export class CanvasHelperService {
             if (en.UUIDCsSelected.length > 0) {
                 let container = this.es.UUIDToContainer.get(en.UUIDCsSelected[0]);
                 if (container.locked) return
-                this.setSelected(container.type);
+                this.setSelected(container);
             } else {
                 this.gizmoManager.positionGizmoEnabled = false;
                 this.gizmoManager.rotationGizmoEnabled = false;
@@ -185,10 +188,12 @@ export class CanvasHelperService {
         this.pickInfo = this.es.getScene().pick(this.es.getScene().pointerX, this.es.getScene().pointerY);
         if (this.pickInfo.hit) {
             let mesh = <Mesh | Light>this.pickInfo.pickedMesh;
-            if (this.es.getContainerFromType(mesh).locked) return;
-            this.setSelected(mesh);
+            if (mesh.id.includes("glyph")) mesh = <Mesh | Light>this.pickInfo.pickedMesh.parent;
+            let container = this.es.getContainerFromType(mesh);
+            if (container.locked) return;
+            this.setSelected(container);
             this.startingPoint = this.getGroundPosition();
-            this.store.dispatch(oneSelection({ UUID: this.es.getContainerFromType(<Mesh>this.pickInfo.pickedMesh).UUID }));
+            this.store.dispatch(oneSelection({ UUID: this.es.getContainerFromType(mesh).UUID }));
             if (this.startingPoint) { // we need to disconnect camera from canvas
                 setTimeout(() => {
                     this.es.getCamera().detachControl(this.es.getCanvas());
@@ -219,25 +224,31 @@ export class CanvasHelperService {
         this.startingPoint = current;
     }
 
-    setSelected(o: Mesh | Light) {
-        if (o instanceof Mesh) {
-            this.gizmoManager.attachToMesh(o);
-            this.updateEdgedRendering(o);
+    setSelected(c: Container) {
+
+        if (c.type instanceof Mesh) {
+            this.gizmoManager.attachToMesh(c.type);
+            this.updateEdgedRendering(c.type);
+            if (c.isText) c.type.getChildMeshes().forEach(m => this.updateEdgedRendering(<Mesh>m))
         } else {
-            this.lightGizmo.light = o;
+            this.lightGizmo.light = c.type;
         }
     }
 
     updateEdgedRendering(m: Mesh) {
         m.enableEdgesRendering();
         m.edgesColor.copyFromFloats(0, 1, .5, 0.5);
-        m.edgesWidth = 10;
+        m.edgesWidth = 8;
     }
 
     clearHighLightSelected(o: Mesh | Light) {
         if (o instanceof Mesh) {
             o.disableEdgesRendering();
             o.edgesWidth = 0;
+            o.getChildMeshes().forEach(m => {
+                m.disableEdgesRendering();
+                m.edgesWidth = 0;
+            })
         }
     }
 }
