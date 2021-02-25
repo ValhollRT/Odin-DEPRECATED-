@@ -1,12 +1,12 @@
+import { Haling as HAling, Valing as VAling } from './../../engine/Text/TextType';
+import { LogService } from './../../services/log.service';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Mesh } from 'babylonjs';
-import * as MeshWriter from "meshwriter";
+import { filter, map } from 'rxjs/operators';
 import { AppState } from 'src/app/app.reducer';
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
-import { Text } from '../../engine/Text/Text';
-import { Font } from '../../engine/Text/Font';
 
 @Component({
   selector: 'text-panel',
@@ -16,28 +16,41 @@ import { Font } from '../../engine/Text/Font';
 export class TextPanelComponent implements OnInit {
 
 
-  @ViewChild('text', { static: false }) text: ElementRef;
-  @ViewChild('hJust', { static: false }) hJust: ElementRef;
-  @ViewChild('vJust', { static: false }) vJust: ElementRef;
+  @ViewChild('text', { static: true }) text: ElementRef;
+  ha: HAling;
+  va: VAling;
   public current: Container;
   public Writer;
   public textMesh;
 
   constructor(public store: Store<AppState>,
-    public es: EngineService) {
-    this.Writer = MeshWriter(this.es.getScene(), { scale: 1, defaultFont: "Arial" });
-  }
+    public ls: LogService,
+    public es: EngineService) { }
 
   ngOnInit(): void {
-    this.store.pipe(select('engine')).subscribe(en => {
-      if (en.UUIDCsSelected.length == 0) { this.current = undefined; return; }
-      let container = this.es.getContainerFromUUID(en.UUIDCsSelected[0]);
-      if (!container.isText) return;
-      if (!(container.type instanceof Mesh)) this.current = undefined; else this.current = container;
-    });
+    this.store.pipe(select('engine'),
+      filter(selection => selection.UUIDCsSelected.length > 0),
+      filter(sel => this.es.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
+      map(s => this.es.getContainerFromUUID(s.UUIDCsSelected[0])))
+      .subscribe((c: Container) => {
+        this.current = c;
+        this.text.nativeElement.value = c.text.value;
+        this.ls.log(c.name, "edited text Type", "TextPanelComponent")
+      });
   }
 
   updateText() {
-
+    this.current.text.updateText(this.text.nativeElement.value, this.ha, this.va);
   }
+
+  setHorizontalAlign(i: number) {
+    this.ha = i;
+    this.updateText();
+  }
+
+  setVerticalAlign(i: number) {
+    this.va = i;
+    this.updateText();
+  }
+
 }

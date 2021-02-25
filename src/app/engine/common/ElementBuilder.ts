@@ -2,8 +2,6 @@ import { Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, P
 import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
 import { BoxPanel, CapsulePanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
 import { Container } from "./Container";
-import { Font } from "../Text/Font";
-import { Text } from "../Text/Text";
 
 export class ElementBuilder {
 

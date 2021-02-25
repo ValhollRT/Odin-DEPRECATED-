@@ -1,14 +1,14 @@
 import { Utils } from '../Utils/Utils';
 import { Mesh, Scene, Light, VertexData } from 'babylonjs';
 import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
-import { Text } from '../Text/Text'
+import { TextType } from '../Text/TextType'
 
 export class Container {
 
   public UUID: string;
   public name: string;
   public type: Mesh | Light = undefined;
-  public text: Text;
+  public text: TextType;
   public rebuildMesh: (options: any) => VertexData;
   public children: Container[] = [];
   public parent: Container;
@@ -19,8 +19,7 @@ export class Container {
   public hidden: boolean = false;
   public locked: boolean = false;
   public isText: boolean = false;
-  container: import("/home/sparanzza/Code/Odin/src/app/engine/Text/Text").Text;
-
+    c: globalThis.Text;
 
   constructor(type?: Mesh | Light) {
     this.type = type;

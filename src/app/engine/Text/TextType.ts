@@ -1,26 +1,37 @@
-import { Mesh, Scene, VertexData } from "babylonjs";
-import { Font } from "./Font";
+import { InstancedMesh, Mesh } from "babylonjs";
+import { FontType } from "./FontType";
+import { GlyphMesh } from './GlyphMesh';
 
-export class Text {
+export enum Haling { LEFT, CENTER, RIGHT }
+export enum Valing { TOP, FIRST_LINE, CENTER, BOTTOM }
+
+export class TextType {
 
     GLYPH_COORDS_SCALE = 0.001;
-    font: Font;
-    text: string;
+    fontType: FontType;
+    value: string;
+    halign: Haling;
+    valign: Valing;
     width: number;
     instances: {};
-    rootNode: Mesh;
+    rootMesh: Mesh;
 
-    constructor(font: Font, text: string, mesh: Mesh) {
-        this.font = font;
-        this.text = text;
+    constructor(fontType: FontType, text: string, mesh: Mesh) {
+        this.fontType = fontType;
+        this.value = text;
+        this.halign = Haling.LEFT
+        this.valign = Valing.FIRST_LINE
         this.width = 0;
         this.instances = {};
-        this.rootNode = mesh;
-
-        this.updateText(text);
+        this.rootMesh = mesh;
+        this.updateText(text, this.halign, this.valign);
     }
 
-    updateText(text) {
+    updateText(text: string, ha: Haling, va: Valing) {
+        this.value = text;
+        this.halign = ha;
+        this.valign = va;
+
         const instanceCounts = {};
         const pos = { x: 0, y: 0, z: 0 };
 
@@ -35,17 +46,17 @@ export class Text {
             }
             else {
                 const ch2 = text[i + 1];
-                let g = this.font.glyphs[ch1];
+                let g: GlyphMesh | undefined = this.fontType.glyphs[ch1];
 
                 if (!g) {
-                    g = this.font.createGlyph(ch1);
+                    g = this.fontType.createGlyph(ch1);
                 }
 
                 if (g) {
                     if (g.mesh) {
                         instanceCounts[ch1] = instanceCounts[ch1] ? instanceCounts[ch1] + 1 : 1;
-                        let inst;
-
+                        let inst: InstancedMesh;
+                        g.mesh.material = this.rootMesh.material;
                         if (!this.instances[ch1]) {
                             inst = g.mesh.createInstance("glyph-inst: " + ch1);
                             this.instances[ch1] = [inst];
@@ -59,15 +70,16 @@ export class Text {
                             inst.setEnabled(true);
                         }
 
-                        // inst.setParent(this.rootNode);
+
+                        inst.setParent(this.rootMesh);
                         Object.assign(inst.position, pos);
                     }
 
                     let advance = g.advanceWidth;
 
                     if (advance) {
-                        if (ch2 && this.font.glyphs[ch2]) {
-                            const kern = this.font.font.getKerningValue(g.index, this.font.glyphs[ch2].index);
+                        if (ch2 && this.fontType.glyphs[ch2]) {
+                            const kern = this.fontType.font.getKerningValue(g.index, this.fontType.glyphs[ch2].index);
 
                             if (kern) {
                                 advance += kern;
@@ -100,6 +112,6 @@ export class Text {
             }
         }
 
-        this.rootNode.dispose();
+        this.rootMesh.dispose();
     }
 }

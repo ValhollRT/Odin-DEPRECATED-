@@ -1,4 +1,4 @@
-export class Character {
+export class PathBuilder {
     MAX_BEZIER_STEPS = 10;
     BEZIER_STEP_SIZE = 20.0;
     GLYPH_COORDS_SCALE = 0.001;

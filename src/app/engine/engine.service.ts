@@ -1,3 +1,4 @@
+import { FontType } from './Text/FontType';
 import { Injector } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -19,8 +20,7 @@ import { Container } from './common/Container';
 import { ElementBuilder } from './common/ElementBuilder';
 import { GizmoHelper } from './helpers/GizmoHelper';
 import { Grid } from './helpers/Grid';
-import { Font } from './Text/Font';
-import { Text } from './Text/Text';
+import { TextType } from './Text/TextType';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService {
@@ -49,10 +49,7 @@ export class EngineService {
     store.select('engine').subscribe(en => this.selectedUUIDContainers = [...en.UUIDCsSelected]);
   }
 
-  public createScene(
-    canvas: ElementRef<HTMLCanvasElement>
-
-  ): void {
+  public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);
@@ -91,28 +88,6 @@ export class EngineService {
 
   public createLight(type: string): void {
     let c = new Container(ElementBuilder.createLight(type, this.getScene()));
-    this.typeToContainer.set(c.type, c);
-    this.UUIDToContainer.set(c.UUID, c);
-    this.saveContainerToDataTree(c);
-  }
-
-  public createText() {
-    let c: Container
-    let text: Text
-    let mesh: Mesh = new Mesh("Text: " + "HelloWorld", this.scene);
-    c = new Container(mesh);
-    c.isText = true;
-    c.panel = null;
-    let font = new Font("assets/font/Ubuntu-L.ttf", null, () => {
-      text = new Text(font, "Hola", mesh);
-      c.text = text;
-    }, this.scene);
-
-    font.load();
-    let mat: StandardMaterial = new StandardMaterial("material", this.scene);
-    mat.diffuseColor = new Color3(.0, .75, .75);
-    (<Mesh>c.type).material = mat;
-    (<Mesh>c.type).getChildMeshes(false).forEach(m => m.material = mat);
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);

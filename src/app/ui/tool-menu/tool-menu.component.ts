@@ -1,3 +1,4 @@
+import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
 import { ToolMenu } from 'src/app/models/toolMenu';
 import { AppService, EngineService } from 'src/app/services/index.service';
@@ -15,6 +16,7 @@ export class ToolMenuComponent implements OnInit {
 
   constructor(
     public es: EngineService,
+    public library: LibraryService,
     public appService: AppService,
     public logService: LogService
   ) { }
@@ -50,7 +52,7 @@ export class ToolMenuComponent implements OnInit {
   }
 
   createText() {
-    this.es.createText();
+    this.library.createNewGeometryText();
   }
 
   createMesh(param: string): void {

@@ -1,69 +1,57 @@
-import { Character } from "./Character";
-import * as opentype from "opentype.js"
+import { GlyphMesh } from './GlyphMesh';
+import { PathBuilder } from "./PathBuilder";
 import * as earcut from "earcut";
-import { Mesh } from "babylonjs";
+import { Mesh, Scene, StandardMaterial, VertexData } from "babylonjs";
+import { Font, Glyph, Path, PathCommand } from "opentype.js"
+import * as opentype from "opentype.js"
+import { EngineService } from "../engine.service";
 
-export class Font {
+export class FontType {
     GLYPH_COORDS_SCALE = 0.001;
-    glyphsParent: Mesh;
-    doneCallback: any;
-    material: any;
-    glyphs: {};
-    font: any;
-    scene: any;
-    fontURL: any;
+    material: StandardMaterial;
+    glyphsParent: Mesh; /* Maintain in a group all the characters created not reached by the user */
+    glyphs: GlyphMesh[] = [];
+    font: Font;
+    fontURL: string;
+    scene: Scene;
 
-    constructor(fontURL, material, doneCallback, scene) {
-        this.doneCallback = doneCallback;
-        this.material = material;
-        this.glyphs = {};
-        this.scene = scene
-        this.fontURL = fontURL
-    }
+    constructor() { }
 
-    async load() {
-        await opentype.load(this.fontURL, (err, font) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-
-            if (!font) {
-                console.error("Could not load font from", this.fontURL);
-                return;
-            }
+    async load(fontURL: string, es: EngineService, callback: (font: FontType) => void) {
+        opentype.load(fontURL, (err, font) => {
+            this.fontURL = fontURL;
+            if (err) { console.error(err); return; }
+            if (!font) { console.error("Could not load font from", this.fontURL); return; }
 
             let fontName = "TextMeshFont";
 
-            if (font.names && font.names.fontFamily && font.names.fontFamily.en) {
+            if (font.names && font.names.fontFamily && font.names.fontFamily.en)
                 fontName = font.names.fontFamily.en;
-            }
 
             this.font = font;
+            this.scene = es.getScene();
             this.glyphsParent = new Mesh(fontName, this.scene);
+            callback(this);
 
-            if (this.doneCallback) {
-                this.doneCallback();
-            }
         });
     }
 
-    createGlyph(ch) {
-        const glyph = this.font.charToGlyph(ch);
+    createGlyph(ch: string): GlyphMesh {
+        const glyph: Glyph = this.font.charToGlyph(ch);
 
         if (glyph && glyph.advanceWidth) {
-            this.glyphs[ch] =
-            {
+            this.glyphs[ch] = {
                 index: glyph.index,
                 advanceWidth: glyph.advanceWidth
             };
 
-            if (glyph.path && glyph.path.commands && glyph.path.commands.length) {
+            let commands: PathCommand[] = (<Path>glyph.path).commands;
+            if (glyph.path && commands && commands.length) {
                 const polys = [];
-                glyph.path.commands.forEach(({ type, x, y, x1, y1, x2, y2 }) => {
+                (<any>commands).forEach(({ type, x, y, x1, y1, x2, y2 }) => {
                     switch (type) {
                         case 'M':
-                            polys.push(new Character());
+                            polys.push(new PathBuilder());
                             polys[polys.length - 1].moveTo({ x, y });
                             break;
                         case 'L':
@@ -130,7 +118,7 @@ export class Font {
 
                 root.forEach(process);
 
-                var meshdata = new BABYLON.VertexData();
+                var meshdata = new VertexData();
                 var vertices = [];
                 var normals = [];
 
@@ -148,7 +136,7 @@ export class Font {
                 meshdata.indices = indices;
                 meshdata.normals = normals;
 
-                this.glyphs[ch].mesh = new BABYLON.Mesh("glyph #" + this.glyphs[ch].index + ": " + ch, this.scene);
+                this.glyphs[ch].mesh = new Mesh("glyph #" + this.glyphs[ch].index + ": " + ch, this.scene);
                 this.glyphs[ch].mesh.setParent(this.glyphsParent);
 
                 if (this.material) {
@@ -173,4 +161,5 @@ export class Font {
 
         this.glyphsParent.dispose();
     }
+
 }
