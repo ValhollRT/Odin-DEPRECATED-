@@ -13,7 +13,7 @@
         <div class="input-group">
             <div class="title-section-menu">Vertical Justification</div>
             <div style="display: flex;">
-                <button (click)="setVerticalAlign(0)">Top</button>
+                <button [ngClass]="['this.current.mesh', 'off']" (click)="setVerticalAlign(0)">Top</button>
                 <button (click)="setVerticalAlign(1)">first line</button>
                 <button (click)="setVerticalAlign(2)">center</button>
                 <button (click)="setVerticalAlign(3)">bottom</button>

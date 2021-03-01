@@ -17,8 +17,6 @@ export class TextPanelComponent implements OnInit {
 
 
   @ViewChild('text', { static: true }) text: ElementRef;
-  ha: HAling;
-  va: VAling;
   public current: Container;
   public Writer;
   public textMesh;
@@ -40,16 +38,16 @@ export class TextPanelComponent implements OnInit {
   }
 
   updateText() {
-    this.current.text.updateText(this.text.nativeElement.value, this.ha, this.va);
+    this.current.text.updateText(this.text.nativeElement.value);
   }
 
   setHorizontalAlign(i: number) {
-    this.ha = i;
+    this.current.text.halign = i;
     this.updateText();
   }
 
   setVerticalAlign(i: number) {
-    this.va = i;
+    this.current.text.valign = i;
     this.updateText();
   }
 

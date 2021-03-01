@@ -16,12 +16,11 @@ export class LibraryService {
     let font = new FontType();
     font.load("assets/font/Ubuntu-L.ttf", this.es, (fontType: FontType) => {
 
-      let mesh = new Mesh("parent", this.es.getScene());
+      let mesh = new Mesh("text", this.es.getScene());
       let mat: StandardMaterial = new StandardMaterial("material", this.es.getScene());
       mat.diffuseColor = new Color3(.0, .75, .75);
       mesh.material = mat;
 
-      // this.glyphsParent.getChildMeshes(false).forEach(m => m.material = this.material);
       let text: TextType = new TextType(font, "Text", mesh);
       let c: Container = new Container(mesh);
 

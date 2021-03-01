@@ -24,33 +24,56 @@ export class TextType {
         this.width = 0;
         this.instances = {};
         this.rootMesh = mesh;
-        this.updateText(text, this.halign, this.valign);
+        this.updateText(text);
     }
 
-    updateText(text: string, ha: Haling, va: Valing) {
+    updateText(text: string) {
         this.value = text;
-        this.halign = ha;
-        this.valign = va;
+        this.width = 0;
+        let ha = this.halign;
+        let va = this.valign;
+
+        //Set the start height of the text depending of the number of rows and Vertical Align
+        let g: GlyphMesh | undefined = this.fontType.glyphs['Á'];
+        if (!g) g = this.fontType.createGlyph('Á');
+        let sizeLetter = g.mesh.getBoundingInfo().boundingBox.extendSize.y * 2
+        let numberRows = text.split('\n').length;
+        let startYValign = va == Valing.FIRST_LINE ? 0 :
+            va == Valing.TOP ? -sizeLetter :
+                va == Valing.BOTTOM ? sizeLetter * (numberRows - 1) : (sizeLetter * numberRows) / 2;
 
         const instanceCounts = {};
-        const pos = { x: 0, y: 0, z: 0 };
+        let pos = { x: 0, y: startYValign, z: 0 };
+        let textSplitteByLines = text.split('\n');
 
-        this.width = 0;
+        for (let j = 0; j < textSplitteByLines.length; j++) {
 
-        for (let i = 0; i < text.length; i++) {
-            const ch1 = text[i];
-
-            if (ch1 === "\n") {
-                pos.x = 0;
-                pos.y -= 1.1;
+            // Set pos X
+            let totalWidthX = 0;
+            for (let h = 0; h < textSplitteByLines[j].length; h++) {
+                const ch = textSplitteByLines[j][h];
+                const nextCh = textSplitteByLines[j][h + 1];
+                let g: GlyphMesh | undefined = this.fontType.glyphs[ch];
+                if (!g) g = this.fontType.createGlyph(ch);
+                totalWidthX += g.advanceWidth * this.GLYPH_COORDS_SCALE;
+                if (nextCh && this.fontType.glyphs[nextCh]) {
+                    let kern = this.fontType.font.getKerningValue(g.index, this.fontType.glyphs[nextCh].index);
+                    totalWidthX += kern * this.GLYPH_COORDS_SCALE;
+                }
             }
-            else {
-                const ch2 = text[i + 1];
+            pos.x = ha == Haling.LEFT ? 0 : ha == Haling.RIGHT ? -totalWidthX : -(totalWidthX / 2);
+
+            // Set pos Y
+            if (j == 0 && va == Valing.CENTER) pos.y -= sizeLetter;
+            if (j > 0) pos.y -= sizeLetter;
+
+            for (let i = 0; i < textSplitteByLines[j].length; i++) {
+                const ch1 = textSplitteByLines[j][i];
+                const ch2 = textSplitteByLines[j][i + 1];
+
                 let g: GlyphMesh | undefined = this.fontType.glyphs[ch1];
 
-                if (!g) {
-                    g = this.fontType.createGlyph(ch1);
-                }
+                if (!g) { g = this.fontType.createGlyph(ch1); }
 
                 if (g) {
                     if (g.mesh) {
@@ -70,27 +93,19 @@ export class TextType {
                             inst.setEnabled(true);
                         }
 
-
                         inst.setParent(this.rootMesh);
                         Object.assign(inst.position, pos);
                     }
 
                     let advance = g.advanceWidth;
-
                     if (advance) {
                         if (ch2 && this.fontType.glyphs[ch2]) {
                             const kern = this.fontType.font.getKerningValue(g.index, this.fontType.glyphs[ch2].index);
-
-                            if (kern) {
-                                advance += kern;
-                            }
+                            if (kern) { advance += kern; }
                         }
 
                         pos.x += advance * this.GLYPH_COORDS_SCALE;
-
-                        if (pos.x > this.width) {
-                            this.width = pos.x;
-                        }
+                        if (pos.x > this.width) { this.width = pos.x; }
                     }
                 }
             }
