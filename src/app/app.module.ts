@@ -12,6 +12,7 @@ import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
 import { SidebarPropertiesComponent } from './ui/sidebar-properties/sidebar-properties.component';
 import { MaterialPanelComponent } from './ui/material-panel/material-panel.component';
 import { LightPanelComponent } from './ui/light-panel/light-panel.component';
+import { TextPanelComponent } from './ui/text-panel/text-panel.component';
 
 //Service
 import { ServiceModule } from './services/service.module';
@@ -52,7 +53,8 @@ import { appReducers } from './app.reducer';
     MaterialPanelComponent,
     LightPanelComponent,
     BuilderPanelComponent,
-    PopupWindowComponent
+    PopupWindowComponent,
+    TextPanelComponent
   ],
   imports: [
     FormsModule,

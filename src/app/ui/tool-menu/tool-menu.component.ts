@@ -1,3 +1,4 @@
+import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
 import { ToolMenu } from 'src/app/models/toolMenu';
 import { AppService, EngineService } from 'src/app/services/index.service';
@@ -14,7 +15,8 @@ export class ToolMenuComponent implements OnInit {
   public menus: ToolMenu[] = [];
 
   constructor(
-    public engine: EngineService,
+    public es: EngineService,
+    public library: LibraryService,
     public appService: AppService,
     public logService: LogService
   ) { }
@@ -33,6 +35,11 @@ export class ToolMenuComponent implements OnInit {
         this.createLight(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
+
+      case GEOM.TEXT:
+        this.createText();
+        this.logService.log(param, "created", "ToolMenuComponent")
+        break;
       case 'CONSOLE':
         this.openConsole();
         break;
@@ -44,12 +51,16 @@ export class ToolMenuComponent implements OnInit {
     }
   }
 
+  createText() {
+    this.library.createNewGeometryText();
+  }
+
   createMesh(param: string): void {
-    this.engine.createMesh(param);
+    this.es.createMesh(param);
   }
 
   createLight(param: string): void {
-    this.engine.createLight(param);
+    this.es.createLight(param);
   }
 
   openConsole(): void {
@@ -75,6 +86,7 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Torus', param: GEOM.TORUS },
           { displayName: 'Capsule', param: GEOM.CAPSULE },
           { displayName: 'Sphere', param: GEOM.SPHERE },
+          { displayName: 'Text', param: GEOM.TEXT },
         ]
       },
       {

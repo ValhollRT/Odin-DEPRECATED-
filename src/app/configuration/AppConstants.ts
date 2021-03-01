@@ -10,6 +10,7 @@ export const GEOM = {
     RIBBON: 'RIBBON',
     CAPSULE: 'CAPSULE',
     SPHERE: 'SPHERE',
+    TEXT: 'TEXT',
 };
 
 export const LIGHT = {

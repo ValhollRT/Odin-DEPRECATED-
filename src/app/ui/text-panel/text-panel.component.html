@@ -1,0 +1,23 @@
+<div>
+    <div class="title-section-menu">Text</div>
+    <textarea #text (input)=updateText() style="margin: 5px" rows="4" cols="50"></textarea>
+    <div style="display: flex;">
+        <div class="input-group">
+            <div class="title-section-menu">Horizontal Justification</div>
+            <div style="display: flex;">
+                <button (click)="setHorizontalAlign(0)">left</button>
+                <button (click)="setHorizontalAlign(1)">center</button>
+                <button (click)="setHorizontalAlign(2)">right</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <div class="title-section-menu">Vertical Justification</div>
+            <div style="display: flex;">
+                <button [ngClass]="['this.current.mesh', 'off']" (click)="setVerticalAlign(0)">Top</button>
+                <button (click)="setVerticalAlign(1)">first line</button>
+                <button (click)="setVerticalAlign(2)">center</button>
+                <button (click)="setVerticalAlign(3)">bottom</button>
+            </div>
+        </div>
+    </div>
+</div>

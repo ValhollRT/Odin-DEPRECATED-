@@ -1,10 +1,12 @@
+import { FontType } from './Text/FontType';
 import { Injector } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  ArcRotateCamera, Color4, Engine,
+  ArcRotateCamera, Color3, Color4, Engine,
   Light,
   Mesh, Scene,
+  StandardMaterial,
   Vector3
 } from 'babylonjs';
 import 'babylonjs-materials';
@@ -18,6 +20,7 @@ import { Container } from './common/Container';
 import { ElementBuilder } from './common/ElementBuilder';
 import { GizmoHelper } from './helpers/GizmoHelper';
 import { Grid } from './helpers/Grid';
+import { TextType } from './Text/TextType';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService {
@@ -46,10 +49,7 @@ export class EngineService {
     store.select('engine').subscribe(en => this.selectedUUIDContainers = [...en.UUIDCsSelected]);
   }
 
-  public createScene(
-    canvas: ElementRef<HTMLCanvasElement>
-
-  ): void {
+  public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);

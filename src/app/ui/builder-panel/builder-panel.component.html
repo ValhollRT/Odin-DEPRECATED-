@@ -1,11 +1,16 @@
-<div *ngIf="this.current !== null && this.current !== undefined ">
-	<div *ngFor="let p of this.current.panel.properties">
-		<div class="property-panel-group"
-			style="margin: 2px 0px; display: flex; flex-direction: row; justify-content: space-between;">
-			<span class="property-panel-text">{{p.label}}</span>
-			<div [ngSwitch]="p.controlType">
-				<input style="display: inline-block;" *ngSwitchCase="'number'" [id]="p.key" type="number" min="0"
-					max="9999" [(ngModel)]=this.current.panel.values[p.key] (change)=updateGeom()>
+<div *ngIf="this.current !== null && this.current !== undefined">
+	<div *ngIf="this.current.isText">
+		<text-panel></text-panel>
+	</div>
+	<div *ngIf="!this.current.isText">
+		<div *ngFor="let p of this.current.panel.properties">
+			<div class="property-panel-group"
+				style="margin: 2px 0px; display: flex; flex-direction: row; justify-content: space-between;">
+				<span class="property-panel-text">{{p.label}}</span>
+				<div [ngSwitch]="p.controlType">
+					<input style="display: inline-block;" *ngSwitchCase="'number'" [id]="p.key" type="number" min="0"
+						max="9999" [(ngModel)]=this.current.panel.values[p.key] (change)=updateMesh()>
+				</div>
 			</div>
 		</div>
 	</div>

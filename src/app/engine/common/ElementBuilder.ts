@@ -1,4 +1,3 @@
-
 import { Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3, VertexData } from "babylonjs";
 import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
 import { BoxPanel, CapsulePanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
@@ -10,9 +9,9 @@ export class ElementBuilder {
 
     static createContainerMesh(type: string, s: Scene): Container {
         let options = {};
-        let container;
+        let container: Container;
         let gp: GeometryPanel;
-        let mesh;
+        let mesh: Mesh;
         switch (type) {
             case GEOM.BOX:
                 gp = new BoxPanel();
@@ -78,12 +77,13 @@ export class ElementBuilder {
                 container.rebuildMesh = VertexData.CreateSphere;
                 break;
         }
+
         // Default material
         let mat: StandardMaterial = new StandardMaterial("material", s);
         mat.diffuseColor = new Color3(.75, .75, .75);
         (<Mesh>container.type).material = mat;
-
         return container;
+
     }
 
     static createLight(type: string, scene: Scene) {

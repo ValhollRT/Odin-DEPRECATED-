@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Mesh, VertexData } from 'babylonjs';
-import { filter, map } from 'rxjs/operators';
+import * as MeshWriter from "meshwriter";
 import { AppState } from 'src/app/app.reducer';
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
@@ -15,24 +15,21 @@ export class BuilderPanelComponent implements OnInit {
 
   public current: Container;
   constructor(
-    public engineService: EngineService,
+    public es: EngineService,
     public store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
-    this.store.pipe(select('engine'),
-      filter(selection => selection.UUIDCsSelected.length > 0),
-      filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
-      map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
-      .subscribe((o: Mesh) => {
-        this.current = this.engineService.typeToContainer.get(o);
-      });
+    this.store.pipe(select('engine')).subscribe(en => {
+      if (en.UUIDCsSelected.length == 0) { this.current = undefined; return; }
+      let container = this.es.getContainerFromUUID(en.UUIDCsSelected[0]);
+      if (!(container.type instanceof Mesh)) this.current = undefined; else this.current = container;
+    });
   }
 
-  updateGeom() {
+  updateMesh() {
     let vd: VertexData = this.current.rebuildMesh(this.current.panel.values);
     vd.applyToMesh(<Mesh>this.current.type, true);
-    this.engineService.getCanvasHelper().updateEdgedRendering(<Mesh>(this.current.type));
+    this.es.getCanvasHelper().updateEdgedRendering(<Mesh>(this.current.type));
   }
-
 }
