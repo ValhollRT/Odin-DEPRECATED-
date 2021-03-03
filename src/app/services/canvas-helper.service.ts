@@ -1,10 +1,10 @@
+import { Utils } from './../engine/Utils/Utils';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Light, LightGizmo, Mesh, PickingInfo, ShadowLight, GizmoManager, Vector3 } from 'babylonjs';
-import { distinctUntilChanged, filter, take } from 'rxjs/operators';
+import { Light, LightGizmo, Mesh, PickingInfo, ShadowLight, GizmoManager, Vector3, BoundingInfo } from 'babylonjs';
+import { take } from 'rxjs/operators';
 import { AppState } from '../app.reducer';
 import { EngineService } from '../engine/engine.service';
-import { engineReducer, State } from '../engine/engine.reducer';
 import { clearSelection, oneSelection } from '../engine/engine.action';
 import { Container } from '../engine/common/Container';
 
@@ -225,30 +225,34 @@ export class CanvasHelperService {
     }
 
     setSelected(c: Container) {
-
         if (c.type instanceof Mesh) {
             this.gizmoManager.attachToMesh(c.type);
-            this.updateEdgedRendering(c.type);
-            if (c.isText) c.type.getChildMeshes().forEach(m => this.updateEdgedRendering(<Mesh>m))
+            this.setBoundingBoxMesh(c.type);
         } else {
             this.lightGizmo.light = c.type;
         }
     }
 
-    updateEdgedRendering(m: Mesh) {
-        m.enableEdgesRendering();
-        m.edgesColor.copyFromFloats(0, 1, .5, 0.5);
-        m.edgesWidth = 8;
+    setBoundingBoxMesh(m: Mesh) {
+        if(!Utils.isEmptyArr(m.getChildMeshes())) m.setBoundingInfo(this.boundingInfoFromMeshesChildren(m.getChildren()));
+        m.showBoundingBox = true;
+    }
+
+    boundingInfoFromMeshesChildren(meshes) {
+        let boundingInfo = meshes[0].getBoundingInfo();
+        let min = boundingInfo.minimum.add(meshes[0].position);
+        let max = boundingInfo.maximum.add(meshes[0].position);
+        for (let i = 0; i < meshes.length; i++) {
+            boundingInfo = meshes[i].getBoundingInfo();
+            min = BABYLON.Vector3.Minimize(min, boundingInfo.minimum.add(meshes[i].position));
+            max = BABYLON.Vector3.Maximize(max, boundingInfo.maximum.add(meshes[i].position));
+        }
+        return new BoundingInfo(min, max);
     }
 
     clearHighLightSelected(o: Mesh | Light) {
         if (o instanceof Mesh) {
-            o.disableEdgesRendering();
-            o.edgesWidth = 0;
-            o.getChildMeshes().forEach(m => {
-                m.disableEdgesRendering();
-                m.edgesWidth = 0;
-            })
+            o.showBoundingBox = false;
         }
     }
 }

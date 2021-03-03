@@ -39,6 +39,7 @@ export class TextPanelComponent implements OnInit {
 
   updateText() {
     this.current.text.updateText(this.text.nativeElement.value);
+    this.es.getCanvasHelper().setBoundingBoxMesh(<Mesh>(this.current.type));
   }
 
   setHorizontalAlign(i: number) {

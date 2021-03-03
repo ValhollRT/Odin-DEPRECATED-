@@ -1,6 +1,9 @@
 import { Vector3 } from 'babylonjs';
 
 export class Utils {
+    static isEmptyArr(arr: any) {
+        return Array.isArray(arr) && arr.length ? false : true;
+    }
 
     public static generateUID(str: String): Number {
         var hash = 0;
