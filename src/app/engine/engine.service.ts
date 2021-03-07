@@ -24,7 +24,6 @@ import { TextType } from './Text/TextType';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService {
-
   private static grid: Grid;
 
   private canvas: HTMLCanvasElement;
@@ -40,6 +39,7 @@ export class EngineService {
 
   public newContainer$ = new BehaviorSubject<Container>(undefined);
   private selectedUUIDContainers: string[];
+  private sceneBackgroundColor: Color3;
 
   public constructor(
     public windowService: WindowService,
@@ -107,6 +107,12 @@ export class EngineService {
     this.typeToContainer.delete(container.type)
     this.UUIDToContainer.delete(container.UUID)
   }
+
+  public setBackgroundColorScene(backgroundColor: string) {
+    this.sceneBackgroundColor = Color3.FromHexString(backgroundColor);
+    this.scene.clearColor = new Color4(this.sceneBackgroundColor.r, this.sceneBackgroundColor.g, this.sceneBackgroundColor.b, 1);
+  }
+
 
   public animate(): void {
     const rendererLoopCallback = () => {

@@ -1,6 +1,6 @@
 import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
-import { ToolMenu } from 'src/app/models/toolMenu';
+import { ToolMenu } from 'src/app/models/ToolMenu';
 import { AppService, EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
 import { GEOM, LIGHT } from '../../configuration/AppConstants';
@@ -28,49 +28,33 @@ export class ToolMenuComponent implements OnInit {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
       case GEOM.CAPSULE:
-        this.createMesh(param);
+        this.es.createMesh(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
       case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
-        this.createLight(param);
+        this.es.createLight(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
 
       case GEOM.TEXT:
-        this.createText();
+        this.library.createNewGeometryText();
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
       case 'CONSOLE':
-        this.openConsole();
+        this.logService.log("Console", "ToolMenuComponent", "open");
+        this.appService.openConsole();
         break;
       case 'ABOUTODIN':
-        this.aboutOdin();
+        this.logService.log("About Odin", "ToolMenuComponent", "open");
+        this.appService.openAboutOdin();
+        break;
+      case 'SETTINGS':
+        this.logService.log("Settings", "ToolMenuComponent", "open");
+        this.appService.openSettings();
         break;
       default:
         break;
     }
-  }
-
-  createText() {
-    this.library.createNewGeometryText();
-  }
-
-  createMesh(param: string): void {
-    this.es.createMesh(param);
-  }
-
-  createLight(param: string): void {
-    this.es.createLight(param);
-  }
-
-  openConsole(): void {
-    this.logService.log("Console", "ToolMenuComponent", "open");
-    this.appService.openConsole();
-  }
-
-  aboutOdin(): void {
-    this.logService.log("About Odin", "ToolMenuComponent", "open");
-    this.appService.openAboutOdin();
   }
 
   setMenu() {
@@ -109,6 +93,7 @@ export class ToolMenuComponent implements OnInit {
         ]
       },
       */
+      { displayName: "Settings", icon: 'icon-settings', param: "SETTINGS" },
       { displayName: "Console", icon: 'icon-console', param: "CONSOLE" },
       { displayName: "About Odin", icon: 'icon-info', param: "ABOUTODIN" }
     ];

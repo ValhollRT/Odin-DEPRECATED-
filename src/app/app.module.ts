@@ -1,3 +1,4 @@
+import { SceneSettingsComponent } from './ui/scene-settings/scene-settings.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -54,7 +55,8 @@ import { appReducers } from './app.reducer';
     LightPanelComponent,
     BuilderPanelComponent,
     PopupWindowComponent,
-    TextPanelComponent
+    TextPanelComponent,
+    SceneSettingsComponent
   ],
   imports: [
     FormsModule,

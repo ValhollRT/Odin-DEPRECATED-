@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EngineService } from './engine/engine.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +7,5 @@ import { EngineService } from './engine/engine.service';
 })
 export class AppComponent {
   title = 'Odin';
-  constructor(engineService: EngineService) { }
+  constructor() { }
 }
