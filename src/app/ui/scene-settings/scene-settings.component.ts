@@ -18,7 +18,6 @@ export class SceneSettingsComponent implements OnInit {
 
   constructor(public ap: AppService, public es: EngineService, public logService: LogService) {
     this.tempSceneSettings = new SceneSettings();
-    console.log(this.saveBtnFooter);
     // https://stackoverflow.com/questions/39074765/typescript-service-is-undefined-when-calling-a-function-from-common-service
     this.saveBtnFooter = { name: "Save", event: this.saveSettings.bind(this) };
   }
@@ -36,7 +35,7 @@ export class SceneSettingsComponent implements OnInit {
     // TODO call update settings engine
   }
 
-  closeDialog(): void { console.log(this.ap); this.ap.isOpenSettings.next(false); }
+  closeDialog(): void { this.ap.isOpenSettings.next(false); }
 
 }
 

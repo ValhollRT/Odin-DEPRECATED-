@@ -5,6 +5,7 @@ import { EngineService } from '../engine/engine.service';
 import { LogService } from './log.service';
 import { AppService } from './app.service';
 import { CanvasHelperService } from './canvas-helper.service';
+import { SessionService } from './session.service';
 
 @NgModule({
     imports: [CommonModule],
@@ -15,7 +16,8 @@ import { CanvasHelperService } from './canvas-helper.service';
         EngineService,
         LogService,
         AppService,
-        CanvasHelperService
+        CanvasHelperService,
+        SessionService
     ],
 })
 export class ServiceModule { }

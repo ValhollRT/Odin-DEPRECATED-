@@ -1,0 +1,43 @@
+<popup-window [title]="'Login'" [isOpen]="this.isOpen" [width]="350" (emitCloseDialog)="closeDialog()">
+    <div class="container">
+        <div *ngIf="isLogin">
+            <div class="property-panel-group">
+                <span class="property-panel-text">Email</span>
+                <input style="width: 100%" type="text" [(ngModel)]="signInUp.email">
+            </div>
+            <div class="property-panel-group">
+                <span class="property-panel-text">Password</span>
+                <input style="width: 100%" type="password" [(ngModel)]="signInUp.password">
+            </div>
+            <div class="property-panel-group">
+                <button class="full-button-login" (click)="signInWithEmail()">Login</button>
+            </div>
+            <div class="separator"></div>
+            <p (click)="this.isLogin = !this.isLogin"><a>Sign up</a></p>
+        </div>
+        <div *ngIf="!isLogin">
+            <div class="property-panel-group">
+                <span class="property-panel-text">Display name</span>
+                <input style="width: 100%" type="text" [(ngModel)]="signInUp.displayName">
+            </div>
+            <div class="property-panel-group">
+                <span class="property-panel-text">Email</span>
+                <input style="width: 100%" type="text" [(ngModel)]="signInUp.email">
+            </div>
+            <div class="property-panel-group">
+                <span class="property-panel-text">New Password</span>
+                <input style="width: 100%" type="password" [(ngModel)]="signInUp.password">
+            </div>
+            <div class="property-panel-group">
+                <span class="property-panel-text">Confirm Password</span>
+                <input style="width: 100%" type="password" [(ngModel)]="signInUp.confirmPassword">
+            </div>
+            <div class="property-panel-group">
+                <button class="full-button-login" (click)="signUpWithEmail()">Sign Up</button>
+            </div>
+            <div class="separator"></div>
+            <p (click)="this.isLogin = !this.isLogin"><a>Login</a></p>
+        </div>
+        <alert *ngIf="showAlert" [type]=typeAlert [inline]=false [message]=message></alert>
+    </div>
+</popup-window>

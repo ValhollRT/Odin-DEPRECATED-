@@ -81,7 +81,7 @@ a {
 }
 
 h3,
-p {
+p, span {
   color: var(--main-menu-color);
 }
 
@@ -207,6 +207,10 @@ body {
   mask-image: url("assets/icons/settings.svg");
 }
 
+.icon-user {
+  mask-image: url("assets/icons/user.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);
@@ -292,6 +296,7 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 2px;
 }
 
 .property-panel-text {
@@ -410,6 +415,11 @@ button:active {
 }
 
 .property-panel-group input[type="text"] {
+  width: 40px;
+  margin-left: 12px;
+}
+
+.property-panel-group input[type="password"] {
   width: 40px;
   margin-left: 12px;
 }

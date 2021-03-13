@@ -8,25 +8,29 @@ export class AppService {
   isOpenAboutUs: BehaviorSubject<boolean>;
   isOpenConsole: BehaviorSubject<boolean>;
   isOpenSettings: BehaviorSubject<boolean>;
+  isOpenLogin: BehaviorSubject<boolean>;
   sceneSettings: SceneSettings;
+
+
 
   constructor() {
     this.sceneSettings = new SceneSettings();
     this.isOpenAboutUs = new BehaviorSubject(false);
     this.isOpenConsole = new BehaviorSubject(false);
     this.isOpenSettings = new BehaviorSubject(false);
+    this.isOpenLogin = new BehaviorSubject(false);
     this.loadSceneSettings();
+
   }
 
   loadSceneSettings() {
-    // TODO Load from server
+    // TODO Load from firebase
 
     //Default Settings
     this.loadDefaultSceneSettings();
   }
 
   loadDefaultSceneSettings() {
-    console.log("loaded default settings")
     this.sceneSettings.backgroundColor = "#000000";
   }
 
@@ -40,6 +44,10 @@ export class AppService {
 
   openSettings() {
     this.isOpenSettings.next(!this.isOpenSettings.getValue());
+  }
+
+  openLogin() {
+    this.isOpenLogin.next(!this.isOpenLogin.getValue());
   }
 
   getSceneSettings(): SceneSettings {

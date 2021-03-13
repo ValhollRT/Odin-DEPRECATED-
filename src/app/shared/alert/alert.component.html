@@ -1,0 +1,8 @@
+<div style="padding: 2px;" [ngClass]="{'inline': inline}" 
+[ngClass]="{'alertType-success': type == 0,
+            'alertType-info': type == 1,
+            'alertType-warning':type == 2,
+            'alertType-error':type == 3
+        }">
+    <span>{{message}}</span>
+</div>

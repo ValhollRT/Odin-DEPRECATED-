@@ -1,9 +1,13 @@
+import { SessionService } from './../../services/session.service';
 import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
 import { ToolMenu } from 'src/app/models/ToolMenu';
 import { AppService, EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
 import { GEOM, LIGHT } from '../../configuration/AppConstants';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'tool-menu',
@@ -15,13 +19,19 @@ export class ToolMenuComponent implements OnInit {
   public menus: ToolMenu[] = [];
 
   constructor(
+    public store: Store<AppState>,
     public es: EngineService,
     public library: LibraryService,
     public appService: AppService,
-    public logService: LogService
-  ) { }
+    public logService: LogService,
+    public sessionService: SessionService
+  ) { this.setMenu(); }
 
-  ngOnInit(): void { this.setMenu(); }
+  ngOnInit(): void {
+    this.store.select('session').subscribe(session => {
+      this.authenticateUserMenu(session.user);
+    });
+  }
 
   executeCommandMenu(param: string): void {
     switch (param) {
@@ -52,6 +62,16 @@ export class ToolMenuComponent implements OnInit {
         this.logService.log("Settings", "ToolMenuComponent", "open");
         this.appService.openSettings();
         break;
+      case 'LOGIN':
+        this.logService.log("Login", "ToolMenuComponent", "open");
+        this.appService.openLogin();
+        break;
+      case 'USER_DETAILS':
+        this.logService.log("User details", "ToolMenuComponent", "open");
+        break;
+      case 'SIGNOUT':
+        this.sessionService.signOut();
+        break;
       default:
         break;
     }
@@ -59,6 +79,11 @@ export class ToolMenuComponent implements OnInit {
 
   setMenu() {
     this.menus = [
+      {
+        displayName: "User", icon: 'icon-user', child: [
+          { displayName: 'Login', param: "LOGIN" },
+        ]
+      },
       {
         displayName: 'Geometry', icon: 'icon-geometry', child: [
           { displayName: 'Box', param: GEOM.BOX },
@@ -99,5 +124,16 @@ export class ToolMenuComponent implements OnInit {
     ];
   }
 
+  authenticateUserMenu(user: User) {
+    if (user == undefined) {
+      this.menus[0].child = [{ displayName: 'Login', param: "LOGIN" }];
+    } else {
+      this.menus[0].child = [
+        { displayName: user.name != undefined ? user.name : user.email, param: "" },
+        { displayName: "Sign out", param: "SIGNOUT" }
+      ];
+    };
+
+  }
 
 }
