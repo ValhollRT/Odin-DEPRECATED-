@@ -38,12 +38,15 @@ li a {
   display: inline-block;
   padding: 2px;
   margin: 0px 2px;
-  min-width: 100px;
+  width: 100px;
   height: 30px;
   line-height: 27px;
   border: var(--main-menu-border);
   color: var(--console-debug-color);
   background-color: var(--main-menu-background-color);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 li a:hover {

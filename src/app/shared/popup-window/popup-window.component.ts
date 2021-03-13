@@ -17,10 +17,14 @@ export class PopupWindowComponent implements OnInit {
 
   @Input() title: string;
   @Input() isOpen: boolean;
+  @Input() width: number;
   @Input() buttonsFooter: BtnFooter[];
   @Output() emitCloseDialog: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(public ap: AppService) { this.isOpen = false; }
+  constructor(public ap: AppService) {
+    this.width = this.width == undefined ? 800 : this.width;
+    this.isOpen = false;
+  }
 
   ngOnInit() { }
 

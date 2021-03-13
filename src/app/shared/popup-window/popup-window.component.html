@@ -1,4 +1,4 @@
-<div #transformMenuValue class="container" [ngClass]="{'open-modal': this.isOpen}" cdkDrag>
+<div #transformMenuValue class="container" [ngStyle]="{'width.px': width}" [ngClass]="{'open-modal': this.isOpen}" cdkDrag>
     <div class="input-group">
         <div style="display: flex; align-items: center; margin-bottom: 3px;">
             <div style="flex: 1" class="title-section-menu">{{title}}</div>
