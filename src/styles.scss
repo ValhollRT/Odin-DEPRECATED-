@@ -211,6 +211,10 @@ body {
   mask-image: url("assets/icons/user.svg");
 }
 
+.icon-font {
+  mask-image: url("assets/icons/font.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);

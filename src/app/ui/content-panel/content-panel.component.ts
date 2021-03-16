@@ -11,13 +11,10 @@ export class ContentPanelComponent implements OnInit {
   @Input() icon: string;
   @Input() expand: boolean;
 
-  isExpanded: boolean = false;
   constructor() { }
 
-  ngOnInit(): void { 
-    this.isExpanded = this.expand;
-  }
+  ngOnInit(): void { }
 
-  collapse() { this.isExpanded = !this.isExpanded; }
+  collapse() { this.expand = !this.expand; }
 
 }

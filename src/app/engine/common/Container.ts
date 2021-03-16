@@ -1,3 +1,4 @@
+import { SidebarPanel } from './../../models/SidebarPanelAction';
 import { Utils } from '../Utils/Utils';
 import { Mesh, Scene, Light, VertexData } from 'babylonjs';
 import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
@@ -19,7 +20,7 @@ export class Container {
   public hidden: boolean = false;
   public locked: boolean = false;
   public isText: boolean = false;
-    c: globalThis.Text;
+  c: globalThis.Text;
 
   constructor(type?: Mesh | Light) {
     this.type = type;
@@ -27,8 +28,9 @@ export class Container {
     this.selected = false;
     this.hidden = false;
     if (type !== undefined) this.name = type.name.toUpperCase();
-    else this.name = "ROOT";
+    else this.name = "Root";
   }
+
 
   isMesh(): boolean { return this.type instanceof Mesh; }
   isLight(): boolean { return this.type instanceof Light; }
@@ -63,8 +65,15 @@ export class Container {
   get() { return this.type; }
 
   getIconType(): string {
-    if (this.isMesh()) return 'icon-geometry';
     if (this.isLight()) return 'icon-light';
+    if (this.text) return 'icon-font';
+    if (this.panel == null) return '';
+    if (this.isMesh()) return 'icon-geometry';
     if (this.isText) return 'icon-font';
+  }
+
+  getPanel(): number {
+    if (this.isLight()) return SidebarPanel.LIGHT;
+    if (this.text || this.isMesh() || this.isText) return SidebarPanel.GEOMETRY;
   }
 }

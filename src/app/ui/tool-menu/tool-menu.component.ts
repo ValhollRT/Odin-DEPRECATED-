@@ -37,7 +37,7 @@ export class ToolMenuComponent implements OnInit {
     switch (param) {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
-      case GEOM.CAPSULE:
+      case GEOM.CAPSULE: case GEOM.GROUP:
         this.es.createMesh(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
@@ -45,7 +45,6 @@ export class ToolMenuComponent implements OnInit {
         this.es.createLight(param);
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
-
       case GEOM.TEXT:
         this.library.createNewGeometryText();
         this.logService.log(param, "created", "ToolMenuComponent")
@@ -86,6 +85,7 @@ export class ToolMenuComponent implements OnInit {
       },
       {
         displayName: 'Geometry', icon: 'icon-geometry', child: [
+          { displayName: 'Group', param: "GROUP" },
           { displayName: 'Box', param: GEOM.BOX },
           { displayName: 'Cylinder', param: GEOM.CYLINDER },
           { displayName: 'Disc', param: GEOM.DISC },

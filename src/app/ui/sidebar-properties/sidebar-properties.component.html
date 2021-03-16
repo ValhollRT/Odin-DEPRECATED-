@@ -1,16 +1,16 @@
 <div #transformMenuValue class="container">
   <div class="input-group">
     <div class="title-section-menu"></div>
-    <content-panel [title]="'Transformation'" [icon]="'icon-axis'" [expand]=true>
+    <content-panel #transformation [title]="'Transformation'" [icon]="'icon-axis'" [expand]=this.expandTransformation>
       <transform-menu></transform-menu>
     </content-panel>
-    <content-panel [title]="'Geometry'" [icon]="'icon-geometry'">
+    <content-panel #geometry [title]="'Geometry'" [icon]="'icon-geometry'" [expand]=this.expandGeometry>
       <builder-panel></builder-panel>
     </content-panel>
-    <content-panel [title]="'Material'" [icon]="'icon-material'">
+    <content-panel #material [title]="'Material'" [icon]="'icon-material'" [expand]=this.expandMaterial>
       <material-panel></material-panel>
     </content-panel>
-    <content-panel [title]="'Light'" [icon]="'icon-light'">
+    <content-panel #light [title]="'Light'" [icon]="'icon-light'" [expand]=this.expandLight>
       <light-panel></light-panel>
     </content-panel>
   </div>

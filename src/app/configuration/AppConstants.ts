@@ -1,4 +1,5 @@
 export const GEOM = {
+    GROUP: 'GROUP',
     BOX: 'BOX',
     CYLINDER: 'CYLINDER',
     DISC: 'DISC',

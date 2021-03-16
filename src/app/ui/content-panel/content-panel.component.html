@@ -4,11 +4,11 @@
       <div style="flex: 0 auto" [ngClass]="[ this.icon ,'icon-color', 'icon-xs']"></div>
       <div style="flex: 1" class="title-section-menu">{{title}}</div>
       <div style="flex: 0" (click)='collapse()' class="float-right" style="cursor: pointer;">
-        <div *ngIf="!this.isExpanded" class="icon-color icon-expand icon-xs"></div>
-        <div *ngIf="this.isExpanded" class="icon-color icon-minimize icon-xs"></div>
+        <div *ngIf="!this.expand" class="icon-color icon-expand icon-xs"></div>
+        <div *ngIf="this.expand" class="icon-color icon-minimize icon-xs"></div>
       </div>
     </div>
-    <div *ngIf="this.isExpanded">
+    <div *ngIf="this.expand">
       <ng-content></ng-content>
     </div>
   </div>

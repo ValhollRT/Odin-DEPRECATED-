@@ -13,6 +13,10 @@ export class ElementBuilder {
         let gp: GeometryPanel;
         let mesh: Mesh;
         switch (type) {
+            case GEOM.GROUP:
+                container = new Container(new Mesh("Group", s));
+                container.panel = null;
+                break;
             case GEOM.BOX:
                 gp = new BoxPanel();
                 mesh = MeshBuilder.CreateBox("box", (<BoxPanel>gp).values, s);
@@ -79,9 +83,11 @@ export class ElementBuilder {
         }
 
         // Default material
-        let mat: StandardMaterial = new StandardMaterial("material", s);
-        mat.diffuseColor = new Color3(.75, .75, .75);
-        (<Mesh>container.type).material = mat;
+        if (type != "GROUP") {
+            let mat: StandardMaterial = new StandardMaterial("material", s);
+            mat.diffuseColor = new Color3(.75, .75, .75);
+            (<Mesh>container.type).material = mat;
+        }
         return container;
 
     }

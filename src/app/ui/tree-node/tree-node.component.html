@@ -24,8 +24,10 @@
               class="icon-color icon-xs float-left"></div>
             <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
-            <div class="icon-color icon-axis icon-xs float-left"></div>
-            <div [ngClass]="[ this.flatNodeMap.get(node).getIconType() ,'icon-color', 'icon-xs']">
+            <div class="icon-color icon-axis icon-xs float-left" (click)="openSidebarPanel(0)"></div>
+            <div *ngIf="this.flatNodeMap.get(node).getIconType() != ''"
+              [ngClass]="[ this.flatNodeMap.get(node).getIconType() ,'icon-color', 'icon-xs']"
+              (click)="openSidebarPanel(this.flatNodeMap.get(node).getPanel())">
             </div>
           </div>
         </div>
@@ -53,8 +55,10 @@
               class="icon-color icon-xs float-left"></div>
             <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
-            <div class="icon-color icon-axis icon-xs float-left"></div>
-            <div [ngClass]="[ this.flatNodeMap.get(node).getIconType() ,'icon-color', 'icon-xs']">
+            <div class="icon-color icon-axis icon-xs float-left" (click)="openSidebarPanel(0)"></div>
+            <div *ngIf="this.flatNodeMap.get(node).getIconType() != ''"
+              [ngClass]="[ this.flatNodeMap.get(node).getIconType() ,'icon-color', 'icon-xs']"
+              (click)="openSidebarPanel(this.flatNodeMap.get(node).getPanel())">
             </div>
           </div>
         </div>
@@ -73,6 +77,7 @@ z-index: 3;
 left: 305px;
 text-align: left;
 opacity: .6;
-">Odin Ver. 0.0.9 [F Fit to view, Q select, W Move, E Rotate, R Scale, T Local Global Move] [Camera Viewport - 'Atl' + (LMB - WMB -
+">Odin Ver. 0.0.9 [F Fit to view, Q select, W Move, E Rotate, R Scale, T Local Global Move] [Camera Viewport - 'Atl' +
+  (LMB - WMB -
   RMB)]
 </div>

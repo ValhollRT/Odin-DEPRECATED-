@@ -1,4 +1,4 @@
-<div *ngIf="this.currentMesh!==null && this.currentMesh !==undefined">
+<div *ngIf="this.currentMesh!==null && this.currentMesh !==undefined && !isGroup">
     <div class="property-panel-group">
         <span class="property-panel-text">Name</span>
         <input style="width: 100%" type="text" [(ngModel)]="this.currentMesh.material.name">

@@ -14,6 +14,7 @@ import { LogService } from 'src/app/services/log.service';
 export class MaterialPanelComponent implements OnInit {
 
   public currentMesh: Mesh;
+  public isGroup: boolean = false;
 
   constructor(private engineService: EngineService, store: Store<AppState>, private logService: LogService) {
 
@@ -23,6 +24,8 @@ export class MaterialPanelComponent implements OnInit {
       map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((m: Mesh) => {
         this.currentMesh = m;
+        this.isGroup = this.engineService.getContainerFromType(m).panel == null;
+        if (this.isGroup) return;
         this.logService.log(m.material.name, "edited material", "MaterialPanelComponent")
       });
 

@@ -2,7 +2,7 @@
 	<div *ngIf="this.current.isText">
 		<text-panel></text-panel>
 	</div>
-	<div *ngIf="!this.current.isText">
+	<div *ngIf="!this.current.isText && this.current.panel !== null">
 		<div *ngFor="let p of this.current.panel.properties">
 			<div class="property-panel-group"
 				style="margin: 2px 0px; display: flex; flex-direction: row; justify-content: space-between;">

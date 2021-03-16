@@ -1,3 +1,5 @@
+import { openSidebarPanel } from './../ui.action';
+import { SidebarPanel, SidebarPanelAction } from './../../models/SidebarPanelAction';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, ElementRef, ViewChild } from '@angular/core';
@@ -50,7 +52,7 @@ export class TreeNodeComponent {
   isReadOnly: boolean = true;
 
   constructor(
-    private store: Store<AppState>,
+    public store: Store<AppState>,
     public dataTree: DataTreeContainer,
     private es: EngineService, public logService: LogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
@@ -184,6 +186,11 @@ export class TreeNodeComponent {
       this.dataTree.deleteNodeAndChildren(this.es.getFirstSelected());
       this.store.dispatch(clearSelection());
     }
+  }
+
+  openSidebarPanel(panel: number) {
+    const osp = new SidebarPanelAction(panel, true);
+    this.store.dispatch(openSidebarPanel({ action: osp }));
   }
 }
 
