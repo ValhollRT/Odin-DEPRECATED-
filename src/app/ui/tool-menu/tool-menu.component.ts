@@ -1,3 +1,5 @@
+import { SceneSettings } from './../../models/SceneSettings';
+import { openConsole, openLogin, openSceneSettings } from './../ui.action';
 import { SessionService } from './../../services/session.service';
 import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
@@ -8,6 +10,8 @@ import { GEOM, LIGHT } from '../../configuration/AppConstants';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { User } from 'src/app/models/User';
+import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { openAboutOdin } from '../ui.action';
 
 @Component({
   selector: 'tool-menu',
@@ -51,19 +55,19 @@ export class ToolMenuComponent implements OnInit {
         break;
       case 'CONSOLE':
         this.logService.log("Console", "ToolMenuComponent", "open");
-        this.appService.openConsole();
+        this.store.dispatch(openConsole({ console: new PopupDialogAction(true) }))
         break;
       case 'ABOUTODIN':
         this.logService.log("About Odin", "ToolMenuComponent", "open");
-        this.appService.openAboutOdin();
+        this.store.dispatch(openAboutOdin({ aboutOdin: new PopupDialogAction(true) }))
         break;
       case 'SETTINGS':
         this.logService.log("Settings", "ToolMenuComponent", "open");
-        this.appService.openSettings();
+        this.store.dispatch(openSceneSettings({ sceneSettings: new PopupDialogAction(true) }))
         break;
       case 'LOGIN':
         this.logService.log("Login", "ToolMenuComponent", "open");
-        this.appService.openLogin();
+        this.store.dispatch(openLogin({ login: new PopupDialogAction(true) }))
         break;
       case 'USER_DETAILS':
         this.logService.log("User details", "ToolMenuComponent", "open");

@@ -1,7 +1,7 @@
 import { AppState } from 'src/app/app.reducer';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SidebarPanel } from 'src/app/models/SidebarPanelAction';
+import { SidebarPanel } from 'src/app/models/actions/SidebarPanelAction';
 import { filter } from 'rxjs/operators';
 
 @Component({

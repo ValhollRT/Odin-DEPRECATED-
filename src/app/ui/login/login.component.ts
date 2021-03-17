@@ -1,3 +1,4 @@
+import { openLogin } from './../ui.action';
 import { AlertType } from './../../models/AlertType';
 import { SessionService } from '../../services/session.service';
 import { LogService } from 'src/app/services/log.service';
@@ -6,6 +7,7 @@ import { AppService } from 'src/app/services/index.service';
 import { SignInUp } from 'src/app/models/SignInUp';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
+import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
 
 
 @Component({
@@ -23,6 +25,7 @@ export class LoginComponent implements OnInit {
   typeAlert: AlertType;
 
   constructor(
+    private store: Store<AppState>,
     public session: SessionService,
     public logService: LogService,
     public appService: AppService) {
@@ -30,12 +33,14 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.appService.isOpenLogin.subscribe(isOpen => {
-      this.isOpen = isOpen;
+    this.store.select('ui').subscribe(ui => {
+      this.isOpen = ui.login.open;
     });
   }
 
-  closeDialog() { this.appService.isOpenLogin.next(false); }
+  closeDialog() {
+    this.store.dispatch(openLogin({ login: new PopupDialogAction(false) }))
+  }
 
   signUpWithEmail() {
     this.showAlert = false;

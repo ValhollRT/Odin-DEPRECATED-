@@ -1,5 +1,8 @@
+import { openAboutOdin } from './../ui.action';
+import { AppState } from 'src/app/app.reducer';
 import { Component, OnInit } from '@angular/core';
-import { AppService } from 'src/app/services/app.service';
+import { Store } from '@ngrx/store';
+import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
 
 @Component({
   selector: 'about-odin',
@@ -9,12 +12,15 @@ import { AppService } from 'src/app/services/app.service';
 export class AboutOdinComponent implements OnInit {
 
   isOpen = false;
-  constructor(public appService: AppService) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.appService.isOpenAboutUs.subscribe(isOpen => {
-      this.isOpen = isOpen;
+    this.store.select('ui').subscribe(ui => {
+      this.isOpen = ui.aboutOdin.open;
     });
   }
-  closeDialog() { this.appService.isOpenAboutUs.next(false); }
+
+  closeDialog() {
+    this.store.dispatch(openAboutOdin({ aboutOdin: new PopupDialogAction(false) }))
+  }
 }

@@ -1,5 +1,5 @@
 import { openSidebarPanel } from './../ui.action';
-import { SidebarPanel, SidebarPanelAction } from './../../models/SidebarPanelAction';
+import { SidebarPanel, SidebarPanelAction } from './../../models/actions/SidebarPanelAction';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, ElementRef, ViewChild } from '@angular/core';

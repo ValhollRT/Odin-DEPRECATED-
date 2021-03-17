@@ -1,4 +1,4 @@
-import { SidebarPanel } from './../../models/SidebarPanelAction';
+import { SidebarPanel } from './../../models/actions/SidebarPanelAction';
 import { Utils } from '../Utils/Utils';
 import { Mesh, Scene, Light, VertexData } from 'babylonjs';
 import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
