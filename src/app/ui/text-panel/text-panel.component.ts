@@ -38,7 +38,8 @@ export class TextPanelComponent implements OnInit {
   }
 
   updateText() {
-    this.current.text.updateText(this.text.nativeElement.value);
+    this.current.text.value = this.text.nativeElement.value;
+    this.current.text.updateText();
     this.es.getCanvasHelper().setBoundingBoxMesh(<Mesh>(this.current.type));
   }
 

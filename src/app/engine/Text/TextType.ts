@@ -12,6 +12,8 @@ export class TextType {
     value: string;
     halign: Haling;
     valign: Valing;
+    letterSpacing: number;
+    lineHeight: number;
     width: number;
     instances: {};
     rootMesh: Mesh;
@@ -22,21 +24,23 @@ export class TextType {
         this.halign = Haling.LEFT
         this.valign = Valing.FIRST_LINE
         this.width = 0;
+        this.letterSpacing = 0;
+        this.lineHeight = 0;
         this.instances = {};
         this.rootMesh = mesh;
-        this.updateText(text);
+        this.updateText();
     }
 
-    updateText(text: string) {
-        this.value = text;
-        this.width = 0;
+    updateText() {
+        let text = this.value;
         let ha = this.halign;
         let va = this.valign;
+        this.width = 0;
 
         //Set the start height of the text depending of the number of rows and Vertical Align
         let g: GlyphMesh | undefined = this.fontType.glyphs['Á'];
         if (!g) g = this.fontType.createGlyph('Á');
-        let sizeLetter = g.mesh.getBoundingInfo().boundingBox.extendSize.y * 2
+        let sizeLetter = (g.mesh.getBoundingInfo().boundingBox.extendSize.y * 2) + this.lineHeight;
         let numberRows = text.split('\n').length;
         let startYValign = va == Valing.FIRST_LINE ? 0 :
             va == Valing.TOP ? -sizeLetter :
@@ -60,6 +64,7 @@ export class TextType {
                     let kern = this.fontType.font.getKerningValue(g.index, this.fontType.glyphs[nextCh].index);
                     totalWidthX += kern * this.GLYPH_COORDS_SCALE;
                 }
+                totalWidthX += this.letterSpacing;
             }
             pos.x = ha == Haling.LEFT ? 0 : ha == Haling.RIGHT ? -totalWidthX : -(totalWidthX / 2);
 
@@ -104,8 +109,8 @@ export class TextType {
                             if (kern) { advance += kern; }
                         }
 
-                        pos.x += advance * this.GLYPH_COORDS_SCALE;
-                        if (pos.x > this.width) { this.width = pos.x; }
+                        pos.x += advance * this.GLYPH_COORDS_SCALE + this.letterSpacing;
+                        if (pos.x > this.width) { this.width = pos.x }
                     }
                 }
             }
