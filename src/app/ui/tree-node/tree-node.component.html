@@ -2,7 +2,16 @@
   <div class="input-group">
     <div class="title-section-menu">Tree Node</div>
     <div class="tree-node__top-menu-align">
-      <input (keyup.enter)="searchElement($event.target.value)" class="searchElement" type="text" placeholder="search...">
+      <div class="tree-node__tope-menu__group-vertical-btn">
+        <div class="icon-hide icon-color icon-xxs float-left" (click)="checkHideDirectDescendants()"></div>
+        <div class="icon-unhide icon-color icon-xxs float-left" (click)="checkUnHideDirectDescendants()"></div>
+      </div>
+      <div class="tree-node__tope-menu__group-vertical-btn">
+        <div class="icon-lock icon-color icon-xxs float-left" (click)="checkLockDirectDescendants()"></div>
+        <div class="icon-unlock icon-color icon-xxs float-left" (click)="checkUnLockDirectDescendants()"></div>
+      </div>
+      <input (keyup.enter)="searchElement($event.target.value)" class="searchElement" type="text"
+        placeholder="search...">
       <div (click)="clickDeleteNode($event)" class="icon-btn-color icon-trash icon-btn-xs float-left"></div>
     </div>
     <div class="separator"></div>

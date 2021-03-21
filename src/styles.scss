@@ -81,7 +81,8 @@ a {
 }
 
 h3,
-p, span {
+p,
+span {
   color: var(--main-menu-color);
 }
 
@@ -230,10 +231,16 @@ body {
   mix-blend-mode: difference;
 }
 
+.icon-xxs {
+  width: 13px;
+  height: 13px;
+  margin: 2px 5px;
+}
+
 .icon-xs {
   width: 15px;
   height: 15px;
-  margin: 0px 5px;
+  margin: 2px 5px;
 }
 
 .icon-m {

@@ -1,55 +1,110 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-<g>
-	<g>
-		<path d="M418.54,193.172H93.46c-17.235,0-31.258,14.022-31.258,31.258v256.313C62.203,497.978,76.225,512,93.46,512H418.54
-			c17.235,0,31.258-14.022,31.258-31.258V224.43C449.797,207.194,435.775,193.172,418.54,193.172z M412.288,474.491H99.712v-243.81
-			h312.576V474.491z"/>
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 512 512"
+   style="enable-background:new 0 0 512 512;"
+   xml:space="preserve"
+   sodipodi:docname="unlock.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><metadata
+   id="metadata55"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs53" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1023"
+   id="namedview51"
+   showgrid="false"
+   inkscape:zoom="1.3037281"
+   inkscape:cx="299.60948"
+   inkscape:cy="266.02525"
+   inkscape:window-x="0"
+   inkscape:window-y="27"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Capa_1" />
+<g
+   id="g6">
+	<g
+   id="g4">
+		<path
+   d="M418.54,193.172H93.46c-17.235,0-31.258,14.022-31.258,31.258v256.313C62.203,497.978,76.225,512,93.46,512H418.54    c17.235,0,31.258-14.022,31.258-31.258V224.43C449.797,207.194,435.775,193.172,418.54,193.172z M412.288,474.491H99.712v-243.81    h312.576V474.491z"
+   id="path2" />
 	</g>
 </g>
-<g>
-	<g>
-		<path d="M254.75,0c-54.132,0-104.882,31.551-129.3,80.382c-4.639,9.265-0.881,20.53,8.383,25.162
-			c9.271,4.639,20.53,0.875,25.162-8.383c18.117-36.234,55.707-59.652,95.586-59.652c59.383,0.531,107.695,49.606,107.695,109.402
-			v62.515c0,10.359,8.396,18.755,18.755,18.755s18.755-8.396,18.755-18.755v-62.515C399.785,66.616,334.801,0.713,254.75,0z"/>
+<g
+   id="g12">
+	<g
+   id="g10">
+		<path
+   d="m 254.75,0 c -54.132,0 -80.71794,21.931964 -101.30078,42.382812 -4.639,9.265001 -0.88119,20.530108 8.38281,25.162108 9.271,4.639 20.53011,0.87324 25.16211,-8.384764 11.21372,-13.223067 36.14428,-27.019608 67.58594,-21.65039 59.383,0.531 107.69531,49.604374 107.69531,109.400394 v 62.51562 c 0,10.359 8.39686,18.75586 18.75586,18.75586 10.359,0 18.75391,-8.39686 18.75391,-18.75586 V 146.91016 C 399.78416,66.61514 334.801,0.713 254.75,0 Z"
+   id="path8"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="cccccsssscc" />
 	</g>
 </g>
-<g>
-	<g>
-		<path d="M256,330.706c-10.359,0-18.755,8.396-18.755,18.755v43.761c0,10.359,8.396,18.755,18.755,18.755
-			s18.755-8.39,18.755-18.755V349.46C274.755,339.102,266.359,330.706,256,330.706z"/>
-	</g>
+
+<g
+   id="g20">
 </g>
-<g>
+<g
+   id="g22">
 </g>
-<g>
+<g
+   id="g24">
 </g>
-<g>
+<g
+   id="g26">
 </g>
-<g>
+<g
+   id="g28">
 </g>
-<g>
+<g
+   id="g30">
 </g>
-<g>
+<g
+   id="g32">
 </g>
-<g>
+<g
+   id="g34">
 </g>
-<g>
+<g
+   id="g36">
 </g>
-<g>
+<g
+   id="g38">
 </g>
-<g>
+<g
+   id="g40">
 </g>
-<g>
+<g
+   id="g42">
 </g>
-<g>
+<g
+   id="g44">
 </g>
-<g>
+<g
+   id="g46">
 </g>
-<g>
-</g>
-<g>
+<g
+   id="g48">
 </g>
 </svg>

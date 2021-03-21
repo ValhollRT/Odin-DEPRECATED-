@@ -2,7 +2,7 @@ import { openSidebarPanel } from './../ui.action';
 import { SidebarPanel, SidebarPanelAction } from './../../models/actions/SidebarPanelAction';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from 'src/app/engine/engine.service';
@@ -198,5 +198,70 @@ export class TreeNodeComponent {
       if (c.name.toUpperCase() === containerName.toUpperCase()) this.store.dispatch(oneSelection({ UUID: c.UUID }));
     });
   }
+
+  checkHideDirectDescendants() {
+    if (this.es.nothingSelected()) return;
+    let fs = this.es.getFirstSelected();
+    this.hideContainers(fs);
+  }
+
+  hideContainers(c: Container) {
+    c.hide();
+    this.nestedNodeMap.get(c).hidden = true;
+    c.children.forEach(c => {
+      c.hide();
+      this.nestedNodeMap.get(c).hidden = true;
+      this.hideContainers(c);
+    });
+  }
+
+  checkUnHideDirectDescendants() {
+    if (this.es.nothingSelected()) return;
+    let fs = this.es.getFirstSelected();
+    this.unHideContainers(fs);
+  }
+
+  unHideContainers(c: Container) {
+    c.unHide();
+    this.nestedNodeMap.get(c).hidden = false;
+    c.children.forEach(c => {
+      c.unHide();
+      this.nestedNodeMap.get(c).hidden = false;
+      this.unHideContainers(c);
+    });
+  }
+
+  checkLockDirectDescendants() {
+    if (this.es.nothingSelected()) return;
+    let fs = this.es.getFirstSelected();
+    this.lockContainers(fs);
+  }
+
+  lockContainers(c: Container) {
+    c.lock();
+    this.nestedNodeMap.get(c).locked = true;
+    c.children.forEach(c => {
+      c.lock();
+      this.nestedNodeMap.get(c).locked = true;
+      this.lockContainers(c);
+    });
+  }
+
+  checkUnLockDirectDescendants() {
+    if (this.es.nothingSelected()) return;
+    let fs = this.es.getFirstSelected();
+    this.unLockContainers(fs);
+  }
+
+  unLockContainers(c: Container) {
+    c.unlock();
+    this.nestedNodeMap.get(c).locked = false;
+    c.children.forEach(c => {
+      c.unlock();
+      this.nestedNodeMap.get(c).locked = false;
+      this.unLockContainers(c);
+    });
+  }
+
 }
 
