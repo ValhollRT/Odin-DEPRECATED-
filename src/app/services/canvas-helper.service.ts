@@ -236,7 +236,7 @@ export class CanvasHelperService {
 
                 let bbr = this.es.getScene().getBoundingBoxRenderer();
                 bbr.onBeforeBoxRenderingObservable.add((bb: BoundingBox) => {
-                    bbr.frontColor = bb == this.es.UUIDToBoundingBox.get(c.UUID)
+                    bbr.backColor = bbr.frontColor = bb == this.es.UUIDToBoundingBox.get(c.UUID)
                         ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
                 })
             }
