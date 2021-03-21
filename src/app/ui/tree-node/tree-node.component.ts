@@ -192,5 +192,11 @@ export class TreeNodeComponent {
     const osp = new SidebarPanelAction(panel, true);
     this.store.dispatch(openSidebarPanel({ action: osp }));
   }
+
+  searchElement(containerName: String) {
+    this.es.UUIDToContainer.forEach(c => {
+      if (c.name.toUpperCase() === containerName.toUpperCase()) this.store.dispatch(oneSelection({ UUID: c.UUID }));
+    });
+  }
 }
 

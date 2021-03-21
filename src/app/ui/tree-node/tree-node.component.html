@@ -1,11 +1,12 @@
 <div #transformMenuValue class="container">
   <div class="input-group">
     <div class="title-section-menu">Tree Node</div>
-    <div style="display: inline-block;">
+    <div class="tree-node__top-menu-align">
+      <input (keyup.enter)="searchElement($event.target.value)" class="searchElement" type="text" placeholder="search...">
       <div (click)="clickDeleteNode($event)" class="icon-btn-color icon-trash icon-btn-xs float-left"></div>
     </div>
     <div class="separator"></div>
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-tree class="tree-node" [dataSource]="dataSource" [treeControl]="treeControl">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
         <button mat-icon-button disabled></button>
         <div
@@ -77,5 +78,6 @@ z-index: 3;
 left: 305px;
 text-align: left;
 opacity: .6;
-">Odin Ver. 0.1.0 [F Fit to view, Q select, W Move, E Rotate, R Scale, T Local Global Move] [Camera Viewport - 'Atl' + (LMB - WMB - RMB)]
+">Odin Ver. 0.1.0 [F Fit to view, Q select, W Move, E Rotate, R Scale, T Local Global Move] [Camera Viewport - 'Atl' +
+  (LMB - WMB - RMB)]
 </div>

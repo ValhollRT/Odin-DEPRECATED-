@@ -159,7 +159,7 @@ button {
   box-sizing: border-box;
 }
 
-input[type="text"] {
+.tree-node input[type="text"] {
   background-color: transparent;
   min-width: 100px;
   cursor: default;
@@ -167,4 +167,15 @@ input[type="text"] {
 
 .btn-tree-header {
   border: var(--main-menu-border);
+}
+
+.tree-node__top-menu-align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchElement {
+  width: 140px;
+  height: 18px;
 }
