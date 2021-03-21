@@ -30,6 +30,6 @@ export class BuilderPanelComponent implements OnInit {
   updateMesh() {
     let vd: VertexData = this.current.rebuildMesh(this.current.panel.values);
     vd.applyToMesh(<Mesh>this.current.type, true);
-    this.es.getCanvasHelper().setBoundingBoxMesh(<Mesh>(this.current.type));
+    this.es.getCanvasHelper().setBoundingBoxText(<Mesh>(this.current.type));
   }
 }

@@ -20,7 +20,6 @@ export class Container {
   public hidden: boolean = false;
   public locked: boolean = false;
   public isText: boolean = false;
-  c: globalThis.Text;
 
   constructor(type?: Mesh | Light) {
     this.type = type;
@@ -75,5 +74,14 @@ export class Container {
   getPanel(): number {
     if (this.isLight()) return SidebarPanel.LIGHT;
     if (this.text || this.isMesh() || this.isText) return SidebarPanel.GEOMETRY;
+  }
+
+  setParent(parent: Container) {
+    (<Mesh>this.type).refreshBoundingInfo();
+    let worldMatrix = this.type.getWorldMatrix();
+    this.parent = parent;
+    this.type.parent = parent.type;
+    (<Mesh>this.type).refreshBoundingInfo();
+    this.type._worldMatrix = worldMatrix;
   }
 }

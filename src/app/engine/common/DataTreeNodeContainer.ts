@@ -1,8 +1,8 @@
 import { Container } from 'src/app/engine/common/Container';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, fromEvent } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { EngineService } from '../engine.service';
-import { Mesh } from 'babylonjs';
+import { Matrix, Mesh, Node, Quaternion, Vector3 } from 'babylonjs';
 import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
 
@@ -43,7 +43,9 @@ export class DataTreeContainer {
         if (from.parent === to) return null;
         to.children.push(from); to.expandable = true;
         this.deleteNode(from);
-        from.parent = to;
+
+        from.setParent(to);
+
         this.updateNodeTree();
         return to;
     }
@@ -55,7 +57,8 @@ export class DataTreeContainer {
         let targetIdx = to.parent.children.indexOf(to);
         to.parent.children.splice(targetIdx, 0, from);
 
-        from.parent = to.parent;
+        from.setParent(to.parent);
+
         this.updateNodeTree();
         return to;
     }
@@ -67,7 +70,8 @@ export class DataTreeContainer {
         let targetIdx = to.parent.children.indexOf(to);
         to.parent.children.splice(targetIdx + 1, 0, from);
 
-        from.parent = to.parent;
+        from.setParent(to.parent);
+
         this.updateNodeTree();
         return to;
     }

@@ -1,4 +1,3 @@
-import { FontType } from './Text/FontType';
 import { Injector } from '@angular/core';
 import { ElementRef, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -6,7 +5,6 @@ import {
   ArcRotateCamera, Color3, Color4, Engine,
   Light,
   Mesh, Scene,
-  StandardMaterial,
   Vector3
 } from 'babylonjs';
 import 'babylonjs-materials';
@@ -20,7 +18,7 @@ import { Container } from './common/Container';
 import { ElementBuilder } from './common/ElementBuilder';
 import { GizmoHelper } from './helpers/GizmoHelper';
 import { Grid } from './helpers/Grid';
-import { TextType } from './Text/TextType';
+import { BoundingBox } from 'babylonjs/Culling/boundingBox';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService {
@@ -36,6 +34,7 @@ export class EngineService {
   // References Containers for engine
   public typeToContainer = new Map<Mesh | Light, Container>();
   public UUIDToContainer = new Map<string, Container>();
+  public UUIDToBoundingBox = new Map<string, BoundingBox>();
 
   public newContainer$ = new BehaviorSubject<Container>(undefined);
   private selectedUUIDContainers: string[];
@@ -83,6 +82,7 @@ export class EngineService {
     let c = ElementBuilder.createContainerMesh(type, this.getScene());
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
+    this.UUIDToBoundingBox.set(c.UUID, (<Mesh>c.type).getBoundingInfo().boundingBox)
     this.saveContainerToDataTree(c);
   }
 
@@ -112,7 +112,6 @@ export class EngineService {
     this.sceneBackgroundColor = Color3.FromHexString(backgroundColor);
     this.scene.clearColor = new Color4(this.sceneBackgroundColor.r, this.sceneBackgroundColor.g, this.sceneBackgroundColor.b, 1);
   }
-
 
   public animate(): void {
     const rendererLoopCallback = () => {

@@ -29,7 +29,8 @@ export class TextPanelComponent implements OnInit {
     this.store.pipe(select('engine'),
       filter(selection => selection.UUIDCsSelected.length > 0),
       filter(sel => this.es.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
-      map(s => this.es.getContainerFromUUID(s.UUIDCsSelected[0])))
+      map(s => this.es.getContainerFromUUID(s.UUIDCsSelected[0])),
+      filter(c => c.isText))
       .subscribe((c: Container) => {
         this.current = c;
         this.text.nativeElement.value = c.text.value;
@@ -40,7 +41,7 @@ export class TextPanelComponent implements OnInit {
   updateText() {
     this.current.text.value = this.text.nativeElement.value;
     this.current.text.updateText();
-    this.es.getCanvasHelper().setBoundingBoxMesh(<Mesh>(this.current.type));
+    this.es.getCanvasHelper().setBoundingBoxText(<Mesh>(this.current.type));
   }
 
   setHorizontalAlign(i: number) {
