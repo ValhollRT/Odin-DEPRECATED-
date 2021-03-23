@@ -1,5 +1,5 @@
-import { Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3, VertexData } from "babylonjs";
-import { GEOM, LIGHT } from 'src/app/configuration/AppConstants';
+import { ArcRotateCamera, Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3, VertexData } from "babylonjs";
+import { CAMERA, GEOM, LIGHT } from 'src/app/configuration/AppConstants';
 import { BoxPanel, CapsulePanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
 import { Container } from "./Container";
 
@@ -108,6 +108,16 @@ export class ElementBuilder {
             case LIGHT.HEMISPHERIC:
                 return new HemisphericLight("HemisphericLight", new Vector3(0, 0, 0), s);
 
+        }
+    }
+
+    static createCamera(type: string, s: Scene) {
+        switch (type) {
+            case CAMERA.ARCROTATECAMERA:
+                let camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(0, 0, 0), s);
+                camera.setTarget(Vector3.Zero());
+                camera.panningSensibility = 100;
+                return camera;
         }
     }
 }

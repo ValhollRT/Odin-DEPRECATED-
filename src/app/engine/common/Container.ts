@@ -1,6 +1,6 @@
 import { SidebarPanel } from './../../models/actions/SidebarPanelAction';
 import { Utils } from '../Utils/Utils';
-import { Mesh, Scene, Light, VertexData } from 'babylonjs';
+import { Mesh, Scene, Light, VertexData, ArcRotateCamera, TargetCamera } from 'babylonjs';
 import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
 import { TextType } from '../Text/TextType'
 
@@ -8,7 +8,7 @@ export class Container {
 
   public UUID: string;
   public name: string;
-  public type: Mesh | Light = undefined;
+  public type: Mesh | Light | ArcRotateCamera = undefined;
   public text: TextType;
   public rebuildMesh: (options: any) => VertexData;
   public children: Container[] = [];
@@ -21,7 +21,7 @@ export class Container {
   public locked: boolean = false;
   public isText: boolean = false;
 
-  constructor(type?: Mesh | Light) {
+  constructor(type?: Mesh | Light | ArcRotateCamera) {
     this.type = type;
     this.UUID = Utils.generatorUUID();
     this.selected = false;
@@ -33,6 +33,7 @@ export class Container {
 
   isMesh(): boolean { return this.type instanceof Mesh; }
   isLight(): boolean { return this.type instanceof Light; }
+  isCamera(): boolean { return this.type instanceof ArcRotateCamera; }
 
   unHide() {
     if (this.isMesh()) {
@@ -64,6 +65,7 @@ export class Container {
   get() { return this.type; }
 
   getIconType(): string {
+    if (this.isCamera()) return 'icon-camera';
     if (this.isLight()) return 'icon-light';
     if (this.text) return 'icon-font';
     if (this.panel == null) return '';
@@ -73,10 +75,12 @@ export class Container {
 
   getPanel(): number {
     if (this.isLight()) return SidebarPanel.LIGHT;
+    if (this.isCamera()) return SidebarPanel.CAMERA;
     if (this.text || this.isMesh() || this.isText) return SidebarPanel.GEOMETRY;
   }
 
   setParent(parent: Container) {
+    if (this.type instanceof TargetCamera) return;
     (<Mesh>this.type).refreshBoundingInfo();
     let worldMatrix = this.type.getWorldMatrix();
     this.parent = parent;

@@ -11,11 +11,11 @@ import { filter } from 'rxjs/operators';
 })
 export class SidebarPropertiesComponent implements OnInit {
 
-
   expandTransformation: boolean = false;
   expandGeometry: boolean = false;
   expandMaterial: boolean = false;
   expandLight: boolean = false;
+  expandCamera: boolean = false;
 
   constructor(
     private store: Store<AppState>
@@ -38,6 +38,9 @@ export class SidebarPropertiesComponent implements OnInit {
           case SidebarPanel.LIGHT:
             this.expandLight = true;
             break;
+          case SidebarPanel.CAMERA:
+            this.expandCamera = true;
+            break;
           default:
             break;
         }
@@ -49,5 +52,6 @@ export class SidebarPropertiesComponent implements OnInit {
     this.expandGeometry = false;
     this.expandMaterial = false;
     this.expandLight = false;
+    this.expandCamera = false;
   }
 }

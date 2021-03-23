@@ -14,6 +14,7 @@ import { LogService } from 'src/app/services/log.service';
 import { select, Store } from '@ngrx/store';
 import { clearSelection, oneSelection } from 'src/app/engine/engine.action';
 import { AppState } from 'src/app/app.reducer';
+import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 
 export class ContainerFlatTreeNode {
   name: string;
@@ -33,7 +34,7 @@ export class ContainerFlatTreeNode {
 export class TreeNodeComponent {
   flatNodeMap = new Map<ContainerFlatTreeNode, Container>();
   nestedNodeMap = new Map<Container, ContainerFlatTreeNode>();
-  nestedMeshMap = new Map<Mesh | Light, ContainerFlatTreeNode>();
+  nestedMeshMap = new Map<Mesh | Light | ArcRotateCamera, ContainerFlatTreeNode>();
   selectedParent: ContainerFlatTreeNode | null = null;
   lastSelectedTreeNode: ContainerFlatTreeNode | null = null;
 
@@ -262,6 +263,5 @@ export class TreeNodeComponent {
       this.unLockContainers(c);
     });
   }
-
 }
 

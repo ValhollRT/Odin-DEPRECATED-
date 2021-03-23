@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToolMenu } from 'src/app/models/ToolMenu';
 import { AppService, EngineService } from 'src/app/services/index.service';
 import { LogService } from 'src/app/services/log.service';
-import { GEOM, LIGHT } from '../../configuration/AppConstants';
+import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { User } from 'src/app/models/User';
@@ -51,6 +51,10 @@ export class ToolMenuComponent implements OnInit {
         break;
       case GEOM.TEXT:
         this.library.createNewGeometryText();
+        this.logService.log(param, "created", "ToolMenuComponent")
+        break;
+      case CAMERA.ARCROTATECAMERA:
+        this.es.createCameraContainer(param)
         this.logService.log(param, "created", "ToolMenuComponent")
         break;
       case 'CONSOLE':
@@ -108,6 +112,11 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Spot', param: LIGHT.SPOT },
           { displayName: 'Point', param: LIGHT.POINT },
           { displayName: 'Hemispheric', param: LIGHT.HEMISPHERIC }
+        ]
+      },
+      {
+        displayName: 'Camera', icon: 'icon-camera', child: [
+          { displayName: 'Rotate Camera', param: CAMERA.ARCROTATECAMERA },
         ]
       },
       /*

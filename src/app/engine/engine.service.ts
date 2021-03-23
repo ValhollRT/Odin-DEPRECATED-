@@ -10,7 +10,7 @@ import {
 import 'babylonjs-materials';
 import { BehaviorSubject } from 'rxjs';
 import { AppState } from '../app.reducer';
-import { LIGHT } from '../configuration/AppConstants';
+import { CAMERA, LIGHT } from '../configuration/AppConstants';
 import { CanvasHelperService } from '../services/index.service';
 import { LogService } from '../services/log.service';
 import { WindowService } from '../services/window.service';
@@ -26,13 +26,13 @@ export class EngineService {
 
   private canvas: HTMLCanvasElement;
   private engine: Engine;
-  private camera: ArcRotateCamera;
+  private defaultCamera: ArcRotateCamera;
   private scene: Scene;
   private gizmoHelper: GizmoHelper;
   private canvasHelper: CanvasHelperService;
 
   // References Containers for engine
-  public typeToContainer = new Map<Mesh | Light, Container>();
+  public typeToContainer = new Map<Mesh | Light | ArcRotateCamera, Container>();
   public UUIDToContainer = new Map<string, Container>();
   public UUIDToBoundingBox = new Map<string, BoundingBox>();
 
@@ -56,16 +56,14 @@ export class EngineService {
     this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);
 
     EngineService.grid = new Grid(this.scene);
-    this.camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(0, 0, 0), this.scene);
-    this.camera.setTarget(Vector3.Zero());
-    this.camera.panningSensibility = 100;
+    this.defaultCamera = this.createCameraContainer(CAMERA.ARCROTATECAMERA);
 
     this.scene.registerAfterRender(() => { });
     this.canvasHelper = this.injector.get(CanvasHelperService);
     this.gizmoHelper = new GizmoHelper(this);
 
-    this.camera.onViewMatrixChangedObservable.add(() => {
-      this.gizmoHelper.cameraGizmo.position = this.camera.position;
+    this.defaultCamera.onViewMatrixChangedObservable.add(() => {
+      this.gizmoHelper.cameraGizmo.position = this.defaultCamera.position;
     });
 
     this.createDefaultScene();
@@ -73,10 +71,15 @@ export class EngineService {
 
   public getGizmoHelper() { return this.gizmoHelper; }
   public getCanvas() { return this.canvas; }
-  public getCamera() { return this.camera; }
+  public getCamera() { return this.defaultCamera; }
   public getScene(): Scene { return this.scene }
   public getCanvasHelper() { return this.canvasHelper; }
   public getEngine() { return this.engine; }
+
+  public setCamera(camera: ArcRotateCamera) {
+    this.defaultCamera = camera;
+    this.scene.activeCamera = camera;
+  }
 
   public createMesh(type: string): void {
     let c = ElementBuilder.createContainerMesh(type, this.getScene());
@@ -91,6 +94,14 @@ export class EngineService {
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);
+  }
+
+  public createCameraContainer(type: string): ArcRotateCamera {
+    let c = new Container(ElementBuilder.createCamera(type, this.getScene()));
+    this.typeToContainer.set(c.type, c);
+    this.UUIDToContainer.set(c.UUID, c);
+    this.saveContainerToDataTree(c);
+    return <ArcRotateCamera>c.type;
   }
 
   public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }

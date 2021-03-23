@@ -240,7 +240,7 @@ export class CanvasHelperService {
                         ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
                 })
             }
-        } else {
+        } else if (c.type instanceof Light) {
             this.lightGizmo.light = c.type;
         }
     }

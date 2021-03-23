@@ -16,6 +16,7 @@ import { MaterialPanelComponent } from './ui/material-panel/material-panel.compo
 import { LightPanelComponent } from './ui/light-panel/light-panel.component';
 import { TextPanelComponent } from './ui/text-panel/text-panel.component';
 import { LoginComponent } from './ui/login/login.component';
+import { CameraPanelComponent } from './ui/camera-panel/camera-panel.component';
 
 //Service
 import { ServiceModule } from './services/service.module';
@@ -65,7 +66,8 @@ import { environment } from '../environments/environment';
     TextPanelComponent,
     SceneSettingsComponent,
     LoginComponent,
-    AlertComponent
+    AlertComponent,
+    CameraPanelComponent
   ],
   imports: [
     FormsModule,

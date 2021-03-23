@@ -27,7 +27,6 @@ export class LightPanelComponent implements OnInit {
         this.currentLight = l;
         this.logService.log(l.name, "light selected", "LightPanelComponent")
       });
-
   }
 
   ngOnInit(): void { }

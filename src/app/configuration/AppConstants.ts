@@ -20,3 +20,7 @@ export const LIGHT = {
     POINT: 'POINT',
     HEMISPHERIC: 'HEMISPHERIC'
 };
+
+export const CAMERA = {
+    ARCROTATECAMERA: 'ARCROTATECAMERA',
+};
