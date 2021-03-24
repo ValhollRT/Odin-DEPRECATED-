@@ -99,9 +99,9 @@ export class ElementBuilder {
     static setLight(type: string, s: Scene, options?: any): Light {
         switch (type) {
             case LIGHT.DIRECTIONAL:
-                return new DirectionalLight("DirectionalLight", new Vector3(-1, -1, -1), s);
+                return new DirectionalLight("DirectionalLight", new Vector3(1, 1, 1), s);
             case LIGHT.SPOT:
-                return new SpotLight("SpotLight", Vector3.Zero(), new Vector3(0, -1, 0), 20, 1, s);
+                return new SpotLight("SpotLight", new Vector3(100, 100, 100), new Vector3(-1, -1, 1), 20, 1, s);
             case LIGHT.POINT:
                 return new PointLight("PointLight", new Vector3(0, 0, 0), s);
             case LIGHT.HEMISPHERIC:
@@ -113,6 +113,7 @@ export class ElementBuilder {
         switch (type) {
             case CAMERA.ARCROTATECAMERA:
                 let camera = new ArcRotateCamera("Camera", 0, 0, 100, new Vector3(0, 0, 0), s);
+                camera.position = new Vector3(0, 0, -500);
                 camera.setTarget(Vector3.Zero());
                 camera.panningSensibility = 100;
                 return camera;
