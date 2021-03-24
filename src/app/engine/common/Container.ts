@@ -1,8 +1,8 @@
-import { SidebarPanel } from './../../models/actions/SidebarPanelAction';
-import { Utils } from '../Utils/Utils';
-import { Mesh, Scene, Light, VertexData, ArcRotateCamera, TargetCamera } from 'babylonjs';
+import { ArcRotateCamera, Light, Mesh, Scene, TargetCamera, VertexData } from 'babylonjs';
 import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
-import { TextType } from '../Text/TextType'
+import { TextType } from '../Text/TextType';
+import { Utils } from '../Utils/Utils';
+import { SidebarPanel } from './../../models/actions/SidebarPanelAction';
 
 export class Container {
 

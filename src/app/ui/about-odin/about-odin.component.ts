@@ -1,8 +1,8 @@
-import { openAboutOdin } from './../ui.action';
-import { AppState } from 'src/app/app.reducer';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { openAboutOdin } from './../../store/actions';
+import { AppState } from './../../store/reducers/app.reducer';
 
 @Component({
   selector: 'about-odin',

@@ -1,6 +1,5 @@
-import { SceneSettings } from './../models/SceneSettings';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { SceneSettings } from './../models/SceneSettings';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {

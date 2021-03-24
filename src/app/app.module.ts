@@ -37,7 +37,7 @@ import { PopupWindowComponent } from './shared/popup-window/popup-window.compone
 // NgRx
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { appReducers } from './app.reducer';
+import { appReducers } from './store/reducers/app.reducer';
 
 // Firebase
 import { AngularFireModule } from '@angular/fire';

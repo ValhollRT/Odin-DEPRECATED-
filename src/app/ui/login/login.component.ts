@@ -1,14 +1,11 @@
-import { openLogin } from './../ui.action';
-import { AlertType } from './../../models/AlertType';
-import { SessionService } from '../../services/session.service';
-import { LogService } from 'src/app/services/log.service';
 import { Component, OnInit } from '@angular/core';
-import { AppService } from 'src/app/services/index.service';
-import { SignInUp } from 'src/app/models/SignInUp';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
 import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-
+import { SignInUp } from 'src/app/models/SignInUp';
+import { openLogin } from '../../store/actions';
+import { AppState } from '../../store/reducers/app.reducer';
+import { AlertType } from './../../models/AlertType';
+import { AppService, LogService, SessionService } from './../../services/index.service';
 
 @Component({
   selector: 'login',
@@ -66,5 +63,4 @@ export class LoginComponent implements OnInit {
         this.showAlert = true;
       });
   }
-
 }

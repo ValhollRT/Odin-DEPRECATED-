@@ -1,7 +1,6 @@
-import { SessionService } from './services/session.service';
 import { Component } from '@angular/core';
-import firebase from 'firebase/app';
-import 'firebase/auth' // https://github.com/FirebaseExtended/angularfire/issues/968
+import 'firebase/auth'; // https://github.com/FirebaseExtended/angularfire/issues/968
+import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +11,5 @@ export class AppComponent {
   title = 'Odin';
   constructor(public session: SessionService) {
     this.session.initAuthListener();
-   }
+  }
 }

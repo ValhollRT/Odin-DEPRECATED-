@@ -1,10 +1,10 @@
+import { Mesh, Scene, StandardMaterial, VertexData } from "babylonjs";
+import * as earcut from "earcut";
+import * as opentype from "opentype.js";
+import { Font, Glyph, Path, PathCommand } from "opentype.js";
+import { EngineService } from "../../services/engine.service";
 import { GlyphMesh } from './GlyphMesh';
 import { PathBuilder } from "./PathBuilder";
-import * as earcut from "earcut";
-import { Mesh, Scene, StandardMaterial, VertexData } from "babylonjs";
-import { Font, Glyph, Path, PathCommand } from "opentype.js"
-import * as opentype from "opentype.js"
-import { EngineService } from "../engine.service";
 
 export class FontType {
     GLYPH_COORDS_SCALE = 0.001;

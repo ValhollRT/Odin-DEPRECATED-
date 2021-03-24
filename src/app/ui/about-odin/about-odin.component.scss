@@ -11,7 +11,7 @@
     pointer-events: none;
     transition: all 0.3s;
 
-    &>div {
+    & > div {
         width: 400px;
         position: absolute;
         top: 50%;

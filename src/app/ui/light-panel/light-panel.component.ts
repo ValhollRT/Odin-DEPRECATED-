@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Color3, Light, Mesh } from 'babylonjs';
+import { Color3, Light } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
-import { EngineService } from 'src/app/engine/engine.service';
-import { LogService } from 'src/app/services/log.service';
+import { AppState } from '../../store/reducers/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'light-panel',
@@ -35,5 +34,4 @@ export class LightPanelComponent implements OnInit {
     if (attribute === "DIFFUSECOLOR") { this.currentLight.diffuse = Color3.FromHexString(value); }
     if (attribute === "SPECULARCOLOR") { this.currentLight.specular = Color3.FromHexString(value); }
   }
-
 }

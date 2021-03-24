@@ -1,17 +1,12 @@
-import { SceneSettings } from './../../models/SceneSettings';
-import { openConsole, openLogin, openSceneSettings } from './../ui.action';
-import { SessionService } from './../../services/session.service';
-import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
-import { ToolMenu } from 'src/app/models/ToolMenu';
-import { AppService, EngineService } from 'src/app/services/index.service';
-import { LogService } from 'src/app/services/log.service';
-import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
-import { User } from 'src/app/models/User';
 import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-import { openAboutOdin } from '../ui.action';
+import { ToolMenu } from 'src/app/models/ToolMenu';
+import { User } from 'src/app/models/User';
+import { AppService, EngineService, LibraryService, LogService, SessionService } from 'src/app/services/index.service';
+import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
+import { openAboutOdin, openConsole, openLogin, openSceneSettings } from '../../store/actions';
+import { AppState } from '../../store/reducers/app.reducer';
 
 @Component({
   selector: 'tool-menu',
@@ -119,18 +114,6 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Rotate Camera', param: CAMERA.ARCROTATECAMERA },
         ]
       },
-      /*
-      {
-        displayName: 'Functions', icon: 'icon-light', child: [
-          { displayName: 'TextBox', param: "TEXTBOX" },
-          { displayName: 'FollowUp', param: "FOLLOWUP" },
-          { displayName: 'ScreenSize', param: "SCREENSIZE" },
-          { displayName: 'Clone', param: "CLONE" },
-          { displayName: 'Arrange', param: "ARRANGE" },
-          { displayName: 'Mask', param: "MASK" }
-        ]
-      },
-      */
       { displayName: "Settings", icon: 'icon-settings', param: "SETTINGS" },
       { displayName: "Console", icon: 'icon-console', param: "CONSOLE" },
       { displayName: "About Odin", icon: 'icon-info', param: "ABOUTODIN" }
@@ -146,7 +129,5 @@ export class ToolMenuComponent implements OnInit {
         { displayName: "Sign out", param: "SIGNOUT" }
       ];
     };
-
   }
-
 }

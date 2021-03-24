@@ -1,24 +1,22 @@
-import { Injector } from '@angular/core';
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, Injector } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   ArcRotateCamera, Color3, Color4, Engine,
   Light,
-  Mesh, Scene,
-  Vector3
+  Mesh, Scene
 } from 'babylonjs';
 import 'babylonjs-materials';
-import { BehaviorSubject } from 'rxjs';
-import { AppState } from '../app.reducer';
-import { CAMERA, LIGHT } from '../configuration/AppConstants';
-import { CanvasHelperService } from '../services/index.service';
-import { LogService } from '../services/log.service';
-import { WindowService } from '../services/window.service';
-import { Container } from './common/Container';
-import { ElementBuilder } from './common/ElementBuilder';
-import { GizmoHelper } from './helpers/GizmoHelper';
-import { Grid } from './helpers/Grid';
 import { BoundingBox } from 'babylonjs/Culling/boundingBox';
+import { BehaviorSubject } from 'rxjs';
+import { CAMERA, LIGHT } from '../configuration/AppConstants';
+import { Container } from '../engine/common/Container';
+import { ElementBuilder } from '../engine/common/ElementBuilder';
+import { GizmoHelper } from '../engine/helpers/GizmoHelper';
+import { Grid } from '../engine/helpers/Grid';
+import { AppState } from '../store/reducers/app.reducer';
+import { CanvasHelperService, LogService, WindowRefService } from './index.service';
+
+
 
 @Injectable({ providedIn: 'root' })
 export class EngineService {
@@ -41,7 +39,7 @@ export class EngineService {
   private sceneBackgroundColor: Color3;
 
   public constructor(
-    public windowService: WindowService,
+    public windowService: WindowRefService,
     public store: Store<AppState>,
     public logService: LogService,
     public injector: Injector) {

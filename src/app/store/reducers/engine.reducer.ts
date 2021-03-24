@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { addSelection, clearSelection, oneSelection, removeSelection } from './engine.action';
+import { addSelection, clearSelection, oneSelection, removeSelection } from '../actions';
 
 export interface State {
   UUIDCsSelected: string[];

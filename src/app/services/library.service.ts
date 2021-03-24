@@ -1,9 +1,10 @@
-import { FontType } from './../engine/Text/FontType';
 import { Injectable } from '@angular/core';
 import { Color3, Mesh, StandardMaterial } from 'babylonjs';
 import { Container } from '../engine/common/Container';
-import { EngineService } from '../engine/engine.service';
 import { TextType } from '../engine/Text/TextType';
+import { FontType } from './../engine/Text/FontType';
+// Service
+import { EngineService } from './index.service';
 
 @Injectable({
   providedIn: 'root'

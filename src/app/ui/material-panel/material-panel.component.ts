@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Color3, Mesh, StandardMaterial } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
-import { EngineService } from 'src/app/engine/engine.service';
-import { LogService } from 'src/app/services/log.service';
+import { AppState } from '../../store/reducers/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'material-panel',
@@ -28,7 +27,6 @@ export class MaterialPanelComponent implements OnInit {
         if (this.isGroup) return;
         this.logService.log(m.material.name, "edited material", "MaterialPanelComponent")
       });
-
   }
 
   ngOnInit(): void { }

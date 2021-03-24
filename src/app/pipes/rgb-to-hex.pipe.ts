@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Color3, Light, Material, Mesh, StandardMaterial } from 'babylonjs';
+import { Color3, Light, Mesh, StandardMaterial } from 'babylonjs';
 
 @Pipe({
   name: 'rgbToHex'
@@ -24,10 +24,8 @@ export class RgbToHexPipe implements PipeTransform {
     return this.rgbToHex(c.r * 255, c.g * 255, c.b * 255);
   }
 
-  1
   rgbToHex(r, g, b) {
     var rgb = b | (g << 8) | (r << 16);
     return '#' + (0x1000000 + rgb).toString(16).slice(1)
   }
-
 }

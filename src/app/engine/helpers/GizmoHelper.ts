@@ -13,7 +13,7 @@ import {
 	Vector3,
 	Viewport
 } from 'babylonjs';
-import { EngineService } from '../engine.service';
+import { EngineService } from '../../services/engine.service';
 
 @Injectable()
 export class GizmoHelper {
@@ -139,5 +139,4 @@ export class GizmoHelper {
 	getScene() { return this.sceneGizmo; }
 
 	getCamera() { return this.cameraGizmo; }
-
 }

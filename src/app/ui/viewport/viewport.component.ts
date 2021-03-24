@@ -1,11 +1,11 @@
 import {
   Component,
   ElementRef,
-  OnInit,
-  ViewChild,
-  NgZone
+  NgZone, OnInit,
+  ViewChild
 } from '@angular/core';
-import { EngineService } from '../../engine/engine.service';
+import { EngineService } from '../../services/index.service';
+
 @Component({
   selector: 'app-viewport',
   templateUrl: './viewport.component.html',
@@ -26,5 +26,4 @@ export class ViewportComponent implements OnInit {
       this.engServ.animate();
     });
   }
-
 }

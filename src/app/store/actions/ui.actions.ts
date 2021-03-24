@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { PopupDialogAction } from '../models/actions/PopupDialogAction';
-import { SidebarPanelAction } from '../models/actions/SidebarPanelAction';
+import { PopupDialogAction } from '../../models/actions/PopupDialogAction';
+import { SidebarPanelAction } from '../../models/actions/SidebarPanelAction';
 
 export const openSidebarPanel = createAction('[UI] Open sidebar panel', props<{ action: SidebarPanelAction }>());
 export const openAboutOdin = createAction("[UI] Open About Odin", props<{ aboutOdin: PopupDialogAction }>());

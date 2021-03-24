@@ -1,13 +1,11 @@
-import { AppService } from 'src/app/services/index.service';
-import { AppState } from 'src/app/app.reducer';
-import { select, Store } from '@ngrx/store';
-import { BtnFooter } from './../../shared/popup-window/popup-window.component';
-import { SceneSettings } from './../../models/SceneSettings';
-import { LogService } from '../../services/log.service';
 import { Component, OnInit } from '@angular/core';
-import { EngineService } from 'src/app/engine/engine.service';
-import { openSceneSettings } from '../ui.action';
+import { Store } from '@ngrx/store';
 import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { openSceneSettings } from '../../store/actions';
+import { AppState } from '../../store/reducers/app.reducer';
+import { SceneSettings } from './../../models/SceneSettings';
+import { AppService, EngineService, LogService } from './../../services/index.service';
+import { BtnFooter } from './../../shared/popup-window/popup-window.component';
 
 @Component({
   selector: 'scene-settings',
@@ -46,7 +44,4 @@ export class SceneSettingsComponent implements OnInit {
   closeDialog() {
     this.store.dispatch(openSceneSettings({ sceneSettings: new PopupDialogAction(false) }))
   }
-
 }
-
-

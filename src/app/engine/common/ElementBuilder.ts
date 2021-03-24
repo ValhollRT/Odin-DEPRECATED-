@@ -89,7 +89,6 @@ export class ElementBuilder {
             (<Mesh>container.type).material = mat;
         }
         return container;
-
     }
 
     static createLight(type: string, scene: Scene) {
@@ -107,7 +106,6 @@ export class ElementBuilder {
                 return new PointLight("PointLight", new Vector3(0, 0, 0), s);
             case LIGHT.HEMISPHERIC:
                 return new HemisphericLight("HemisphericLight", new Vector3(0, 0, 0), s);
-
         }
     }
 

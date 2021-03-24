@@ -1,7 +1,7 @@
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-import { SidebarPanelAction } from './../models/actions/SidebarPanelAction';
 import { createReducer, on } from '@ngrx/store';
-import { openSidebarPanel, openAboutOdin, openSceneSettings, openConsole, openLogin } from './ui.action';
+import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { SidebarPanelAction } from '../../models/actions/SidebarPanelAction';
+import { openAboutOdin, openConsole, openLogin, openSceneSettings, openSidebarPanel } from '../actions';
 
 export interface State {
     action: SidebarPanelAction;

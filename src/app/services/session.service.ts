@@ -1,14 +1,13 @@
-import { LogService } from './log.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import firebase from "firebase/app"
 import { AngularFireAuth } from '@angular/fire/auth';
-import { User } from '../models/User';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducer';
-import { login, signUp } from './session.action';
-import { FormBuilder } from '@angular/forms';
+import firebase from "firebase/app";
+import { Observable } from 'rxjs';
+import { User } from '../models/User';
+import { login, signUp } from '../store/actions/session.actions';
+import { AppState } from '../store/reducers/app.reducer';
+import { LogService } from './log.service';
 
 @Injectable({
   providedIn: 'root'

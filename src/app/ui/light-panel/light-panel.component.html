@@ -6,7 +6,8 @@
     <div class="property-panel-group">
         <span class="property-panel-text">Intensity</span>
         <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.currentLight).intensity">
-        <input type="text" min="0" max="1" value={{this.currentLight.intensity}} [(ngModel)]="$any(this.currentLight).intensity">
+        <input type="text" min="0" max="1" value={{this.currentLight.intensity}}
+            [(ngModel)]="$any(this.currentLight).intensity">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Diffuse</span>

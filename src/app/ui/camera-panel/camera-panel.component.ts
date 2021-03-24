@@ -1,11 +1,10 @@
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
-import { TargetCamera } from 'babylonjs';
 import { Component, OnInit } from '@angular/core';
-import { EngineService } from 'src/app/services/index.service';
 import { select, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
-import { LogService } from 'src/app/services/log.service';
+import { TargetCamera } from 'babylonjs';
+import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 import { filter, map } from 'rxjs/operators';
+import { AppState } from '../../store/reducers/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'camera-panel',
@@ -30,8 +29,7 @@ export class CameraPanelComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   enableCamera(enable: boolean) {
     this.engineService.setCamera(this.selected);

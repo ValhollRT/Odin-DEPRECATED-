@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Mesh, VertexData } from 'babylonjs';
-import * as MeshWriter from "meshwriter";
-import { AppState } from 'src/app/app.reducer';
 import { Container } from 'src/app/engine/common/Container';
-import { EngineService } from 'src/app/engine/engine.service';
+import { AppState } from '../../store/reducers/app.reducer';
+import { EngineService } from './../../services/index.service';
 
 @Component({
   selector: 'builder-panel',

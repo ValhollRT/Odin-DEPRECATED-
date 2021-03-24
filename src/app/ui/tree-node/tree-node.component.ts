@@ -1,20 +1,17 @@
-import { openSidebarPanel } from './../ui.action';
-import { SidebarPanel, SidebarPanelAction } from './../../models/actions/SidebarPanelAction';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { Container } from 'src/app/engine/common/Container';
-import { EngineService } from 'src/app/engine/engine.service';
-import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
-import { filter, take } from 'rxjs/operators';
-import { Mesh } from 'babylonjs/Meshes/mesh';
-import { Light } from 'babylonjs';
-import { LogService } from 'src/app/services/log.service';
-import { select, Store } from '@ngrx/store';
-import { clearSelection, oneSelection } from 'src/app/engine/engine.action';
-import { AppState } from 'src/app/app.reducer';
+import { Store } from '@ngrx/store';
+import { Light, Mesh } from 'babylonjs';
 import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
+import { filter } from 'rxjs/operators';
+import { Container } from 'src/app/engine/common/Container';
+import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
+import { EngineService, LogService } from '../../services/index.service';
+import { clearSelection, oneSelection, openSidebarPanel } from '../../store/actions';
+import { AppState } from '../../store/reducers/app.reducer';
+import { SidebarPanelAction } from './../../models/actions/SidebarPanelAction';
 
 export class ContainerFlatTreeNode {
   name: string;
@@ -264,4 +261,3 @@ export class TreeNodeComponent {
     });
   }
 }
-

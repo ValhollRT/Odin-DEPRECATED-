@@ -1,13 +1,10 @@
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { select, Store, props } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, TargetCamera, Vector2, Vector3 } from 'babylonjs';
-import { filter, map, take } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
+import { filter, map } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
-import { EngineService } from 'src/app/services/index.service';
-import { LogService } from 'src/app/services/log.service';
-import { Position } from '@angular/compiler';
+import { EngineService, LogService } from 'src/app/services/index.service';
+import { AppState } from '../../store/reducers/app.reducer';
 
 class TransformMenu {
   position: Vector3;
@@ -110,7 +107,7 @@ export class TransformMenuComponent implements OnInit {
         this.selected.position = new Vector3(Number(value), pos.y, pos.z)
         break;
       case 'y':
-        this.selected.position = new Vector3( pos.x, Number(value), pos.z)
+        this.selected.position = new Vector3(pos.x, Number(value), pos.z)
         break;
       case 'z':
         this.selected.position = new Vector3(pos.x, pos.y, Number(value))
@@ -118,6 +115,7 @@ export class TransformMenuComponent implements OnInit {
       default:
         break;
     }
+
   }
 
   updateRotation(event: any) {

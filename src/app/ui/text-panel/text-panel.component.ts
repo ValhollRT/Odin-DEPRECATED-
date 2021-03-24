@@ -1,12 +1,10 @@
-import { Haling as HAling, Valing as VAling } from './../../engine/Text/TextType';
-import { LogService } from './../../services/log.service';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Mesh } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
 import { Container } from 'src/app/engine/common/Container';
-import { EngineService } from 'src/app/engine/engine.service';
+import { AppState } from '../../store/reducers/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'text-panel',
@@ -53,5 +51,4 @@ export class TextPanelComponent implements OnInit {
     this.current.text.valign = i;
     this.updateText();
   }
-
 }

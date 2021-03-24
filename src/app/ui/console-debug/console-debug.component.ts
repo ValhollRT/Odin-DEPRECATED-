@@ -1,10 +1,9 @@
-import { AppState } from 'src/app/app.reducer';
-import { openConsole } from './../ui.action';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AppService } from 'src/app/services/index.service';
-import { LogService } from 'src/app/services/log.service';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
 import { Store } from '@ngrx/store';
+import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { openConsole } from '../../store/actions';
+import { AppState } from '../../store/reducers/app.reducer';
+import { LogService } from './../../services/index.service';
 
 @Component({
   selector: 'console-debug',

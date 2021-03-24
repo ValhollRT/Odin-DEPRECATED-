@@ -1,10 +1,10 @@
-import { Container } from 'src/app/engine/common/Container';
-import { BehaviorSubject, fromEvent } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { EngineService } from '../engine.service';
-import { Matrix, Mesh, Node, Quaternion, Vector3 } from 'babylonjs';
-import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
+import { Mesh } from 'babylonjs';
+import { BehaviorSubject } from 'rxjs';
+import { Container } from 'src/app/engine/common/Container';
+import { EngineService } from '../../services/index.service';
+import { AppState } from '../../store/reducers/app.reducer';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -36,8 +36,6 @@ export class DataTreeContainer {
         this.root.children.push(container);
         this.updateNodeTree();
     }
-
-    update(node: Container, name: string) { }
 
     moveContainer(from: Container, to: Container) {
         if (from.parent === to) return null;
