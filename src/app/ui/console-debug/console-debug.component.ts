@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { PopupDialogAction } from '../../models';
 import { openConsole } from '../../store/actions';
-import { AppState } from '../../store/reducers/app.reducer';
+import { AppState } from '../../store/app.reducer';
 import { LogService } from './../../services/index.service';
 
 @Component({

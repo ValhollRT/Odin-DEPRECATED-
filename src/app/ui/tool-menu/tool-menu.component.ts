@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-import { ToolMenu } from 'src/app/models/ToolMenu';
-import { User } from 'src/app/models/User';
 import { AppService, EngineService, LibraryService, LogService, SessionService } from 'src/app/services/index.service';
 import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
+import { PopupDialogAction, ToolMenu, User } from '../../models';
 import { openAboutOdin, openConsole, openLogin, openSceneSettings } from '../../store/actions';
-import { AppState } from '../../store/reducers/app.reducer';
+import { AppState } from '../../store/app.reducer';
 
 @Component({
   selector: 'tool-menu',

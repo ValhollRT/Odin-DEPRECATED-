@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Mesh, VertexData } from 'babylonjs';
 import { Container } from 'src/app/engine/common/Container';
-import { AppState } from '../../store/reducers/app.reducer';
+import { AppState } from '../../store/app.reducer';
 import { EngineService } from './../../services/index.service';
 
 @Component({

@@ -5,12 +5,12 @@ import { BoundingBox } from 'babylonjs/Culling/boundingBox';
 import { take } from 'rxjs/operators';
 import { Container } from '../engine/common/Container';
 import { clearSelection, oneSelection } from '../store/actions/engine.actions';
-import { AppState } from '../store/reducers/app.reducer';
-import { Utils } from './../engine/Utils/Utils';
+import { AppState } from '../store/app.reducer';
+import { Utils } from '../engine/Utils/Utils';
 import { EngineService } from './engine.service';
 
 @Injectable({ providedIn: 'root' })
-export class CanvasHelperService {
+export class CanvasService {
 
     private pickInfo: PickingInfo;
     private startingPoint: any;

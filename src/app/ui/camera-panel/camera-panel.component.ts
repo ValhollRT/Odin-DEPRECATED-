@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { TargetCamera } from 'babylonjs';
 import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from '../../store/reducers/app.reducer';
+import { AppState } from '../../store/app.reducer';
 import { EngineService, LogService } from './../../services/index.service';
 
 @Component({

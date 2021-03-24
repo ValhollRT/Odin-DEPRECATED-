@@ -1,49 +1,38 @@
-import { AlertComponent } from './shared/alert/alert.component';
-import { SceneSettingsComponent } from './ui/scene-settings/scene-settings.component';
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ToolMenuComponent } from './ui/tool-menu/tool-menu.component';
-import { ViewportComponent } from './ui/viewport/viewport.component';
-import { TreeNodeComponent } from './ui/tree-node/tree-node.component';
-import { TransformMenuComponent } from './ui/transform-menu/transform-menu.component';
-import { ConsoleDebugComponent } from './ui/console-debug/console-debug.component';
-import { ContentPanelComponent } from './ui/content-panel/content-panel.component';
-import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
-import { SidebarPropertiesComponent } from './ui/sidebar-properties/sidebar-properties.component';
-import { MaterialPanelComponent } from './ui/material-panel/material-panel.component';
-import { LightPanelComponent } from './ui/light-panel/light-panel.component';
-import { TextPanelComponent } from './ui/text-panel/text-panel.component';
-import { LoginComponent } from './ui/login/login.component';
-import { CameraPanelComponent } from './ui/camera-panel/camera-panel.component';
-
-//Service
-import { ServiceModule } from './services/service.module';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-//Pipes
-import { RotationPipe } from './pipes/rotation.pipe';
-import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
-import { PrecisionPipe } from './pipes/precision.pipe';
-
-//Material
-import { AllAngularMaterialModule } from './all-angular-material.module';
-import { MatNativeDateModule } from '@angular/material/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.component';
-import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
-
-// NgRx
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { appReducers } from './store/reducers/app.reducer';
-
-// Firebase
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { AllAngularMaterialModule } from './all-angular-material.module';
+import { AppComponent } from './app.component';
+import { PrecisionPipe } from './pipes/precision.pipe';
+import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
+import { RotationPipe } from './pipes/rotation.pipe';
+import { ServiceModule } from './services/service.module';
+import { AlertComponent } from './shared/alert/alert.component';
+import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
+import { appReducers } from './store/app.reducer';
+import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
+import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.component';
+import { CameraPanelComponent } from './ui/camera-panel/camera-panel.component';
+import { ConsoleDebugComponent } from './ui/console-debug/console-debug.component';
+import { ContentPanelComponent } from './ui/content-panel/content-panel.component';
+import { LightPanelComponent } from './ui/light-panel/light-panel.component';
+import { LoginComponent } from './ui/login/login.component';
+import { MaterialPanelComponent } from './ui/material-panel/material-panel.component';
+import { SceneSettingsComponent } from './ui/scene-settings/scene-settings.component';
+import { SidebarPropertiesComponent } from './ui/sidebar-properties/sidebar-properties.component';
+import { TextPanelComponent } from './ui/text-panel/text-panel.component';
+import { ToolMenuComponent } from './ui/tool-menu/tool-menu.component';
+import { TransformMenuComponent } from './ui/transform-menu/transform-menu.component';
+import { TreeNodeComponent } from './ui/tree-node/tree-node.component';
+import { ViewportComponent } from './ui/viewport/viewport.component';
 
 @NgModule({
   declarations: [

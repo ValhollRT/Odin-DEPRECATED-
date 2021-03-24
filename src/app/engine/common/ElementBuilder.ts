@@ -1,6 +1,6 @@
 import { ArcRotateCamera, Color3, DirectionalLight, HemisphericLight, Light, Mesh, MeshBuilder, PointLight, Scene, SpotLight, StandardMaterial, Vector3, VertexData } from "babylonjs";
 import { CAMERA, GEOM, LIGHT } from 'src/app/configuration/AppConstants';
-import { BoxPanel, CapsulePanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from 'src/app/models/geometry/geometry-panels';
+import { BoxPanel, CapsulePanel, CylinderPanel, DiscPanel, GeometryPanel, IcoSpherePanel, PlanePanel, PolyhedronPanel, SpherePanel, TorusPanel } from '../../models/panels/GeometryPanels.model';
 import { Container } from "./Container";
 
 export class ElementBuilder {

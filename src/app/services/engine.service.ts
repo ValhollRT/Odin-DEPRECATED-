@@ -13,8 +13,8 @@ import { Container } from '../engine/common/Container';
 import { ElementBuilder } from '../engine/common/ElementBuilder';
 import { GizmoHelper } from '../engine/helpers/GizmoHelper';
 import { Grid } from '../engine/helpers/Grid';
-import { AppState } from '../store/reducers/app.reducer';
-import { CanvasHelperService, LogService, WindowRefService } from './index.service';
+import { AppState } from '../store/app.reducer';
+import { CanvasService, LogService, WindowRefService } from './index.service';
 
 
 
@@ -27,7 +27,7 @@ export class EngineService {
   private defaultCamera: ArcRotateCamera;
   private scene: Scene;
   private gizmoHelper: GizmoHelper;
-  private canvasHelper: CanvasHelperService;
+  private canvasService: CanvasService;
 
   // References Containers for engine
   public typeToContainer = new Map<Mesh | Light | ArcRotateCamera, Container>();
@@ -57,7 +57,7 @@ export class EngineService {
     this.defaultCamera = this.createCameraContainer(CAMERA.ARCROTATECAMERA);
 
     this.scene.registerAfterRender(() => { });
-    this.canvasHelper = this.injector.get(CanvasHelperService);
+    this.canvasService = this.injector.get(CanvasService);
     this.gizmoHelper = new GizmoHelper(this);
 
     this.defaultCamera.onViewMatrixChangedObservable.add(() => {
@@ -71,7 +71,7 @@ export class EngineService {
   public getCanvas() { return this.canvas; }
   public getCamera() { return this.defaultCamera; }
   public getScene(): Scene { return this.scene }
-  public getCanvasHelper() { return this.canvasHelper; }
+  public getCanvasHelper() { return this.canvasService; }
   public getEngine() { return this.engine; }
 
   public setCamera(camera: ArcRotateCamera) {

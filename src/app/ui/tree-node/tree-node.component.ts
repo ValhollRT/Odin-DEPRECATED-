@@ -3,15 +3,14 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Store } from '@ngrx/store';
-import { Light, Mesh } from 'babylonjs';
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
+import { ArcRotateCamera, Light, Mesh } from 'babylonjs';
 import { filter } from 'rxjs/operators';
 import { Container } from 'src/app/engine/common/Container';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
+import { SidebarPanelAction } from '../../models';
 import { EngineService, LogService } from '../../services/index.service';
 import { clearSelection, oneSelection, openSidebarPanel } from '../../store/actions';
-import { AppState } from '../../store/reducers/app.reducer';
-import { SidebarPanelAction } from './../../models/actions/SidebarPanelAction';
+import { AppState } from '../../store/app.reducer';
 
 export class ContainerFlatTreeNode {
   name: string;

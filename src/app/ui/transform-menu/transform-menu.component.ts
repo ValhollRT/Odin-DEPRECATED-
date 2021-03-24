@@ -4,7 +4,7 @@ import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight
 import { filter, map } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { EngineService, LogService } from 'src/app/services/index.service';
-import { AppState } from '../../store/reducers/app.reducer';
+import { AppState } from '../../store/app.reducer';
 
 class TransformMenu {
   position: Vector3;

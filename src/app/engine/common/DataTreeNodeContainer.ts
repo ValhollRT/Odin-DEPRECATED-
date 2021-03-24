@@ -4,7 +4,7 @@ import { Mesh } from 'babylonjs';
 import { BehaviorSubject } from 'rxjs';
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from '../../services/index.service';
-import { AppState } from '../../store/reducers/app.reducer';
+import { AppState } from '../../store/app.reducer';
 
 /**
  * Checklist database, it can build a tree structured Json object.

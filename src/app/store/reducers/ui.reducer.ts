@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-import { SidebarPanelAction } from '../../models/actions/SidebarPanelAction';
+import { PopupDialogAction } from '../../models/';
+import { SidebarPanelAction } from '../../models/menuActions/SidebarPanelAction.model';
 import { openAboutOdin, openConsole, openLogin, openSceneSettings, openSidebarPanel } from '../actions';
 
 export interface State {

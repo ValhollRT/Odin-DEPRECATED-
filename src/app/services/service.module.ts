@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AppService, CanvasHelperService, EngineService, LogService, SessionService, WindowRefService } from './index.service';
+import { AppService, CanvasService, EngineService, LogService, SessionService, WindowRefService } from './index.service';
 
 
 @NgModule({
@@ -12,7 +12,7 @@ import { AppService, CanvasHelperService, EngineService, LogService, SessionServ
         EngineService,
         LogService,
         AppService,
-        CanvasHelperService,
+        CanvasService,
         SessionService
     ],
 })

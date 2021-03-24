@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-import { SignInUp } from 'src/app/models/SignInUp';
+import { AlertType, PopupDialogAction, SignInUp } from '../../models';
 import { openLogin } from '../../store/actions';
-import { AppState } from '../../store/reducers/app.reducer';
-import { AlertType } from './../../models/AlertType';
+import { AppState } from '../../store/app.reducer';
 import { AppService, LogService, SessionService } from './../../services/index.service';
 
 @Component({

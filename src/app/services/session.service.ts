@@ -4,9 +4,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import firebase from "firebase/app";
 import { Observable } from 'rxjs';
-import { User } from '../models/User';
+import { User } from '../models/User.model';
 import { login, signUp } from '../store/actions/session.actions';
-import { AppState } from '../store/reducers/app.reducer';
+import { AppState } from '../store/app.reducer';
 import { LogService } from './log.service';
 
 @Injectable({

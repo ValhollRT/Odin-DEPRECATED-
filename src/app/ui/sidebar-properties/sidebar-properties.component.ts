@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
-import { SidebarPanel } from 'src/app/models/actions/SidebarPanelAction';
-import { AppState } from '../../store/reducers/app.reducer';
+import { SidebarPanel } from '../../models';
+import { AppState } from '../../store/app.reducer';
 
 @Component({
   selector: 'sidebar-properties',

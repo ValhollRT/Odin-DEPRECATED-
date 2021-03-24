@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SceneSettings } from './../models/SceneSettings';
+import { SceneSettings } from '../models/SceneSettings.model';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
