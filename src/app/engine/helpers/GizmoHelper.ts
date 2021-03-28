@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import {
 	ActionManager,
 	ArcRotateCamera,
 	Color3,
 	DynamicTexture,
+	Engine,
 	ExecuteCodeAction,
 	HemisphericLight,
 	Mesh,
@@ -13,16 +13,14 @@ import {
 	Vector3,
 	Viewport
 } from 'babylonjs';
-import { EngineService } from '../../services/engine.service';
 
-@Injectable()
 export class GizmoHelper {
 
 	public sceneGizmo: Scene;
 	public cameraGizmo: ArcRotateCamera;
 
-	constructor(public es: EngineService) {
-		this.sceneGizmo = new Scene(this.es.getEngine());
+	constructor(public engine: Engine, viewportCamera: ArcRotateCamera) {
+		this.sceneGizmo = new Scene(engine);
 		this.sceneGizmo.autoClear = false;
 
 		this.cameraGizmo = new ArcRotateCamera("cameraGizmo", 0, 0, 100, new Vector3(0, 0, 0), this.sceneGizmo);
@@ -101,7 +99,6 @@ export class GizmoHelper {
 		zminus.material = blueMat;
 
 		this.sceneGizmo.onReadyObservable.add(() => {
-			let cam = this.es.getCamera();
 			for (var i = 0; i < this.sceneGizmo.meshes.length; i++) {
 				let mesh = this.sceneGizmo.meshes[i];
 
@@ -109,13 +106,13 @@ export class GizmoHelper {
 				mesh.actionManager = new ActionManager(this.sceneGizmo);
 				mesh.actionManager.registerAction(
 					new ExecuteCodeAction(ActionManager.OnPickTrigger, o => {
-						if (mesh.name === 'xplus') { cam.position = new Vector3(-500, 0, 0); }
-						if (mesh.name === 'yplus') { cam.position = new Vector3(0, -500, 0); }
-						if (mesh.name === 'zplus') { cam.position = new Vector3(0, 0, -500); }
-						if (mesh.name === 'xminus') { cam.position = new Vector3(500, 0, 0); }
-						if (mesh.name === 'yminus') { cam.position = new Vector3(0, 500, 0); }
-						if (mesh.name === 'zminus') { cam.position = new Vector3(0, 0, 500); }
-						cam.cameraDirection = Vector3.Zero();
+						if (mesh.name === 'xplus') { viewportCamera.position = new Vector3(-500, 0, 0); }
+						if (mesh.name === 'yplus') { viewportCamera.position = new Vector3(0, -500, 0); }
+						if (mesh.name === 'zplus') { viewportCamera.position = new Vector3(0, 0, -500); }
+						if (mesh.name === 'xminus') { viewportCamera.position = new Vector3(500, 0, 0); }
+						if (mesh.name === 'yminus') { viewportCamera.position = new Vector3(0, 500, 0); }
+						if (mesh.name === 'zminus') { viewportCamera.position = new Vector3(0, 0, 500); }
+						viewportCamera.cameraDirection = Vector3.Zero();
 					}))
 			}
 		});

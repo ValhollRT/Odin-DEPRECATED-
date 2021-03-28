@@ -2,7 +2,6 @@ import { Mesh, Scene, StandardMaterial, VertexData } from "babylonjs";
 import * as earcut from "earcut";
 import * as opentype from "opentype.js";
 import { Font, Glyph, Path, PathCommand } from "opentype.js";
-import { EngineService } from "../../services/engine.service";
 import { GlyphMesh } from './GlyphMesh';
 import { PathBuilder } from "./PathBuilder";
 
@@ -17,7 +16,8 @@ export class FontType {
 
     constructor() { }
 
-    async load(fontURL: string, es: EngineService, callback: (font: FontType) => void) {
+    load(fontURL: string, scene: Scene, callback: (font: FontType) => void): void {
+        console.log("load");
         opentype.load(fontURL, (err, font) => {
             this.fontURL = fontURL;
             if (err) { console.error(err); return; }
@@ -29,10 +29,10 @@ export class FontType {
                 fontName = font.names.fontFamily.en;
 
             this.font = font;
-            this.scene = es.getScene();
+            this.scene = scene;
             this.glyphsParent = new Mesh(fontName, this.scene);
+            console.log("load1");
             callback(this);
-
         });
     }
 

@@ -18,7 +18,7 @@ export class SessionService {
 
   constructor(
     private store: Store<AppState>,
-    private logService: LogService,
+    private logServ: LogService,
     public afAuth: AngularFireAuth,
     private firestore: AngularFirestore) {
     this.user = this.afAuth.authState;
@@ -26,7 +26,7 @@ export class SessionService {
 
   initAuthListener(): void {
     this.user.subscribe(fUser => {
-      this.logService.log("initAuthListener", fUser?.uid, fUser?.email);
+      this.logServ.log("initAuthListener", fUser?.uid, fUser?.email);
       const user = fUser == undefined ? undefined : new User(fUser.uid, fUser.displayName, fUser.email);
       this.store.dispatch(login({ user: user }));
     })

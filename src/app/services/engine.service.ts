@@ -8,26 +8,24 @@ import {
 import 'babylonjs-materials';
 import { BoundingBox } from 'babylonjs/Culling/boundingBox';
 import { BehaviorSubject } from 'rxjs';
+import { Container } from 'src/app/engine/common/Container';
 import { CAMERA, LIGHT } from '../configuration/AppConstants';
-import { Container } from '../engine/common/Container';
-import { ElementBuilder } from '../engine/common/ElementBuilder';
 import { GizmoHelper } from '../engine/helpers/GizmoHelper';
 import { Grid } from '../engine/helpers/Grid';
+import { PlugBuilder } from '../engine/plugs/plugBuilder';
 import { AppState } from '../store/app.reducer';
-import { CanvasService, LogService, WindowRefService } from './index.service';
-
-
+import { LogService } from './log.service';
+import { WindowService } from './window.service';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService {
-  private static grid: Grid;
 
+  private grid: Grid;
   private canvas: HTMLCanvasElement;
   private engine: Engine;
   private defaultCamera: ArcRotateCamera;
   private scene: Scene;
   private gizmoHelper: GizmoHelper;
-  private canvasService: CanvasService;
 
   // References Containers for engine
   public typeToContainer = new Map<Mesh | Light | ArcRotateCamera, Container>();
@@ -39,7 +37,7 @@ export class EngineService {
   private sceneBackgroundColor: Color3;
 
   public constructor(
-    public windowService: WindowRefService,
+    public windowService: WindowService,
     public store: Store<AppState>,
     public logService: LogService,
     public injector: Injector) {
@@ -48,30 +46,22 @@ export class EngineService {
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
+
     this.engine = new Engine(this.canvas, true);
     this.scene = new Scene(this.engine);
     this.scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
     this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);
-
-    EngineService.grid = new Grid(this.scene);
-    this.defaultCamera = this.createCameraContainer(CAMERA.ARCROTATECAMERA);
-
     this.scene.registerAfterRender(() => { });
-    this.canvasService = this.injector.get(CanvasService);
-    this.gizmoHelper = new GizmoHelper(this);
 
-    this.defaultCamera.onViewMatrixChangedObservable.add(() => {
-      this.gizmoHelper.cameraGizmo.position = this.defaultCamera.position;
-    });
-
+    this.defaultCamera = this.createCameraContainer(CAMERA.ARCROTATECAMERA);
+    this.scene.activeCamera = this.defaultCamera;
+    this.grid = new Grid(this.scene);
     this.createDefaultScene();
   }
 
-  public getGizmoHelper() { return this.gizmoHelper; }
-  public getCanvas() { return this.canvas; }
+  public getCanvas(): HTMLCanvasElement { return this.canvas; }
   public getCamera() { return this.defaultCamera; }
   public getScene(): Scene { return this.scene }
-  public getCanvasHelper() { return this.canvasService; }
   public getEngine() { return this.engine; }
 
   public setCamera(camera: ArcRotateCamera) {
@@ -80,7 +70,7 @@ export class EngineService {
   }
 
   public createMesh(type: string): void {
-    let c = ElementBuilder.createContainerMesh(type, this.getScene());
+    let c = PlugBuilder.createContainerMesh(type, this.getScene());
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
     this.UUIDToBoundingBox.set(c.UUID, (<Mesh>c.type).getBoundingInfo().boundingBox)
@@ -88,24 +78,31 @@ export class EngineService {
   }
 
   public createLight(type: string): void {
-    let c = new Container(ElementBuilder.createLight(type, this.getScene()));
+    let c = new Container(PlugBuilder.createLight(type, this.getScene()));
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);
   }
 
   public createCameraContainer(type: string): ArcRotateCamera {
-    let c = new Container(ElementBuilder.createCamera(type, this.getScene()));
+    let c = new Container(PlugBuilder.createCamera(type, this.getScene()));
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);
     return <ArcRotateCamera>c.type;
   }
 
+  public createNewGeometryText(): void {
+    PlugBuilder.createNewGeometryText(this);
+  }
+
   public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
   public getContainerFromUUID(UUID: string): Container { return this.UUIDToContainer.get(UUID) }
   public getContainerFromType(type: Mesh | Light): Container { return this.typeToContainer.get(type) }
-  public createDefaultScene() { this.createLight(LIGHT.DIRECTIONAL); }
+  public createDefaultScene() {
+    this.createLight(LIGHT.DIRECTIONAL);
+    this.scene.activeCamera = this.defaultCamera;
+  }
 
   // Get Selections methods
   public getSelectedContainers(): string[] { return this.selectedUUIDContainers }
@@ -122,10 +119,11 @@ export class EngineService {
     this.scene.clearColor = new Color4(this.sceneBackgroundColor.r, this.sceneBackgroundColor.g, this.sceneBackgroundColor.b, 1);
   }
 
-  public animate(): void {
+  public animate(gizmoScene: Scene): void {
     const rendererLoopCallback = () => {
       this.scene.render();
-      this.gizmoHelper.getScene().render();
+      // this.gizmoHelper.getScene().render();
+      gizmoScene.render();
     };
 
     if (this.windowService.document.readyState !== 'loading') {

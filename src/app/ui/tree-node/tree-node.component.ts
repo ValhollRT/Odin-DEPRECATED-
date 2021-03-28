@@ -51,7 +51,7 @@ export class TreeNodeComponent {
   constructor(
     public store: Store<AppState>,
     public dataTree: DataTreeContainer,
-    private es: EngineService, public logService: LogService) {
+    private engineServ: EngineService, public logServ: LogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ContainerFlatTreeNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -61,7 +61,7 @@ export class TreeNodeComponent {
       this.dataSource.data = data;
     });
 
-    es.newContainer$
+    engineServ.newContainer$
       .pipe(filter((cont: Container) => cont != undefined))
       .subscribe(c => {
         dataTree.inserNewtItem(c);
@@ -149,7 +149,7 @@ export class TreeNodeComponent {
   clickNodeContainer(event, node: ContainerFlatTreeNode, emit: boolean = true) {
     event.preventDefault();
     let containersSelected: Container = this.flatNodeMap.get(node);
-    this.logService.log(node, "container clicked", "TreeNodeComponent");
+    this.logServ.log(node, "container clicked", "TreeNodeComponent");
     if (containersSelected.selected) return;
     this.store.dispatch(oneSelection({ UUID: containersSelected.UUID }));
   }
@@ -179,8 +179,8 @@ export class TreeNodeComponent {
   }
 
   clickDeleteNode(event) {
-    if (!this.es.nothingSelected()) {
-      this.dataTree.deleteNodeAndChildren(this.es.getFirstSelected());
+    if (!this.engineServ.nothingSelected()) {
+      this.dataTree.deleteNodeAndChildren(this.engineServ.getFirstSelected());
       this.store.dispatch(clearSelection());
     }
   }
@@ -191,14 +191,14 @@ export class TreeNodeComponent {
   }
 
   searchElement(containerName: String) {
-    this.es.UUIDToContainer.forEach(c => {
+    this.engineServ.UUIDToContainer.forEach(c => {
       if (c.name.toUpperCase() === containerName.toUpperCase()) this.store.dispatch(oneSelection({ UUID: c.UUID }));
     });
   }
 
   checkHideDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.hideContainers(fs);
   }
 
@@ -213,8 +213,8 @@ export class TreeNodeComponent {
   }
 
   checkUnHideDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.unHideContainers(fs);
   }
 
@@ -229,8 +229,8 @@ export class TreeNodeComponent {
   }
 
   checkLockDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.lockContainers(fs);
   }
 
@@ -245,8 +245,8 @@ export class TreeNodeComponent {
   }
 
   checkUnLockDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.unLockContainers(fs);
   }
 

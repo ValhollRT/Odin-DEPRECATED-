@@ -20,7 +20,7 @@ export class SceneSettingsComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private appService: AppService,
-    public es: EngineService,
+    public engineServ: EngineService,
     public logService: LogService) {
     this.tempSceneSettings = new SceneSettings();
     // https://stackoverflow.com/questions/39074765/typescript-service-is-undefined-when-calling-a-function-from-common-service
@@ -36,7 +36,7 @@ export class SceneSettingsComponent implements OnInit {
 
   saveSettings(): void {
     this.appService.setSceneSettings(this.tempSceneSettings);
-    this.es.setBackgroundColorScene(this.tempSceneSettings.backgroundColor)
+    this.engineServ.setBackgroundColorScene(this.tempSceneSettings.backgroundColor)
     // TODO call update settings engine
   }
 

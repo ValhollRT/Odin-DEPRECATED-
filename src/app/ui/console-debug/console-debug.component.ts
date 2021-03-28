@@ -16,7 +16,7 @@ export class ConsoleDebugComponent implements OnInit {
 
   isOpen = false;
 
-  constructor(public store: Store<AppState>, public logService: LogService) { }
+  constructor(public store: Store<AppState>, public logServ: LogService) { }
 
   ngOnInit() {
     this.store.select('ui').subscribe(ui => {
@@ -32,5 +32,5 @@ export class ConsoleDebugComponent implements OnInit {
     this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;
   }
 
-  clearConsole = () => this.logService.bufferLogConsole = [];
+  clearConsole = () => this.logServ.bufferLogConsole = [];
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AppService, CanvasService, EngineService, LogService, SessionService, WindowRefService } from './index.service';
+import { AppService, EngineService, LogService, SessionService, WindowRefService } from './index.service';
 
 
 @NgModule({
@@ -9,11 +9,10 @@ import { AppService, CanvasService, EngineService, LogService, SessionService, W
     declarations: [],
     providers: [
         WindowRefService,
-        EngineService,
-        LogService,
         AppService,
-        CanvasService,
-        SessionService
+        LogService,
+        SessionService,
+        EngineService
     ],
 })
 export class ServiceModule { }

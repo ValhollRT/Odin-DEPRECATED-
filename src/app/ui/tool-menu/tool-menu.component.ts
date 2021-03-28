@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppService, EngineService, LibraryService, LogService, SessionService } from 'src/app/services/index.service';
+import { AppService, EngineService, LogService, SessionService } from 'src/app/services/index.service';
 import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
 import { PopupDialogAction, ToolMenu, User } from '../../models';
 import { openAboutOdin, openConsole, openLogin, openSceneSettings } from '../../store/actions';
@@ -17,10 +17,9 @@ export class ToolMenuComponent implements OnInit {
 
   constructor(
     public store: Store<AppState>,
-    public es: EngineService,
-    public library: LibraryService,
+    public engineServ: EngineService,
     public appService: AppService,
-    public logService: LogService,
+    public logServ: LogService,
     public sessionService: SessionService
   ) { this.setMenu(); }
 
@@ -35,39 +34,39 @@ export class ToolMenuComponent implements OnInit {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
       case GEOM.CAPSULE: case GEOM.GROUP:
-        this.es.createMesh(param);
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createMesh(param);
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
-        this.es.createLight(param);
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createLight(param);
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case GEOM.TEXT:
-        this.library.createNewGeometryText();
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createNewGeometryText();
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case CAMERA.ARCROTATECAMERA:
-        this.es.createCameraContainer(param)
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createCameraContainer(param)
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case 'CONSOLE':
-        this.logService.log("Console", "ToolMenuComponent", "open");
+        this.logServ.log("Console", "ToolMenuComponent", "open");
         this.store.dispatch(openConsole({ console: new PopupDialogAction(true) }))
         break;
       case 'ABOUTODIN':
-        this.logService.log("About Odin", "ToolMenuComponent", "open");
+        this.logServ.log("About Odin", "ToolMenuComponent", "open");
         this.store.dispatch(openAboutOdin({ aboutOdin: new PopupDialogAction(true) }))
         break;
       case 'SETTINGS':
-        this.logService.log("Settings", "ToolMenuComponent", "open");
+        this.logServ.log("Settings", "ToolMenuComponent", "open");
         this.store.dispatch(openSceneSettings({ sceneSettings: new PopupDialogAction(true) }))
         break;
       case 'LOGIN':
-        this.logService.log("Login", "ToolMenuComponent", "open");
+        this.logServ.log("Login", "ToolMenuComponent", "open");
         this.store.dispatch(openLogin({ login: new PopupDialogAction(true) }))
         break;
       case 'USER_DETAILS':
-        this.logService.log("User details", "ToolMenuComponent", "open");
+        this.logServ.log("User details", "ToolMenuComponent", "open");
         break;
       case 'SIGNOUT':
         this.sessionService.signOut();

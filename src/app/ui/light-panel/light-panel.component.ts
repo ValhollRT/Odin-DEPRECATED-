@@ -13,18 +13,18 @@ import { EngineService, LogService } from './../../services/index.service';
 export class LightPanelComponent implements OnInit {
 
   public currentLight: Light;
-  constructor(public engineService: EngineService,
+  constructor(public engineServ: EngineService,
     private store: Store<AppState>,
-    public logService: LogService) {
+    public logServ: LogService) {
 
     this.store
       .pipe(select('engine'),
         filter(selection => selection.UUIDCsSelected.length > 0),
-        filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Light),
-        map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
+        filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Light),
+        map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((l: Light) => {
         this.currentLight = l;
-        this.logService.log(l.name, "light selected", "LightPanelComponent")
+        this.logServ.log(l.name, "light selected", "LightPanelComponent")
       });
   }
 

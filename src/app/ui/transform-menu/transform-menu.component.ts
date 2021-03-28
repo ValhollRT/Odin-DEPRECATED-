@@ -36,21 +36,21 @@ export class TransformMenuComponent implements OnInit {
   @ViewChild('cz', { static: false }) cz: ElementRef;
 
   constructor(
-    public engineService: EngineService,
+    public engineServ: EngineService,
     public store: Store<AppState>,
-    public logService: LogService
+    public logServ: LogService
   ) {
     this.tm = new TransformMenu();
     this.resetAll();
     this.store
       .pipe(select('engine'), filter(selection => selection.UUIDCsSelected.length > 0))
-      .pipe(map(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type))
+      .pipe(map(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type))
       .subscribe((o: Mesh | Light | TargetCamera) => {
         this.isMeshSelected = o instanceof Mesh;
         this.isLightSelected = o instanceof Light;
         this.isCameraSelected = o instanceof TargetCamera;
         this.setTransformMenuSelected(o);
-        this.logService.log(this.tm, "edited transform", "TransformMenuComponent");
+        this.logServ.log(this.tm, "edited transform", "TransformMenuComponent");
       });
   }
 

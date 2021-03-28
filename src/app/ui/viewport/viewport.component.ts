@@ -4,7 +4,15 @@ import {
   NgZone, OnInit,
   ViewChild
 } from '@angular/core';
-import { EngineService } from '../../services/index.service';
+import { select, Store } from '@ngrx/store';
+import { BoundingBox, BoundingInfo, Color3, GizmoManager, Light, LightGizmo, Mesh, PickingInfo, ShadowLight, Vector3 } from 'babylonjs';
+import { take } from 'rxjs/operators';
+import { Container } from 'src/app/engine/common/Container';
+import { Utils } from 'src/app/engine/Utils/Utils';
+import { EngineService } from 'src/app/services/index.service';
+import { clearSelection, oneSelection } from 'src/app/store/actions';
+import { GizmoHelper } from './../../engine/helpers/GizmoHelper';
+import { AppState } from './../../store/app.reducer';
 
 @Component({
   selector: 'app-viewport',
@@ -16,14 +24,281 @@ export class ViewportComponent implements OnInit {
   @ViewChild('rendererCanvas', { static: true })
   public rendererCanvas: ElementRef<HTMLCanvasElement>;
 
+  private pickInfo: PickingInfo;
+  private startingPoint: any;
+  private gizmoManager: GizmoManager;
+  private lightGizmo: LightGizmo;
+  private gizmoHelper: GizmoHelper;
+
   public constructor(
     public ngZone: NgZone,
-    private engServ: EngineService) { }
+    private engineServ: EngineService,
+    public store: Store<AppState>) {
+  }
+
 
   public ngOnInit(): void {
-    this.engServ.createScene(this.rendererCanvas);
+    this.engineServ.createScene(this.rendererCanvas);
+    this.initCanvasRender();
+    this.gizmoHelper = new GizmoHelper(this.engineServ.getEngine(), this.engineServ.getCamera());
+    let cameraViewport = this.engineServ.getCamera();
+    cameraViewport.onViewMatrixChangedObservable.add(() => {
+      this.gizmoHelper.cameraGizmo.position = cameraViewport.position;
+    });
     this.ngZone.runOutsideAngular(() => {
-      this.engServ.animate();
+      this.engineServ.animate(this.gizmoHelper.getScene());
+    });
+
+  }
+
+  initCanvasRender() {
+    let scene = this.engineServ.getScene();
+    let canvas = this.rendererCanvas.nativeElement
+
+    //LightGizmo
+    this.lightGizmo = new LightGizmo();
+
+    // Initialize GizmoManager
+    this.gizmoManager = new GizmoManager(this.engineServ.getScene())
+    this.gizmoManager.boundingBoxGizmoEnabled = true
+    this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
+    //Trick to keep gizmo selected while orbiting viewport
+    this.gizmoManager.usePointerToAttachGizmos = false;
+
+    canvas.addEventListener("pointerdown", this.onPointerDown, false);
+    canvas.addEventListener("pointerup", this.onPointerUp, false);
+    canvas.addEventListener("onmouseenter", this.onPointerDown, false);
+
+    scene.onDispose = () => {
+      canvas.removeEventListener("pointerdown", this.onPointerDown);
+      canvas.removeEventListener("pointerup", this.onPointerUp);
+      canvas.removeEventListener("onmouseenter", this.onPointerDown, false);
+    }
+
+    canvas.onkeydown = (e) => {
+      this.lock = true;
+      /*FIT VIEW*/
+      if (e.key == 'f') {
+        let obj = this.engineServ.getFirstSelected().type;
+        if (!this.engineServ.nothingSelected() && obj instanceof Mesh) {
+          let pMesh = obj.getAbsolutePosition();
+          this.engineServ.getCamera().setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
+        }
+      }
+      if (e.key == 'w') {
+        this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled
+        this.gizmoManager.gizmos.positionGizmo.snapDistance = 0.001;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+      }
+      if (e.key == 'e') {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled
+        this.gizmoManager.gizmos.rotationGizmo.snapDistance = 0.001;
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+      }
+      if (e.key == 'r') {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled
+        this.gizmoManager.gizmos.scaleGizmo.snapDistance = 0.001;
+        this.gizmoManager.boundingBoxGizmoEnabled = false;
+      }
+      if (e.key == 'q') {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = false;
+      }
+      if (e.key == 't') {
+        this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoPositionToMatchAttachedMesh;
+        this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh = !this.gizmoManager.gizmos.positionGizmo.updateGizmoRotationToMatchAttachedMesh;
+        this.gizmoManager.gizmos.positionGizmo.updateScale = true;
+      }
+      if (e.key == 'Alt') {
+        this.engineServ.getCamera().attachControl(canvas, true, true);
+      }
+    }
+
+    canvas.onkeyup = (e) => {
+      if (e.key == 'Alt') {
+        this.lock = false;
+        this.engineServ.getCamera().detachControl(this.rendererCanvas.nativeElement);
+      }
+    }
+    this.initializeGizmo();
+
+    this.store.select('engine').subscribe(en => {
+      if (en.prevUUIDCsSelected.length > 0) {
+        this.clearHighLightSelected(<Mesh>this.engineServ.UUIDToContainer.get(en.prevUUIDCsSelected[0]).type);
+      }
+      if (en.UUIDCsSelected.length > 0) {
+        let container = this.engineServ.UUIDToContainer.get(en.UUIDCsSelected[0]);
+        if (container.locked) return
+        this.setSelected(container);
+      } else {
+        this.gizmoManager.positionGizmoEnabled = false;
+        this.gizmoManager.rotationGizmoEnabled = false;
+        this.gizmoManager.scaleGizmoEnabled = false;
+        this.gizmoManager.attachToMesh(null);
+      }
     });
   }
+
+
+  initializeGizmo() {
+    this.gizmoManager.positionGizmoEnabled = true;
+    this.gizmoManager.rotationGizmoEnabled = true;
+    this.gizmoManager.scaleGizmoEnabled = true;
+    this.gizmoManager.boundingBoxGizmoEnabled = true;
+    this.gizmoManager.positionGizmoEnabled = false;
+    this.gizmoManager.rotationGizmoEnabled = false;
+    this.gizmoManager.scaleGizmoEnabled = false;
+    this.gizmoManager.boundingBoxGizmoEnabled = false;
+    this.onDragObservableGizmo();
+    this.onDragStartObservableGizmo();
+    this.onDragEndObservableGizmo();
+  }
+
+  public lock: boolean = false;
+  updateTransformCurrent() { }
+  startTransformCurrent() { this.lock = true; }
+  endTransformCurrent() { this.lock = false; }
+
+  public onDragObservableGizmo() {
+    this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
+  }
+
+  public onDragStartObservableGizmo() {
+    this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
+  }
+
+  public onDragEndObservableGizmo() {
+    this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+    this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragEndObservable.add(() => { this.endTransformCurrent(); });
+  }
+
+  getGroundPosition() {
+    // Use a predicate to get position on the ground
+    this.pickInfo = this.engineServ.getScene().pick(this.engineServ.getScene().pointerX, this.engineServ.getScene().pointerY);
+    if (this.pickInfo.hit) {
+      return this.pickInfo.pickedPoint;
+    }
+    return null;
+  }
+
+  public onPointerDown = (ev) => {
+    if (this.lock) return;
+    if (ev.button !== 0) return;
+
+    // check if we are under a mesh
+    this.pickInfo = this.engineServ.getScene().pick(this.engineServ.getScene().pointerX, this.engineServ.getScene().pointerY);
+    if (this.pickInfo.hit) {
+      let mesh = <Mesh | Light>this.pickInfo.pickedMesh;
+      if (mesh.id.includes("glyph")) mesh = <Mesh | Light>this.pickInfo.pickedMesh.parent;
+      let container = this.engineServ.getContainerFromType(mesh);
+      if (container.locked) return;
+      this.setSelected(container);
+      this.startingPoint = this.getGroundPosition();
+      this.store.dispatch(oneSelection({ UUID: this.engineServ.getContainerFromType(mesh).UUID }));
+      if (this.startingPoint) { // we need to disconnect camera from canvas
+        setTimeout(() => {
+          this.engineServ.getCamera().detachControl(this.rendererCanvas.nativeElement);
+        }, 0);
+      }
+    } else {
+      this.store.dispatch(clearSelection());
+    }
+  }
+
+  public onPointerUp = () => {
+    if (this.startingPoint) {
+      this.startingPoint = null;
+      return;
+    }
+  }
+
+  public onPointerMove = () => {
+    let cs;
+    this.store.pipe(select('engine'), take(1)).subscribe(s => cs = this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type);
+    if (!this.startingPoint) return;
+    var current = this.getGroundPosition();
+    if (!current) return;
+
+    var diff = current.subtract(this.startingPoint);
+    if (cs instanceof Mesh) cs.position.addInPlace(diff);
+    if (cs instanceof Light) (<ShadowLight>cs).position.addInPlace(diff);
+    this.startingPoint = current;
+  }
+
+  setSelected(c: Container) {
+    if (c.type instanceof Mesh) {
+      this.gizmoManager.attachToMesh(c.type);
+      if (c.isText) {
+        ViewportComponent.setBoundingBoxText(c.type);
+      } else {
+        c.type.getChildMeshes().filter(m => !m.name.startsWith("glyph-inst")).forEach((m: Mesh) => m.showBoundingBox = true);
+        c.type.showBoundingBox = true;
+
+        let bbr = this.engineServ.getScene().getBoundingBoxRenderer();
+        bbr.onBeforeBoxRenderingObservable.add((bb: BoundingBox) => {
+          bbr.backColor = bbr.frontColor = bb == this.engineServ.UUIDToBoundingBox.get(c.UUID)
+            ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
+        })
+      }
+    } else if (c.type instanceof Light) {
+      this.lightGizmo.light = c.type;
+    }
+  }
+
+  static setBoundingBoxText(m: Mesh) {
+    if (!Utils.isEmptyArr(m.getChildMeshes())) m.setBoundingInfo(ViewportComponent.boundingInfoFromMeshesChildren(m.getChildren()));
+    m.showBoundingBox = true;
+    m.refreshBoundingInfo();
+  }
+
+  static boundingInfoFromMeshesChildren(meshes) {
+    let boundingInfo = meshes[0].getBoundingInfo();
+    let min = boundingInfo.minimum.add(meshes[0].position);
+    let max = boundingInfo.maximum.add(meshes[0].position);
+    for (let i = 0; i < meshes.length; i++) {
+      boundingInfo = meshes[i].getBoundingInfo();
+      min = BABYLON.Vector3.Minimize(min, boundingInfo.minimum.add(meshes[i].position));
+      max = BABYLON.Vector3.Maximize(max, boundingInfo.maximum.add(meshes[i].position));
+      meshes[i].refreshBoundingInfo()
+    }
+    return new BoundingInfo(min, max);
+  }
+
+  clearHighLightSelected(o: Mesh | Light) {
+    if (o instanceof Mesh) {
+      o.getChildMeshes().forEach((m: Mesh) => m.showBoundingBox = false);
+      o.showBoundingBox = false;
+    }
+  }
+
 }

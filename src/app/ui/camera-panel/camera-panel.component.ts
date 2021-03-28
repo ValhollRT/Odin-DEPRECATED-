@@ -14,24 +14,24 @@ import { EngineService, LogService } from './../../services/index.service';
 export class CameraPanelComponent implements OnInit {
 
   public selected: ArcRotateCamera;
-  constructor(public engineService: EngineService,
+  constructor(public engineServ: EngineService,
     private store: Store<AppState>,
-    public logService: LogService) {
+    public logServ: LogService) {
 
     this.store
       .pipe(select('engine'),
         filter(selection => selection.UUIDCsSelected.length > 0),
-        filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof TargetCamera),
-        map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
+        filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof TargetCamera),
+        map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((cam: ArcRotateCamera) => {
         this.selected = cam;
-        this.logService.log(cam.name, "camera selected", "CameraPanelComponent")
+        this.logServ.log(cam.name, "camera selected", "CameraPanelComponent")
       });
   }
 
   ngOnInit(): void { }
 
   enableCamera(enable: boolean) {
-    this.engineService.setCamera(this.selected);
+    this.engineServ.setCamera(this.selected);
   }
 }

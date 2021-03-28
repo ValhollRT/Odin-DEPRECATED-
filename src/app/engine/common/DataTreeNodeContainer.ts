@@ -17,14 +17,14 @@ export class DataTreeContainer {
     dataChange = new BehaviorSubject<Container[]>([]);
     root: Container;
 
-    constructor(public engineService: EngineService,
+    constructor(public engineServ: EngineService,
         public store: Store<AppState>,) {
         this.root = new Container();
         this.root.name = "VALHOLLRT_ROOT_CONTAINER"
 
         store.select('engine').subscribe(en => {
-            if (en.prevUUIDCsSelected.length > 0) this.engineService.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
-            if (en.UUIDCsSelected.length > 0) this.engineService.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
+            if (en.prevUUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
+            if (en.UUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
             this.updateNodeTree();
         });
     }
@@ -90,8 +90,8 @@ export class DataTreeContainer {
 
     deleteContainer(node: Container) {
         this.deleteNode(node);
-        if (node.type instanceof Mesh) node.deleteMesh(this.engineService.getScene());
-        else node.deleteLight(this.engineService.getScene());
+        if (node.type instanceof Mesh) node.deleteMesh(this.engineServ.getScene());
+        else node.deleteLight(this.engineServ.getScene());
         node = null;
         this.updateNodeTree();
     }

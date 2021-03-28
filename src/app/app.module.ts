@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -79,4 +79,15 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule {
+  /**
+     * https://stackoverflow.com/questions/39101865/angular-2-inject-dependency-outside-constructor
+     * Allows for retrieving singletons using `AppModule.injector.get(MyService)`
+     * This is good to prevent injecting the service as constructor parameter.
+     */
+  static injector: Injector;
+  constructor(injector: Injector) {
+    AppModule.injector = injector;
+  }
+}

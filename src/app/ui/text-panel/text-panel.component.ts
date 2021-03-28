@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs/operators';
 import { Container } from 'src/app/engine/common/Container';
 import { AppState } from '../../store/app.reducer';
 import { EngineService, LogService } from './../../services/index.service';
+import { ViewportComponent } from './../viewport/viewport.component';
 
 @Component({
   selector: 'text-panel',
@@ -13,21 +14,21 @@ import { EngineService, LogService } from './../../services/index.service';
 })
 export class TextPanelComponent implements OnInit {
 
-
   @ViewChild('text', { static: true }) text: ElementRef;
   public current: Container;
   public Writer;
   public textMesh;
 
-  constructor(public store: Store<AppState>,
+  constructor(
+    public store: Store<AppState>,
     public ls: LogService,
-    public es: EngineService) { }
+    public engineServ: EngineService) { }
 
   ngOnInit(): void {
     this.store.pipe(select('engine'),
       filter(selection => selection.UUIDCsSelected.length > 0),
-      filter(sel => this.es.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
-      map(s => this.es.getContainerFromUUID(s.UUIDCsSelected[0])),
+      filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
+      map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0])),
       filter(c => c.isText))
       .subscribe((c: Container) => {
         this.current = c;
@@ -39,7 +40,7 @@ export class TextPanelComponent implements OnInit {
   updateText() {
     this.current.text.value = this.text.nativeElement.value;
     this.current.text.updateText();
-    this.es.getCanvasHelper().setBoundingBoxText(<Mesh>(this.current.type));
+    ViewportComponent.setBoundingBoxText(<Mesh>(this.current.type));
   }
 
   setHorizontalAlign(i: number) {
