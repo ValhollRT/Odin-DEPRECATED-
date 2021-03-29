@@ -198,6 +198,11 @@ body {
   background-color: var(--main-menu-color);
 }
 
+.icon-color-active,
+.icon-btn-color-active {
+  background-color: greenyellow;
+}
+
 .icon-color:hover {
   background-color: var(--highlight-color);
   mix-blend-mode: difference;
@@ -211,13 +216,13 @@ body {
 .icon-xxs {
   width: 13px;
   height: 13px;
-  margin: 2px 5px;
+  margin: 2px 3px;
 }
 
 .icon-xs {
-  width: 15px;
-  height: 15px;
-  margin: 2px 5px;
+  width: 14px;
+  height: 14px;
+  margin: 2px 3px;
 }
 
 .icon-m {

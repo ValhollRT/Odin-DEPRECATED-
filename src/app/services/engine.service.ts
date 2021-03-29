@@ -32,6 +32,8 @@ export class EngineService {
   public UUIDToCamera = new Map<string, ArcRotateCamera>();
 
   public newContainer$ = new BehaviorSubject<Container>(undefined);
+  public updateTreeNode$ = new BehaviorSubject<boolean>(false);
+
   private selectedUUIDContainers: string[];
   private sceneBackgroundColor: Color3;
 
@@ -66,6 +68,7 @@ export class EngineService {
   public setCamera(camera: ArcRotateCamera) {
     this.defaultCamera = camera;
     this.scene.activeCamera = camera;
+    this.updateTreeNode();
   }
 
   public createMesh(type: string): void {
@@ -93,9 +96,7 @@ export class EngineService {
     return <ArcRotateCamera>c.type;
   }
 
-  public createNewGeometryText(): void {
-    PlugBuilder.createNewGeometryText(this);
-  }
+  public createNewGeometryText(): void { PlugBuilder.createNewGeometryText(this); }
 
   public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
   public getContainerFromUUID(UUID: string): Container { return this.UUIDToContainer.get(UUID) }
@@ -120,10 +121,11 @@ export class EngineService {
     this.scene.clearColor = new Color4(this.sceneBackgroundColor.r, this.sceneBackgroundColor.g, this.sceneBackgroundColor.b, 1);
   }
 
+  public updateTreeNode() { this.updateTreeNode$.next(true); }
+
   public animate(gizmoScene: Scene): void {
     const rendererLoopCallback = () => {
       this.scene.render();
-      // this.gizmoHelper.getScene().render();
       gizmoScene.render();
     };
 
@@ -138,6 +140,5 @@ export class EngineService {
     this.windowService.window.addEventListener('resize', () => {
       this.engine.resize();
     });
-
   }
 }

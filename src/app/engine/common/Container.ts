@@ -79,7 +79,7 @@ export class Container {
   }
 
   setParent(parent: Container) {
-    if (this.type instanceof TargetCamera) return;
+    if (this.type instanceof TargetCamera || this.type instanceof Light) return;
     (<Mesh>this.type).refreshBoundingInfo();
     let worldMatrix = this.type.getWorldMatrix();
     this.parent = parent;

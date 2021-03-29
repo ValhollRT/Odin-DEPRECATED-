@@ -20,6 +20,7 @@ export class ContainerFlatTreeNode {
   selected: boolean;
   hidden: boolean;
   locked: boolean;
+  activeCamera: boolean;
 }
 
 @Component({
@@ -66,6 +67,8 @@ export class TreeNodeComponent {
       .subscribe(c => {
         dataTree.inserNewtItem(c);
       });
+
+      engineServ.updateTreeNode$.subscribe(ignore => dataTree.updateTreeNode());
   }
 
   getLevel = (node: ContainerFlatTreeNode) => node.level;
@@ -85,6 +88,9 @@ export class TreeNodeComponent {
     flatNode.selected = node.selected;
     flatNode.hidden = node.hidden;
     flatNode.expandable = (node.children && node.children.length > 0);
+    if (node.type instanceof ArcRotateCamera) {
+      flatNode.activeCamera = node.type === this.engineServ.getCamera();
+    }
     this.flatNodeMap.set(flatNode, node);
     this.nestedMeshMap.set(node.get(), flatNode);
     this.nestedNodeMap.set(node, flatNode);

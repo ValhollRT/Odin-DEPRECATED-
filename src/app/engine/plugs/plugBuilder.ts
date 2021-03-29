@@ -123,7 +123,7 @@ export class PlugBuilder {
     font.load("assets/font/Ubuntu-L.ttf", engineServ.getScene(), (font: FontType) => {
       let mesh = new Mesh("text", engineServ.getScene());
       let mat: StandardMaterial = new StandardMaterial("material", engineServ.getScene());
-      mat.diffuseColor = new Color3(.0, .75, .75);
+      mat.diffuseColor = new Color3(.75, .75, .75);
       mesh.material = mat;
 
       let text: TextType = new TextType(font, "Text", mesh);

@@ -36,7 +36,7 @@
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
             <div class="icon-color icon-axis icon-xs float-left" (click)="openSidebarPanel(0)"></div>
             <div *ngIf="this.flatNodeMap.get(node).getIconType() != ''"
-              [ngClass]="[ this.flatNodeMap.get(node).getIconType() ,'icon-color', 'icon-xs']"
+            [ngClass]="[ this.flatNodeMap.get(node).getIconType() , 'icon-xs', (node.activeCamera === true)?'icon-color-active':'icon-color']"
               (click)="openSidebarPanel(this.flatNodeMap.get(node).getPanel())">
             </div>
           </div>
@@ -67,7 +67,7 @@
               [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
             <div class="icon-color icon-axis icon-xs float-left" (click)="openSidebarPanel(0)"></div>
             <div *ngIf="this.flatNodeMap.get(node).getIconType() != ''"
-              [ngClass]="[ this.flatNodeMap.get(node).getIconType() ,'icon-color', 'icon-xs']"
+              [ngClass]="[ this.flatNodeMap.get(node).getIconType() , 'icon-xs', (node.activeCamera === true)?'icon-color-active':'icon-color']"
               (click)="openSidebarPanel(this.flatNodeMap.get(node).getPanel())">
             </div>
           </div>

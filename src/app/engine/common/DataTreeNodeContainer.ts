@@ -24,16 +24,16 @@ export class DataTreeContainer {
         store.select('engine').subscribe(en => {
             if (en.prevUUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
             if (en.UUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
-            this.updateNodeTree();
+            this.updateTreeNode();
         });
     }
 
-    updateNodeTree() { this.dataChange.next(this.root.children); }
+    updateTreeNode() { this.dataChange.next(this.root.children); }
 
     inserNewtItem(container: Container) {
         container.parent = this.root;
         this.root.children.push(container);
-        this.updateNodeTree();
+        this.updateTreeNode();
     }
 
     moveContainer(from: Container, to: Container) {
@@ -43,7 +43,7 @@ export class DataTreeContainer {
 
         from.setParent(to);
 
-        this.updateNodeTree();
+        this.updateTreeNode();
         return to;
     }
 
@@ -56,7 +56,7 @@ export class DataTreeContainer {
 
         from.setParent(to.parent);
 
-        this.updateNodeTree();
+        this.updateTreeNode();
         return to;
     }
 
@@ -69,7 +69,7 @@ export class DataTreeContainer {
 
         from.setParent(to.parent);
 
-        this.updateNodeTree();
+        this.updateTreeNode();
         return to;
     }
 
@@ -94,6 +94,6 @@ export class DataTreeContainer {
         else this.engineServ.UUIDToCamera.delete(node.UUID);
         node = null;
         this.engineServ.UUIDToContainer.delete(node.UUID);
-        this.updateNodeTree();
+        this.updateTreeNode();
     }
 }
