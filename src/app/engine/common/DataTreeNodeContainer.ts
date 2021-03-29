@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Mesh } from 'babylonjs';
+import { Light, Mesh } from 'babylonjs';
 import { BehaviorSubject } from 'rxjs';
 import { Container } from 'src/app/engine/common/Container';
 import { EngineService } from '../../services/index.service';
@@ -12,7 +12,6 @@ import { AppState } from '../../store/app.reducer';
  * If a node is a category, it has children items and new items can be added under the category.
  */
 @Injectable({ providedIn: 'root' })
-
 export class DataTreeContainer {
     dataChange = new BehaviorSubject<Container[]>([]);
     root: Container;
@@ -91,8 +90,10 @@ export class DataTreeContainer {
     deleteContainer(node: Container) {
         this.deleteNode(node);
         if (node.type instanceof Mesh) node.deleteMesh(this.engineServ.getScene());
-        else node.deleteLight(this.engineServ.getScene());
+        else if (node.type instanceof Light) node.deleteLight(this.engineServ.getScene());
+        else this.engineServ.UUIDToCamera.delete(node.UUID);
         node = null;
+        this.engineServ.UUIDToContainer.delete(node.UUID);
         this.updateNodeTree();
     }
 }

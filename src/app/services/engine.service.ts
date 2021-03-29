@@ -10,7 +10,6 @@ import { BoundingBox } from 'babylonjs/Culling/boundingBox';
 import { BehaviorSubject } from 'rxjs';
 import { Container } from 'src/app/engine/common/Container';
 import { CAMERA, LIGHT } from '../configuration/AppConstants';
-import { GizmoHelper } from '../engine/helpers/GizmoHelper';
 import { Grid } from '../engine/helpers/Grid';
 import { PlugBuilder } from '../engine/plugs/plugBuilder';
 import { AppState } from '../store/app.reducer';
@@ -25,12 +24,12 @@ export class EngineService {
   private engine: Engine;
   private defaultCamera: ArcRotateCamera;
   private scene: Scene;
-  private gizmoHelper: GizmoHelper;
 
   // References Containers for engine
   public typeToContainer = new Map<Mesh | Light | ArcRotateCamera, Container>();
   public UUIDToContainer = new Map<string, Container>();
   public UUIDToBoundingBox = new Map<string, BoundingBox>();
+  public UUIDToCamera = new Map<string, ArcRotateCamera>();
 
   public newContainer$ = new BehaviorSubject<Container>(undefined);
   private selectedUUIDContainers: string[];
@@ -85,10 +84,12 @@ export class EngineService {
   }
 
   public createCameraContainer(type: string): ArcRotateCamera {
-    let c = new Container(PlugBuilder.createCamera(type, this.getScene()));
+    let camera = PlugBuilder.createCamera(type, this.getScene());
+    let c = new Container(camera);
     this.typeToContainer.set(c.type, c);
     this.UUIDToContainer.set(c.UUID, c);
     this.saveContainerToDataTree(c);
+    this.UUIDToCamera.set(c.UUID, camera);
     return <ArcRotateCamera>c.type;
   }
 
