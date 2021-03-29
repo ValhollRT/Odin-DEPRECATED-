@@ -1,20 +1,16 @@
-import { openSidebarPanel } from './../ui.action';
-import { SidebarPanel, SidebarPanelAction } from './../../models/actions/SidebarPanelAction';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { Store } from '@ngrx/store';
+import { ArcRotateCamera, Light, Mesh } from 'babylonjs';
+import { filter } from 'rxjs/operators';
 import { Container } from 'src/app/engine/common/Container';
-import { EngineService } from 'src/app/engine/engine.service';
 import { DataTreeContainer } from '../../engine/common/DataTreeNodeContainer';
-import { filter, take } from 'rxjs/operators';
-import { Mesh } from 'babylonjs/Meshes/mesh';
-import { Light } from 'babylonjs';
-import { LogService } from 'src/app/services/log.service';
-import { select, Store } from '@ngrx/store';
-import { clearSelection, oneSelection } from 'src/app/engine/engine.action';
-import { AppState } from 'src/app/app.reducer';
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
+import { SidebarPanelAction } from '../../models';
+import { EngineService, LogService } from '../../services/index.service';
+import { clearSelection, oneSelection, openSidebarPanel } from '../../store/actions';
+import { AppState } from '../../store/app.reducer';
 
 export class ContainerFlatTreeNode {
   name: string;
@@ -24,6 +20,7 @@ export class ContainerFlatTreeNode {
   selected: boolean;
   hidden: boolean;
   locked: boolean;
+  activeCamera: boolean;
 }
 
 @Component({
@@ -55,7 +52,7 @@ export class TreeNodeComponent {
   constructor(
     public store: Store<AppState>,
     public dataTree: DataTreeContainer,
-    private es: EngineService, public logService: LogService) {
+    private engineServ: EngineService, public logServ: LogService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<ContainerFlatTreeNode>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -65,11 +62,13 @@ export class TreeNodeComponent {
       this.dataSource.data = data;
     });
 
-    es.newContainer$
+    engineServ.newContainer$
       .pipe(filter((cont: Container) => cont != undefined))
       .subscribe(c => {
         dataTree.inserNewtItem(c);
       });
+
+      engineServ.updateTreeNode$.subscribe(ignore => dataTree.updateTreeNode());
   }
 
   getLevel = (node: ContainerFlatTreeNode) => node.level;
@@ -89,6 +88,9 @@ export class TreeNodeComponent {
     flatNode.selected = node.selected;
     flatNode.hidden = node.hidden;
     flatNode.expandable = (node.children && node.children.length > 0);
+    if (node.type instanceof ArcRotateCamera) {
+      flatNode.activeCamera = node.type === this.engineServ.getCamera();
+    }
     this.flatNodeMap.set(flatNode, node);
     this.nestedMeshMap.set(node.get(), flatNode);
     this.nestedNodeMap.set(node, flatNode);
@@ -153,7 +155,7 @@ export class TreeNodeComponent {
   clickNodeContainer(event, node: ContainerFlatTreeNode, emit: boolean = true) {
     event.preventDefault();
     let containersSelected: Container = this.flatNodeMap.get(node);
-    this.logService.log(node, "container clicked", "TreeNodeComponent");
+    this.logServ.log(node, "container clicked", "TreeNodeComponent");
     if (containersSelected.selected) return;
     this.store.dispatch(oneSelection({ UUID: containersSelected.UUID }));
   }
@@ -183,8 +185,8 @@ export class TreeNodeComponent {
   }
 
   clickDeleteNode(event) {
-    if (!this.es.nothingSelected()) {
-      this.dataTree.deleteNodeAndChildren(this.es.getFirstSelected());
+    if (!this.engineServ.nothingSelected()) {
+      this.dataTree.deleteNodeAndChildren(this.engineServ.getFirstSelected());
       this.store.dispatch(clearSelection());
     }
   }
@@ -195,14 +197,14 @@ export class TreeNodeComponent {
   }
 
   searchElement(containerName: String) {
-    this.es.UUIDToContainer.forEach(c => {
+    this.engineServ.UUIDToContainer.forEach(c => {
       if (c.name.toUpperCase() === containerName.toUpperCase()) this.store.dispatch(oneSelection({ UUID: c.UUID }));
     });
   }
 
   checkHideDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.hideContainers(fs);
   }
 
@@ -217,8 +219,8 @@ export class TreeNodeComponent {
   }
 
   checkUnHideDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.unHideContainers(fs);
   }
 
@@ -233,8 +235,8 @@ export class TreeNodeComponent {
   }
 
   checkLockDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.lockContainers(fs);
   }
 
@@ -249,8 +251,8 @@ export class TreeNodeComponent {
   }
 
   checkUnLockDirectDescendants() {
-    if (this.es.nothingSelected()) return;
-    let fs = this.es.getFirstSelected();
+    if (this.engineServ.nothingSelected()) return;
+    let fs = this.engineServ.getFirstSelected();
     this.unLockContainers(fs);
   }
 
@@ -264,4 +266,3 @@ export class TreeNodeComponent {
     });
   }
 }
-

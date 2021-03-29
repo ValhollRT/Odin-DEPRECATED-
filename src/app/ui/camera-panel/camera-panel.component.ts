@@ -1,11 +1,10 @@
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
-import { TargetCamera } from 'babylonjs';
 import { Component, OnInit } from '@angular/core';
-import { EngineService } from 'src/app/services/index.service';
 import { select, Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
-import { LogService } from 'src/app/services/log.service';
+import { TargetCamera } from 'babylonjs';
+import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 import { filter, map } from 'rxjs/operators';
+import { AppState } from '../../store/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'camera-panel',
@@ -15,25 +14,24 @@ import { filter, map } from 'rxjs/operators';
 export class CameraPanelComponent implements OnInit {
 
   public selected: ArcRotateCamera;
-  constructor(public engineService: EngineService,
+  constructor(public engineServ: EngineService,
     private store: Store<AppState>,
-    public logService: LogService) {
+    public logServ: LogService) {
 
     this.store
       .pipe(select('engine'),
         filter(selection => selection.UUIDCsSelected.length > 0),
-        filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof TargetCamera),
-        map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
+        filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof TargetCamera),
+        map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((cam: ArcRotateCamera) => {
         this.selected = cam;
-        this.logService.log(cam.name, "camera selected", "CameraPanelComponent")
+        this.logServ.log(cam.name, "camera selected", "CameraPanelComponent")
       });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   enableCamera(enable: boolean) {
-    this.engineService.setCamera(this.selected);
+    this.engineServ.setCamera(this.selected);
   }
 }

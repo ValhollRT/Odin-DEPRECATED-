@@ -1,7 +1,5 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AppService } from 'src/app/services/index.service';
-import { EventEmitter, Output } from '@angular/core';
-import { Input } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
 
 export interface BtnFooter {
   name: string;

@@ -1,10 +1,9 @@
-import { AppState } from 'src/app/app.reducer';
-import { openConsole } from './../ui.action';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AppService } from 'src/app/services/index.service';
-import { LogService } from 'src/app/services/log.service';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
 import { Store } from '@ngrx/store';
+import { PopupDialogAction } from '../../models';
+import { openConsole } from '../../store/actions';
+import { AppState } from '../../store/app.reducer';
+import { LogService } from './../../services/index.service';
 
 @Component({
   selector: 'console-debug',
@@ -17,7 +16,7 @@ export class ConsoleDebugComponent implements OnInit {
 
   isOpen = false;
 
-  constructor(public store: Store<AppState>, public logService: LogService) { }
+  constructor(public store: Store<AppState>, public logServ: LogService) { }
 
   ngOnInit() {
     this.store.select('ui').subscribe(ui => {
@@ -33,5 +32,5 @@ export class ConsoleDebugComponent implements OnInit {
     this.scroller.nativeElement.scrollTop = this.scroller.nativeElement.scrollHeight;
   }
 
-  clearConsole = () => this.logService.bufferLogConsole = [];
+  clearConsole = () => this.logServ.bufferLogConsole = [];
 }

@@ -9,5 +9,4 @@ export class PrecisionPipe implements PipeTransform {
   transform(value: number): number {
     return Utils.precision(value, 3);
   }
-
 }

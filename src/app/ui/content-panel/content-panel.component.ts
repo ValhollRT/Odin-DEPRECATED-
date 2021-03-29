@@ -1,4 +1,4 @@
-import { Input, Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'content-panel',
@@ -16,5 +16,4 @@ export class ContentPanelComponent implements OnInit {
   ngOnInit(): void { }
 
   collapse() { this.expand = !this.expand; }
-
 }

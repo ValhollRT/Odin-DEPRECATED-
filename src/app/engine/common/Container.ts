@@ -1,8 +1,7 @@
-import { SidebarPanel } from './../../models/actions/SidebarPanelAction';
+import { ArcRotateCamera, Light, Mesh, Scene, TargetCamera, VertexData } from 'babylonjs';
+import { GeometryPanel, SidebarPanel } from '../../models';
+import { TextType } from '../Text/TextType';
 import { Utils } from '../Utils/Utils';
-import { Mesh, Scene, Light, VertexData, ArcRotateCamera, TargetCamera } from 'babylonjs';
-import { GeometryPanel } from 'src/app/models/geometry/geometry-panels';
-import { TextType } from '../Text/TextType'
 
 export class Container {
 
@@ -80,7 +79,7 @@ export class Container {
   }
 
   setParent(parent: Container) {
-    if (this.type instanceof TargetCamera) return;
+    if (this.type instanceof TargetCamera || this.type instanceof Light) return;
     (<Mesh>this.type).refreshBoundingInfo();
     let worldMatrix = this.type.getWorldMatrix();
     this.parent = parent;

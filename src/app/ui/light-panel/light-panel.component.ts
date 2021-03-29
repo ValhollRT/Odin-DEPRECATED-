@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Color3, Light, Mesh } from 'babylonjs';
+import { Color3, Light } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
-import { EngineService } from 'src/app/engine/engine.service';
-import { LogService } from 'src/app/services/log.service';
+import { AppState } from '../../store/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'light-panel',
@@ -14,18 +13,18 @@ import { LogService } from 'src/app/services/log.service';
 export class LightPanelComponent implements OnInit {
 
   public currentLight: Light;
-  constructor(public engineService: EngineService,
+  constructor(public engineServ: EngineService,
     private store: Store<AppState>,
-    public logService: LogService) {
+    public logServ: LogService) {
 
     this.store
       .pipe(select('engine'),
         filter(selection => selection.UUIDCsSelected.length > 0),
-        filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Light),
-        map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
+        filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Light),
+        map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((l: Light) => {
         this.currentLight = l;
-        this.logService.log(l.name, "light selected", "LightPanelComponent")
+        this.logServ.log(l.name, "light selected", "LightPanelComponent")
       });
   }
 
@@ -35,5 +34,4 @@ export class LightPanelComponent implements OnInit {
     if (attribute === "DIFFUSECOLOR") { this.currentLight.diffuse = Color3.FromHexString(value); }
     if (attribute === "SPECULARCOLOR") { this.currentLight.specular = Color3.FromHexString(value); }
   }
-
 }

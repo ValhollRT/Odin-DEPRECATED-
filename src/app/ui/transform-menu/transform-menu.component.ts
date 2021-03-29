@@ -1,13 +1,10 @@
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { select, Store, props } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, TargetCamera, Vector2, Vector3 } from 'babylonjs';
-import { filter, map, take } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
+import { filter, map } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
-import { EngineService } from 'src/app/services/index.service';
-import { LogService } from 'src/app/services/log.service';
-import { Position } from '@angular/compiler';
+import { EngineService, LogService } from 'src/app/services/index.service';
+import { AppState } from '../../store/app.reducer';
 
 class TransformMenu {
   position: Vector3;
@@ -39,21 +36,21 @@ export class TransformMenuComponent implements OnInit {
   @ViewChild('cz', { static: false }) cz: ElementRef;
 
   constructor(
-    public engineService: EngineService,
+    public engineServ: EngineService,
     public store: Store<AppState>,
-    public logService: LogService
+    public logServ: LogService
   ) {
     this.tm = new TransformMenu();
     this.resetAll();
     this.store
       .pipe(select('engine'), filter(selection => selection.UUIDCsSelected.length > 0))
-      .pipe(map(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type))
+      .pipe(map(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type))
       .subscribe((o: Mesh | Light | TargetCamera) => {
         this.isMeshSelected = o instanceof Mesh;
         this.isLightSelected = o instanceof Light;
         this.isCameraSelected = o instanceof TargetCamera;
         this.setTransformMenuSelected(o);
-        this.logService.log(this.tm, "edited transform", "TransformMenuComponent");
+        this.logServ.log(this.tm, "edited transform", "TransformMenuComponent");
       });
   }
 
@@ -110,7 +107,7 @@ export class TransformMenuComponent implements OnInit {
         this.selected.position = new Vector3(Number(value), pos.y, pos.z)
         break;
       case 'y':
-        this.selected.position = new Vector3( pos.x, Number(value), pos.z)
+        this.selected.position = new Vector3(pos.x, Number(value), pos.z)
         break;
       case 'z':
         this.selected.position = new Vector3(pos.x, pos.y, Number(value))
@@ -118,6 +115,7 @@ export class TransformMenuComponent implements OnInit {
       default:
         break;
     }
+
   }
 
   updateRotation(event: any) {

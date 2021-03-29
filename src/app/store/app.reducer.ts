@@ -1,7 +1,7 @@
 import { ActionReducerMap } from "@ngrx/store";
-import * as engine from './engine/engine.reducer'
-import * as session from './services/session.reducer'
-import * as ui from './ui/ui.reducer'
+import * as engine from './reducers/engine.reducer';
+import * as session from './reducers/session.reducer';
+import * as ui from './reducers/ui.reducer';
 
 export interface AppState {
     engine: engine.State;

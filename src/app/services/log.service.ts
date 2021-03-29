@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { LogLevel } from '../models/logModels/logLevel';
-import { Container } from '../engine/common/Container';
-import { MeshLog } from '../models/logModels/meshLog';
 import { Mesh } from 'babylonjs/Meshes/mesh';
+import { Container } from '../engine/common/Container';
+import { LogLevel } from '../models/logs/LogLevel.model';
+import { MeshLog } from '../models/logs/MeshLog.model';
 
 @Injectable()
 export class LogService {

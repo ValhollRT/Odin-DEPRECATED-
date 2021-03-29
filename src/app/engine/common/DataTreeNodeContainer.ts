@@ -1,10 +1,10 @@
-import { Container } from 'src/app/engine/common/Container';
-import { BehaviorSubject, fromEvent } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { EngineService } from '../engine.service';
-import { Matrix, Mesh, Node, Quaternion, Vector3 } from 'babylonjs';
-import { AppState } from 'src/app/app.reducer';
 import { Store } from '@ngrx/store';
+import { Light, Mesh } from 'babylonjs';
+import { BehaviorSubject } from 'rxjs';
+import { Container } from 'src/app/engine/common/Container';
+import { EngineService } from '../../services/index.service';
+import { AppState } from '../../store/app.reducer';
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -12,32 +12,29 @@ import { Store } from '@ngrx/store';
  * If a node is a category, it has children items and new items can be added under the category.
  */
 @Injectable({ providedIn: 'root' })
-
 export class DataTreeContainer {
     dataChange = new BehaviorSubject<Container[]>([]);
     root: Container;
 
-    constructor(public engineService: EngineService,
+    constructor(public engineServ: EngineService,
         public store: Store<AppState>,) {
         this.root = new Container();
         this.root.name = "VALHOLLRT_ROOT_CONTAINER"
 
         store.select('engine').subscribe(en => {
-            if (en.prevUUIDCsSelected.length > 0) this.engineService.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
-            if (en.UUIDCsSelected.length > 0) this.engineService.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
-            this.updateNodeTree();
+            if (en.prevUUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
+            if (en.UUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
+            this.updateTreeNode();
         });
     }
 
-    updateNodeTree() { this.dataChange.next(this.root.children); }
+    updateTreeNode() { this.dataChange.next(this.root.children); }
 
     inserNewtItem(container: Container) {
         container.parent = this.root;
         this.root.children.push(container);
-        this.updateNodeTree();
+        this.updateTreeNode();
     }
-
-    update(node: Container, name: string) { }
 
     moveContainer(from: Container, to: Container) {
         if (from.parent === to) return null;
@@ -46,7 +43,7 @@ export class DataTreeContainer {
 
         from.setParent(to);
 
-        this.updateNodeTree();
+        this.updateTreeNode();
         return to;
     }
 
@@ -59,7 +56,7 @@ export class DataTreeContainer {
 
         from.setParent(to.parent);
 
-        this.updateNodeTree();
+        this.updateTreeNode();
         return to;
     }
 
@@ -72,7 +69,7 @@ export class DataTreeContainer {
 
         from.setParent(to.parent);
 
-        this.updateNodeTree();
+        this.updateTreeNode();
         return to;
     }
 
@@ -92,9 +89,11 @@ export class DataTreeContainer {
 
     deleteContainer(node: Container) {
         this.deleteNode(node);
-        if (node.type instanceof Mesh) node.deleteMesh(this.engineService.getScene());
-        else node.deleteLight(this.engineService.getScene());
+        if (node.type instanceof Mesh) node.deleteMesh(this.engineServ.getScene());
+        else if (node.type instanceof Light) node.deleteLight(this.engineServ.getScene());
+        else this.engineServ.UUIDToCamera.delete(node.UUID);
         node = null;
-        this.updateNodeTree();
+        this.engineServ.UUIDToContainer.delete(node.UUID);
+        this.updateTreeNode();
     }
 }

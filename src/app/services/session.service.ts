@@ -1,14 +1,13 @@
-import { LogService } from './log.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import firebase from "firebase/app"
 import { AngularFireAuth } from '@angular/fire/auth';
-import { User } from '../models/User';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducer';
-import { login, signUp } from './session.action';
-import { FormBuilder } from '@angular/forms';
+import firebase from "firebase/app";
+import { Observable } from 'rxjs';
+import { User } from '../models/User.model';
+import { login, signUp } from '../store/actions/session.actions';
+import { AppState } from '../store/app.reducer';
+import { LogService } from './log.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class SessionService {
 
   constructor(
     private store: Store<AppState>,
-    private logService: LogService,
+    private logServ: LogService,
     public afAuth: AngularFireAuth,
     private firestore: AngularFirestore) {
     this.user = this.afAuth.authState;
@@ -27,7 +26,7 @@ export class SessionService {
 
   initAuthListener(): void {
     this.user.subscribe(fUser => {
-      this.logService.log("initAuthListener", fUser?.uid, fUser?.email);
+      this.logServ.log("initAuthListener", fUser?.uid, fUser?.email);
       const user = fUser == undefined ? undefined : new User(fUser.uid, fUser.displayName, fUser.email);
       this.store.dispatch(login({ user: user }));
     })

@@ -1,17 +1,10 @@
-import { SceneSettings } from './../../models/SceneSettings';
-import { openConsole, openLogin, openSceneSettings } from './../ui.action';
-import { SessionService } from './../../services/session.service';
-import { LibraryService } from './../../services/library.service';
 import { Component, OnInit } from '@angular/core';
-import { ToolMenu } from 'src/app/models/ToolMenu';
-import { AppService, EngineService } from 'src/app/services/index.service';
-import { LogService } from 'src/app/services/log.service';
-import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
-import { User } from 'src/app/models/User';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
-import { openAboutOdin } from '../ui.action';
+import { AppService, EngineService, LogService, SessionService } from 'src/app/services/index.service';
+import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
+import { PopupDialogAction, ToolMenu, User } from '../../models';
+import { openAboutOdin, openConsole, openLogin, openSceneSettings } from '../../store/actions';
+import { AppState } from '../../store/app.reducer';
 
 @Component({
   selector: 'tool-menu',
@@ -24,10 +17,9 @@ export class ToolMenuComponent implements OnInit {
 
   constructor(
     public store: Store<AppState>,
-    public es: EngineService,
-    public library: LibraryService,
+    public engineServ: EngineService,
     public appService: AppService,
-    public logService: LogService,
+    public logServ: LogService,
     public sessionService: SessionService
   ) { this.setMenu(); }
 
@@ -42,39 +34,39 @@ export class ToolMenuComponent implements OnInit {
       case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
       case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
       case GEOM.CAPSULE: case GEOM.GROUP:
-        this.es.createMesh(param);
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createMesh(param);
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
-        this.es.createLight(param);
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createLight(param);
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case GEOM.TEXT:
-        this.library.createNewGeometryText();
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createNewGeometryText();
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case CAMERA.ARCROTATECAMERA:
-        this.es.createCameraContainer(param)
-        this.logService.log(param, "created", "ToolMenuComponent")
+        this.engineServ.createCameraContainer(param)
+        this.logServ.log(param, "created", "ToolMenuComponent")
         break;
       case 'CONSOLE':
-        this.logService.log("Console", "ToolMenuComponent", "open");
+        this.logServ.log("Console", "ToolMenuComponent", "open");
         this.store.dispatch(openConsole({ console: new PopupDialogAction(true) }))
         break;
       case 'ABOUTODIN':
-        this.logService.log("About Odin", "ToolMenuComponent", "open");
+        this.logServ.log("About Odin", "ToolMenuComponent", "open");
         this.store.dispatch(openAboutOdin({ aboutOdin: new PopupDialogAction(true) }))
         break;
       case 'SETTINGS':
-        this.logService.log("Settings", "ToolMenuComponent", "open");
+        this.logServ.log("Settings", "ToolMenuComponent", "open");
         this.store.dispatch(openSceneSettings({ sceneSettings: new PopupDialogAction(true) }))
         break;
       case 'LOGIN':
-        this.logService.log("Login", "ToolMenuComponent", "open");
+        this.logServ.log("Login", "ToolMenuComponent", "open");
         this.store.dispatch(openLogin({ login: new PopupDialogAction(true) }))
         break;
       case 'USER_DETAILS':
-        this.logService.log("User details", "ToolMenuComponent", "open");
+        this.logServ.log("User details", "ToolMenuComponent", "open");
         break;
       case 'SIGNOUT':
         this.sessionService.signOut();
@@ -119,18 +111,6 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Rotate Camera', param: CAMERA.ARCROTATECAMERA },
         ]
       },
-      /*
-      {
-        displayName: 'Functions', icon: 'icon-light', child: [
-          { displayName: 'TextBox', param: "TEXTBOX" },
-          { displayName: 'FollowUp', param: "FOLLOWUP" },
-          { displayName: 'ScreenSize', param: "SCREENSIZE" },
-          { displayName: 'Clone', param: "CLONE" },
-          { displayName: 'Arrange', param: "ARRANGE" },
-          { displayName: 'Mask', param: "MASK" }
-        ]
-      },
-      */
       { displayName: "Settings", icon: 'icon-settings', param: "SETTINGS" },
       { displayName: "Console", icon: 'icon-console', param: "CONSOLE" },
       { displayName: "About Odin", icon: 'icon-info', param: "ABOUTODIN" }
@@ -146,7 +126,5 @@ export class ToolMenuComponent implements OnInit {
         { displayName: "Sign out", param: "SIGNOUT" }
       ];
     };
-
   }
-
 }

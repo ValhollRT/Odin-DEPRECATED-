@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Color3, Mesh, StandardMaterial } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
-import { AppState } from 'src/app/app.reducer';
-import { EngineService } from 'src/app/engine/engine.service';
-import { LogService } from 'src/app/services/log.service';
+import { AppState } from '../../store/app.reducer';
+import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
   selector: 'material-panel',
@@ -16,19 +15,18 @@ export class MaterialPanelComponent implements OnInit {
   public currentMesh: Mesh;
   public isGroup: boolean = false;
 
-  constructor(private engineService: EngineService, store: Store<AppState>, private logService: LogService) {
+  constructor(private engineServ: EngineService, store: Store<AppState>, private logServ: LogService) {
 
     store.pipe(select('engine'),
       filter(selection => selection.UUIDCsSelected.length > 0),
-      filter(sel => this.engineService.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
-      map(s => this.engineService.getContainerFromUUID(s.UUIDCsSelected[0]).type))
+      filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
+      map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
       .subscribe((m: Mesh) => {
         this.currentMesh = m;
-        this.isGroup = this.engineService.getContainerFromType(m).panel == null;
+        this.isGroup = this.engineServ.getContainerFromType(m).panel == null;
         if (this.isGroup) return;
-        this.logService.log(m.material.name, "edited material", "MaterialPanelComponent")
+        this.logServ.log(m.material.name, "edited material", "MaterialPanelComponent")
       });
-
   }
 
   ngOnInit(): void { }

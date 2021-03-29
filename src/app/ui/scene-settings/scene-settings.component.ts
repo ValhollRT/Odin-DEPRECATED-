@@ -1,13 +1,10 @@
-import { AppService } from 'src/app/services/index.service';
-import { AppState } from 'src/app/app.reducer';
-import { select, Store } from '@ngrx/store';
-import { BtnFooter } from './../../shared/popup-window/popup-window.component';
-import { SceneSettings } from './../../models/SceneSettings';
-import { LogService } from '../../services/log.service';
 import { Component, OnInit } from '@angular/core';
-import { EngineService } from 'src/app/engine/engine.service';
-import { openSceneSettings } from '../ui.action';
-import { PopupDialogAction } from 'src/app/models/actions/PopupDialogAction';
+import { Store } from '@ngrx/store';
+import { PopupDialogAction, SceneSettings } from '../../models';
+import { openSceneSettings } from '../../store/actions';
+import { AppState } from '../../store/app.reducer';
+import { AppService, EngineService, LogService } from './../../services/index.service';
+import { BtnFooter } from './../../shared/popup-window/popup-window.component';
 
 @Component({
   selector: 'scene-settings',
@@ -23,7 +20,7 @@ export class SceneSettingsComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private appService: AppService,
-    public es: EngineService,
+    public engineServ: EngineService,
     public logService: LogService) {
     this.tempSceneSettings = new SceneSettings();
     // https://stackoverflow.com/questions/39074765/typescript-service-is-undefined-when-calling-a-function-from-common-service
@@ -39,14 +36,11 @@ export class SceneSettingsComponent implements OnInit {
 
   saveSettings(): void {
     this.appService.setSceneSettings(this.tempSceneSettings);
-    this.es.setBackgroundColorScene(this.tempSceneSettings.backgroundColor)
+    this.engineServ.setBackgroundColorScene(this.tempSceneSettings.backgroundColor)
     // TODO call update settings engine
   }
 
   closeDialog() {
     this.store.dispatch(openSceneSettings({ sceneSettings: new PopupDialogAction(false) }))
   }
-
 }
-
-

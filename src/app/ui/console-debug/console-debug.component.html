@@ -3,7 +3,7 @@
     <div class="container">
         <div #scroller (scroll)=onElementScroll($event) class="panel-scroll">
             <div class="panel-scroll-child">
-                <ul *ngFor="let blc of logService.bufferLogConsole" class="inner-text-console">
+                <ul *ngFor="let blc of logServ.bufferLogConsole" class="inner-text-console">
                     <li>{{blc}}</li>
                 </ul>
             </div>
