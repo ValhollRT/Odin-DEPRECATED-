@@ -75,6 +75,7 @@ export class ViewportComponent implements OnInit {
       canvas.removeEventListener("onmouseenter", this.onPointerDown, false);
     }
 
+    canvas.onmouseover = (e) => { canvas.focus(); }
     canvas.onkeydown = (e) => {
       this.lock = true;
       /*FIT VIEW*/
