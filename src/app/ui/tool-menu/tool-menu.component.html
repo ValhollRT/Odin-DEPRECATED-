@@ -1,12 +1,8 @@
 <ul>
-    <li *ngFor="let menu of menus">
-        <div #transformMenuValue class="container">
-            <div class="input-group" [attr.title]="menu.displayName">
-                <div style="display: flex; align-items: center;">
-                    <div (click)=executeCommandMenu(menu.param) style="flex: 0 auto"
-                        [ngClass]="[ menu.icon ,'icon-color', 'icon-m']"></div>
-                </div>
-            </div>
+    <li *ngFor="let menu of menus" style="float: left;">
+        <div class="container" [attr.title]="menu.displayName">
+            <div (click)=executeCommandMenu(menu.param) style="flex: 0 auto"
+                [ngClass]="[ menu.icon ,'icon-color', 'icon-m']"></div>
         </div>
         <ul>
             <li *ngFor="let m of menu.child"><a (click)=executeCommandMenu(m.param)>{{m.displayName}}</a></li>

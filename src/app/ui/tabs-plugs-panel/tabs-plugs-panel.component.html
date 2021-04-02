@@ -1,0 +1,14 @@
+<tabs>
+    <tab [tabTitle]="'Database'" [tabIcon]="'icon-folder'">
+        <explorer-panel></explorer-panel>
+    </tab>
+    <tab [tabTitle]="'Geometry'" [tabIcon]="'icon-geometry'">
+        <plugs-panel [plugs]="this.plugs[0]"></plugs-panel>
+    </tab>
+    <tab [tabTitle]="'Light'" [tabIcon]="'icon-light'">
+        <plugs-panel [plugs]="this.plugs[1]"></plugs-panel>
+    </tab>
+    <tab [tabTitle]="'Camera'" [tabIcon]="'icon-camera'">
+        <plugs-panel [plugs]="this.plugs[2]"></plugs-panel>
+    </tab>
+</tabs>
