@@ -1,3 +1,6 @@
+:host {
+  flex: 4;
+}
 .container {
   position: absolute;
   top: 0px;
@@ -28,7 +31,6 @@ label {
 }
 
 .input-group {
-  height: 99%;
   padding: 5px;
   margin: 5px;
   border: var(--main-menu-border);
@@ -44,13 +46,12 @@ label {
 }
 
 mat-tree {
+  flex: 1;
   font-size: 12px;
-  min-height: 93%;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: var(--main-menu-background-color);
   color: var(--console-debug-color);
-  height: 93%;
 }
 
 mat-tree-node {
@@ -182,4 +183,13 @@ button {
 
 .tree-node__tope-menu__group-vertical-btn {
   width: min-content;
+}
+
+.odin-version {
+  position: relative;
+  color: var(--console-debug-color);
+  text-align: left;
+  float: right;
+  font-size: 13px;
+  line-height: 22px;
 }

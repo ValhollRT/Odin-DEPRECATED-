@@ -49,14 +49,12 @@ a:link {
 
 a:hover {
   color: var(--console-debug-color);
-  font-family: arial;
   text-decoration: none;
   cursor: pointer;
 }
 
 a:visited {
   color: var(--console-debug-color);
-  font-family: arial;
   text-decoration: none;
 }
 
@@ -193,6 +191,22 @@ body {
   mask-image: url("assets/icons/camera.svg");
 }
 
+.icon-folder {
+  mask-image: url("assets/icons/folder.svg");
+}
+
+.icon-folder-add {
+  mask-image: url("assets/icons/add.svg");
+}
+
+.icon-folder-delete {
+  mask-image: url("assets/icons/minus.svg");
+}
+
+.icon-refresh {
+  mask-image: url("assets/icons/refresh.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);
@@ -216,7 +230,7 @@ body {
 .icon-xxs {
   width: 13px;
   height: 13px;
-  margin: 2px 3px;
+  margin: 4px;
 }
 
 .icon-xs {
@@ -415,4 +429,12 @@ button:active {
 .property-panel-group input[type="password"] {
   width: 40px;
   margin-left: 12px;
+}
+
+/** Mat tree */
+
+.input-group {
+  padding: 5px;
+  margin: 5px;
+  border: var(--main-menu-border);
 }

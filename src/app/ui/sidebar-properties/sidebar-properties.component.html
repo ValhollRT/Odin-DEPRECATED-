@@ -1,20 +1,18 @@
 <div #transformMenuValue class="container">
-  <div class="input-group">
-    <div class="title-section-menu"></div>
-    <content-panel #transformation [title]="'Transformation'" [icon]="'icon-axis'" [expand]=this.expandTransformation>
-      <transform-menu></transform-menu>
-    </content-panel>
-    <content-panel #geometry [title]="'Geometry'" [icon]="'icon-geometry'" [expand]=this.expandGeometry>
-      <builder-panel></builder-panel>
-    </content-panel>
-    <content-panel #material [title]="'Material'" [icon]="'icon-material'" [expand]=this.expandMaterial>
-      <material-panel></material-panel>
-    </content-panel>
-    <content-panel #light [title]="'Light'" [icon]="'icon-light'" [expand]=this.expandLight>
-      <light-panel></light-panel>
-    </content-panel>
-    <content-panel #light [title]="'Camera'" [icon]="'icon-camera'" [expand]=this.expandCamera>
-      <camera-panel></camera-panel>
-    </content-panel>
-  </div>
+  <div class="title-section-menu"></div>
+  <content-panel #transformation [title]="'Transformation'" [icon]="'icon-axis'" [expand]=this.expandTransformation>
+    <transform-menu></transform-menu>
+  </content-panel>
+  <content-panel #geometry [title]="'Geometry'" [icon]="'icon-geometry'" [expand]=this.expandGeometry>
+    <builder-panel></builder-panel>
+  </content-panel>
+  <content-panel #material [title]="'Material'" [icon]="'icon-material'" [expand]=this.expandMaterial>
+    <material-panel></material-panel>
+  </content-panel>
+  <content-panel #light [title]="'Light'" [icon]="'icon-light'" [expand]=this.expandLight>
+    <light-panel></light-panel>
+  </content-panel>
+  <content-panel #light [title]="'Camera'" [icon]="'icon-camera'" [expand]=this.expandCamera>
+    <camera-panel></camera-panel>
+  </content-panel>
 </div>

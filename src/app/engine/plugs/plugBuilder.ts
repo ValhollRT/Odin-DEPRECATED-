@@ -131,7 +131,6 @@ export class PlugBuilder {
       c.isText = true;
       c.text = text;
       c.panel = null;
-      console.log(c)
 
       engineServ.typeToContainer.set(c.type, c);
       engineServ.UUIDToContainer.set(c.UUID, c);

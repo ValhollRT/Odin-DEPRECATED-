@@ -17,7 +17,6 @@ export class FontType {
     constructor() { }
 
     load(fontURL: string, scene: Scene, callback: (font: FontType) => void): void {
-        console.log("load");
         opentype.load(fontURL, (err, font) => {
             this.fontURL = fontURL;
             if (err) { console.error(err); return; }
@@ -31,7 +30,6 @@ export class FontType {
             this.font = font;
             this.scene = scene;
             this.glyphsParent = new Mesh(fontName, this.scene);
-            console.log("load1");
             callback(this);
         });
     }

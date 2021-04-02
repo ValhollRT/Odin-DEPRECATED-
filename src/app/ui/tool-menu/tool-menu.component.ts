@@ -83,34 +83,6 @@ export class ToolMenuComponent implements OnInit {
           { displayName: 'Login', param: "LOGIN" },
         ]
       },
-      {
-        displayName: 'Geometry', icon: 'icon-geometry', child: [
-          { displayName: 'Group', param: "GROUP" },
-          { displayName: 'Box', param: GEOM.BOX },
-          { displayName: 'Cylinder', param: GEOM.CYLINDER },
-          { displayName: 'Disc', param: GEOM.DISC },
-          { displayName: 'Icosphere', param: GEOM.ICOSPHERE },
-          { displayName: 'Plane', param: GEOM.PLANE },
-          { displayName: 'Polyhedron', param: GEOM.POLYHEDRON },
-          { displayName: 'Torus', param: GEOM.TORUS },
-          { displayName: 'Capsule', param: GEOM.CAPSULE },
-          { displayName: 'Sphere', param: GEOM.SPHERE },
-          { displayName: 'Text', param: GEOM.TEXT },
-        ]
-      },
-      {
-        displayName: 'Light', icon: 'icon-light', child: [
-          { displayName: 'Directional', param: LIGHT.DIRECTIONAL },
-          { displayName: 'Spot', param: LIGHT.SPOT },
-          { displayName: 'Point', param: LIGHT.POINT },
-          { displayName: 'Hemispheric', param: LIGHT.HEMISPHERIC }
-        ]
-      },
-      {
-        displayName: 'Camera', icon: 'icon-camera', child: [
-          { displayName: 'Rotate Camera', param: CAMERA.ARCROTATECAMERA },
-        ]
-      },
       { displayName: "Settings", icon: 'icon-settings', param: "SETTINGS" },
       { displayName: "Console", icon: 'icon-console', param: "CONSOLE" },
       { displayName: "About Odin", icon: 'icon-info', param: "ABOUTODIN" }

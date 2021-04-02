@@ -17,17 +17,22 @@ import { RotationPipe } from './pipes/rotation.pipe';
 import { ServiceModule } from './services/service.module';
 import { AlertComponent } from './shared/alert/alert.component';
 import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
+import { TabComponent } from './shared/tab/tab.component';
+import { TabsComponent } from './shared/tabs/tabs.component';
 import { appReducers } from './store/app.reducer';
 import { AboutOdinComponent } from './ui/about-odin/about-odin.component';
 import { BuilderPanelComponent } from './ui/builder-panel/builder-panel.component';
 import { CameraPanelComponent } from './ui/camera-panel/camera-panel.component';
 import { ConsoleDebugComponent } from './ui/console-debug/console-debug.component';
 import { ContentPanelComponent } from './ui/content-panel/content-panel.component';
+import { ExplorerPanelComponent, folderDatabase } from './ui/explorer-panel/explorer-panel.component';
 import { LightPanelComponent } from './ui/light-panel/light-panel.component';
 import { LoginComponent } from './ui/login/login.component';
 import { MaterialPanelComponent } from './ui/material-panel/material-panel.component';
+import { PlugsPanelComponent } from './ui/plugs-panel/plugs-panel.component';
 import { SceneSettingsComponent } from './ui/scene-settings/scene-settings.component';
 import { SidebarPropertiesComponent } from './ui/sidebar-properties/sidebar-properties.component';
+import { TabsPlugsPanelComponent } from './ui/tabs-plugs-panel/tabs-plugs-panel.component';
 import { TextPanelComponent } from './ui/text-panel/text-panel.component';
 import { ToolMenuComponent } from './ui/tool-menu/tool-menu.component';
 import { TransformMenuComponent } from './ui/transform-menu/transform-menu.component';
@@ -56,7 +61,12 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     SceneSettingsComponent,
     LoginComponent,
     AlertComponent,
-    CameraPanelComponent
+    CameraPanelComponent,
+    TabComponent,
+    TabsComponent,
+    ExplorerPanelComponent,
+    TabsPlugsPanelComponent,
+    PlugsPanelComponent
   ],
   imports: [
     FormsModule,
@@ -76,7 +86,7 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     AngularFireAnalyticsModule,
     AngularFirestoreModule
   ],
-  providers: [],
+  providers: [folderDatabase],
   bootstrap: [AppComponent]
 })
 
