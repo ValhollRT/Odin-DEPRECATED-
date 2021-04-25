@@ -1,0 +1,4 @@
+<div class="plug-box" [title]=plug.title [style.background-color]="isActiveCamera ? 'limegreen': 'dimgray'"
+    (click)="openPanel()">
+    <div [ngClass]="[ plug.getIcon(),'icon-plug-color', 'plug-icon']"></div>
+</div>

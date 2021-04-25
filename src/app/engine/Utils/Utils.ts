@@ -30,7 +30,7 @@ export class Utils {
     public static degreeToRadians(degrees: number): number {
         return degrees * (Math.PI / 180);
     }
-    public static generatorUUID(): string {
+    public static generatorUuid(): string {
         const isString = `${Utils.S4()}${Utils.S4()}-${Utils.S4()}-${Utils.S4()}-${Utils.S4()}-${Utils.S4()}${Utils.S4()}${Utils.S4()}`;
         return isString;
     }

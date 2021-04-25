@@ -1,22 +1,18 @@
-<div *ngIf="this.currentLight!=null || this.currentLight!=undefined">
-    <div class="property-panel-group">
-        <span class="property-panel-text">Name</span>
-        <input style="width: 100%" type="text" [(ngModel)]="this.currentLight.name">
-    </div>
+<div *ngIf="this.selected!=null || this.selected!=undefined">
     <div class="property-panel-group">
         <span class="property-panel-text">Intensity</span>
-        <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.currentLight).intensity">
-        <input type="text" min="0" max="1" value={{this.currentLight.intensity}}
-            [(ngModel)]="$any(this.currentLight).intensity">
+        <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.selected).intensity">
+        <input type="text" min="0" max="1" value={{this.selected.intensity}}
+            [(ngModel)]="$any(this.selected).intensity">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Diffuse</span>
-        <input type="color" [ngModel]="this.currentLight | rgbToHex:'DIFFUSECOLOR'"
+        <input type="color" [ngModel]="this.selected.diffuse | rgbToHex"
             (ngModelChange)="hexToRgb($event, 'DIFFUSECOLOR')" value="#aaaaaa">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Specular</span>
-        <input type="color" [ngModel]="this.currentLight | rgbToHex:'SPECULARCOLOR'"
+        <input type="color" [ngModel]="this.selected.specular | rgbToHex"
             (ngModelChange)="hexToRgb($event, 'SPECULARCOLOR')" value="#aaaaaa">
     </div>
 </div>

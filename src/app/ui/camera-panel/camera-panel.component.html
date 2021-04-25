@@ -1,6 +1,6 @@
-<div>
+<div *ngIf="this.selected != undefined">
     <div class="property-panel-group">
         <span class="property-panel-text">Active camera</span>
-        <input type="button" (click)=enableCamera($event.target.checked) value="Active">
+        <input type="button" (click)=enableCamera() value="Active">
     </div>
 </div>

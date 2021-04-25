@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { TargetCamera } from 'babylonjs';
-import { ArcRotateCamera } from 'babylonjs/Cameras/arcRotateCamera';
 import { filter, map } from 'rxjs/operators';
+import { PlugCamera } from 'src/app/engine/plugs/plug-camera';
+import { AppService } from 'src/app/services/index.service';
 import { AppState } from '../../store/app.reducer';
 import { EngineService, LogService } from './../../services/index.service';
 
@@ -13,25 +13,26 @@ import { EngineService, LogService } from './../../services/index.service';
 })
 export class CameraPanelComponent implements OnInit {
 
-  public selected: ArcRotateCamera;
+  public selected: PlugCamera;
   constructor(public engineServ: EngineService,
+    private appServ: AppService,
     private store: Store<AppState>,
     public logServ: LogService) {
 
     this.store
       .pipe(select('engine'),
-        filter(selection => selection.UUIDCsSelected.length > 0),
-        filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof TargetCamera),
-        map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
-      .subscribe((cam: ArcRotateCamera) => {
-        this.selected = cam;
-        this.logServ.log(cam.name, "camera selected", "CameraPanelComponent")
+        filter(selection => selection.uuidCsSelected.length > 0),
+        map(s => this.appServ.getContainerFromUuid(s.uuidCsSelected[0]).getPlugCamera()))
+      .subscribe((camera: PlugCamera) => {
+        if (camera == undefined) { this.selected = undefined; return; }
+        this.selected = camera;
+        this.logServ.log(camera.name, "camera selected", "CameraPanelComponent")
       });
   }
 
   ngOnInit(): void { }
 
-  enableCamera(enable: boolean) {
+  enableCamera() {
     this.engineServ.setCamera(this.selected);
   }
 }

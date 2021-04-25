@@ -1,29 +1,46 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Light, Mesh } from 'babylonjs';
 import { BehaviorSubject } from 'rxjs';
-import { Container } from 'src/app/engine/common/Container';
+import { AppService } from 'src/app/services/index.service';
+import { clearAllSelection } from 'src/app/store/actions';
 import { EngineService } from '../../services/index.service';
+import { Container } from '../../shared/container/container';
 import { AppState } from '../../store/app.reducer';
+import { PlugTransform } from '../plugs/plug-transform';
 
-/**
- * Checklist database, it can build a tree structured Json object.
- * Each node in Json object represents a to-do item or a category.
- * If a node is a category, it has children items and new items can be added under the category.
- */
 @Injectable({ providedIn: 'root' })
 export class DataTreeContainer {
     dataChange = new BehaviorSubject<Container[]>([]);
     root: Container;
 
     constructor(public engineServ: EngineService,
-        public store: Store<AppState>,) {
+        private appServ: AppService,
+        public store: Store<AppState>,) { }
+
+    initDataTreeNode() {
         this.root = new Container();
+        this.root.setPlugTransform(new PlugTransform());
         this.root.name = "VALHOLLRT_ROOT_CONTAINER"
 
-        store.select('engine').subscribe(en => {
-            if (en.prevUUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.prevUUIDCsSelected[0]).selected = false;
-            if (en.UUIDCsSelected.length > 0) this.engineServ.UUIDToContainer.get(en.UUIDCsSelected[0]).selected = true;
+        this.store.select('engine').subscribe(en => {
+            if (en.prevUuidCsSelected.length > 0) {
+                en.prevUuidCsSelected.forEach(prevUuid => {
+                    let c = this.appServ.uuidToContainer.get(prevUuid)
+                    c.selected = false;
+                });
+            }
+
+            if (en.uuidCsSelected.length > 0) {
+                en.uuidCsSelected.forEach(uuid => {
+                    let c = this.appServ.uuidToContainer.get(uuid)
+                    c.selected = true;
+                });
+            }
+
+            if (en.uuidCsSelected.length == 0 && en.prevUuidCsSelected.length == 0) {
+                let c = this.appServ.uuidToContainer.forEach(c => c.selected = false);
+            }
+
             this.updateTreeNode();
         });
     }
@@ -73,10 +90,9 @@ export class DataTreeContainer {
         return to;
     }
 
-    deleteNode(nodeToDelete: Container) {
-        let p: Container[];
-        if (nodeToDelete.parent == null) this.root.children = this.root.children.filter(o => o.UUID !== nodeToDelete.UUID);
-        else nodeToDelete.parent.children = nodeToDelete.parent.children.filter(o => o.UUID !== nodeToDelete.UUID);
+    deleteNode(c: Container) {
+        if (c.parent == (null || undefined)) this.root.children = this.root.children.filter(o => o.uuid !== c.uuid);
+        else c.parent.children = c.parent.children.filter(o => o.uuid !== c.uuid);
     }
 
     deleteNodeAndChildren(node: Container) {
@@ -87,13 +103,14 @@ export class DataTreeContainer {
         this.deleteContainer(node);
     }
 
-    deleteContainer(node: Container) {
-        this.deleteNode(node);
-        if (node.type instanceof Mesh) node.deleteMesh(this.engineServ.getScene());
-        else if (node.type instanceof Light) node.deleteLight(this.engineServ.getScene());
-        else this.engineServ.UUIDToCamera.delete(node.UUID);
-        node = null;
-        this.engineServ.UUIDToContainer.delete(node.UUID);
+    deleteContainer(c: Container) {
+        // TODO Move to app service
+        c.plugs.forEach(p => p.dispose());
+        this.appServ.uuidToContainer.delete(c.uuid);
+        this.deleteNode(c);
+        this.store.dispatch(clearAllSelection());
+
+        c = null;
         this.updateTreeNode();
     }
 }

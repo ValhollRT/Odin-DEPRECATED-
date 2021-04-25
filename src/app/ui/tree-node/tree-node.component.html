@@ -19,6 +19,8 @@
           </div>
           <input (keyup.enter)="searchElement($event.target.value)" class="searchElement" type="text"
             placeholder="search...">
+            <div (click)="createNewContainer($event)" class="icon-btn-color icon-container icon-btn-xs float-left"></div>
+            <div (click)="addNewDefaultMaterial($event)" class="icon-btn-color icon-material icon-btn-xs float-left"></div>
           <div (click)="clickDeleteNode($event)" class="icon-btn-color icon-trash icon-btn-xs float-left"></div>
         </div>
         <div class="separator"></div>
@@ -26,30 +28,13 @@
       <mat-tree class="tree-node" [dataSource]="dataSource" [treeControl]="treeControl">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
           <button mat-icon-button disabled></button>
-          <div
+          <container
             [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                                                 'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
                                                 'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
             draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);"
             (dragover)="handleDragOver($event, node);" (drop)="handleDrop($event, node);"
-            (dragend)="handleDragEnd($event);">
-
-            <div (click)="clickNodeContainer($event, node)" class="box-node"
-              [ngClass]="{'container-selected': node.selected == true}">
-              <div [ngClass]="node.hidden ? 'icon-hide' : 'icon-unhide'" (click)="clickHideNode($event, node)"
-                class="icon-color icon-xs float-left"></div>
-              <div [ngClass]="node.locked ? 'icon-lock' : 'icon-unlock'" (click)="clickLockNode($event, node)"
-                class="icon-color icon-xs float-left"></div>
-              <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
-                [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
-              <div class="icon-color icon-axis icon-xs float-left" (click)="openSidebarPanel(0)"></div>
-              <div *ngIf="this.flatNodeMap.get(node).getIconType() != ''"
-                [ngClass]="[ this.flatNodeMap.get(node).getIconType() , 'icon-xs', (node.activeCamera === true)?'icon-color-active':'icon-color']"
-                (click)="openSidebarPanel(this.flatNodeMap.get(node).getPanel())">
-              </div>
-            </div>
-          </div>
-
+            (dragend)="handleDragEnd($event);" [data]=node></container>
         </mat-tree-node>
 
         <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
@@ -58,28 +43,13 @@
               {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
             </mat-icon>
           </button>
-          <div
+          <container
             [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
-                                                'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-                                                'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
-            draggable="true" (dragstart)="handleDragStart($event, node);" (dragover)="handleDragOver($event, node);"
-            (drop)="handleDrop($event, node);" (dragend)="handleDragEnd($event);">
-
-            <div (click)="clickNodeContainer($event, node)" class="box-node"
-              [ngClass]="{'container-selected': node.selected == true}">
-              <div [ngClass]="node.hidden ? 'icon-hide' : 'icon-unhide'" (click)="clickHideNode($event, node)"
-                class="icon-color icon-xs float-left"></div>
-              <div [ngClass]="node.locked ? 'icon-lock' : 'icon-unlock'" (click)="clickLockNode($event, node)"
-                class="icon-color icon-xs float-left"></div>
-              <input type="text" [ngModel]="node.name" (ngModelChange)="setContainerName($event, node)"
-                [readonly]="this.isReadOnly" (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
-              <div class="icon-color icon-axis icon-xs float-left" (click)="openSidebarPanel(0)"></div>
-              <div *ngIf="this.flatNodeMap.get(node).getIconType() != ''"
-                [ngClass]="[ this.flatNodeMap.get(node).getIconType() , 'icon-xs', (node.activeCamera === true)?'icon-color-active':'icon-color']"
-                (click)="openSidebarPanel(this.flatNodeMap.get(node).getPanel())">
-              </div>
-            </div>
-          </div>
+                                              'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+            draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);"
+            (dragover)="handleDragOver($event, node);" (drop)="handleDrop($event, node);"
+            (dragend)="handleDragEnd($event);" [data]=node></container>
         </mat-tree-node>
       </mat-tree>
       <span #emptyItem></span>

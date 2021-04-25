@@ -1,5 +1,5 @@
 <div style="display: flex; flex-wrap: wrap;">
-    <button *ngFor="let p of this.plugs.child" (click)=executeCommandMenu(p.param) style="margin: 5px; width: auto;">
+    <button *ngFor="let p of this.plugs.child" (click)=executeFn(p) style="margin: 5px; width: auto;">
         {{p.displayName}}
     </button>
 </div>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppService, EngineService, LogService, SessionService } from 'src/app/services/index.service';
-import { CAMERA, GEOM, LIGHT } from '../../configuration/AppConstants';
 import { PopupDialogAction, ToolMenu, User } from '../../models';
 import { openAboutOdin, openConsole, openLogin, openSceneSettings } from '../../store/actions';
 import { AppState } from '../../store/app.reducer';
@@ -31,24 +30,6 @@ export class ToolMenuComponent implements OnInit {
 
   executeCommandMenu(param: string): void {
     switch (param) {
-      case GEOM.BOX: case GEOM.CYLINDER: case GEOM.DISC: case GEOM.ICOSPHERE: case GEOM.PLANE:
-      case GEOM.POLYHEDRON: case GEOM.TORUS: case GEOM.TUBE: case GEOM.RIBBON: case GEOM.SPHERE:
-      case GEOM.CAPSULE: case GEOM.GROUP:
-        this.engineServ.createMesh(param);
-        this.logServ.log(param, "created", "ToolMenuComponent")
-        break;
-      case LIGHT.DIRECTIONAL: case LIGHT.SPOT: case LIGHT.POINT: case LIGHT.HEMISPHERIC:
-        this.engineServ.createLight(param);
-        this.logServ.log(param, "created", "ToolMenuComponent")
-        break;
-      case GEOM.TEXT:
-        this.engineServ.createNewGeometryText();
-        this.logServ.log(param, "created", "ToolMenuComponent")
-        break;
-      case CAMERA.ARCROTATECAMERA:
-        this.engineServ.createCameraContainer(param)
-        this.logServ.log(param, "created", "ToolMenuComponent")
-        break;
       case 'CONSOLE':
         this.logServ.log("Console", "ToolMenuComponent", "open");
         this.store.dispatch(openConsole({ console: new PopupDialogAction(true) }))

@@ -5,13 +5,15 @@ import {
   ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BoundingBox, BoundingInfo, Color3, GizmoManager, Light, LightGizmo, Mesh, PickingInfo, ShadowLight, Vector3 } from 'babylonjs';
+import { BoundingBox, BoundingInfo, Color3, GizmoManager, LightGizmo, Mesh, PickingInfo, Vector3 } from 'babylonjs';
 import { take } from 'rxjs/operators';
-import { Container } from 'src/app/engine/common/Container';
+import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
+import { PlugText } from 'src/app/engine/plugs/plug-text';
 import { Utils } from 'src/app/engine/Utils/Utils';
-import { EngineService } from 'src/app/services/index.service';
+import { AppService, EngineService } from 'src/app/services/index.service';
+import { Container } from 'src/app/shared/container/container';
 import { clearSelection, oneSelection } from 'src/app/store/actions';
-import { GizmoHelper } from './../../engine/helpers/GizmoHelper';
+import { GizmoHelper } from '../../engine/helpers/gizmo-helper';
 import { AppState } from './../../store/app.reducer';
 
 @Component({
@@ -33,9 +35,9 @@ export class ViewportComponent implements OnInit {
   public constructor(
     public ngZone: NgZone,
     private engineServ: EngineService,
+    private appServ: AppService,
     public store: Store<AppState>) {
   }
-
 
   public ngOnInit(): void {
     this.engineServ.createScene(this.rendererCanvas);
@@ -48,7 +50,6 @@ export class ViewportComponent implements OnInit {
     this.ngZone.runOutsideAngular(() => {
       this.engineServ.animate(this.gizmoHelper.getScene());
     });
-
   }
 
   initCanvasRender() {
@@ -77,12 +78,11 @@ export class ViewportComponent implements OnInit {
 
     canvas.onmouseover = (e) => { canvas.focus(); }
     canvas.onkeydown = (e) => {
-      this.lock = true;
-      /*FIT VIEW*/
+      this.lockGizmoTransform = true;
       if (e.key == 'f') {
-        let obj = this.engineServ.getFirstSelected().type;
-        if (!this.engineServ.nothingSelected() && obj instanceof Mesh) {
-          let pMesh = obj.getAbsolutePosition();
+        let container = this.appServ.getFirstSelected();
+        if (!this.appServ.noSelected()) {
+          let pMesh = container.getPlugTransform().getAbsolutePosition();
           this.engineServ.getCamera().setTarget(new Vector3(pMesh.x, pMesh.y, pMesh.z));
         }
       }
@@ -124,29 +124,31 @@ export class ViewportComponent implements OnInit {
 
     canvas.onkeyup = (e) => {
       if (e.key == 'Alt') {
-        this.lock = false;
+        this.lockGizmoTransform = false;
         this.engineServ.getCamera().detachControl(this.rendererCanvas.nativeElement);
       }
     }
     this.initializeGizmo();
 
     this.store.select('engine').subscribe(en => {
-      if (en.prevUUIDCsSelected.length > 0) {
-        this.clearHighLightSelected(<Mesh>this.engineServ.UUIDToContainer.get(en.prevUUIDCsSelected[0]).type);
+      if (en.prevUuidCsSelected.length > 0) {
+        this.clearHighLightSelected(this.appServ.uuidToContainer.get(en.prevUuidCsSelected[0]));
       }
-      if (en.UUIDCsSelected.length > 0) {
-        let container = this.engineServ.UUIDToContainer.get(en.UUIDCsSelected[0]);
+
+      if (en.uuidCsSelected.length > 0) {
+        let container = this.appServ.uuidToContainer.get(en.uuidCsSelected[0]);
         if (container.locked) return
+
         this.setSelected(container);
       } else {
         this.gizmoManager.positionGizmoEnabled = false;
         this.gizmoManager.rotationGizmoEnabled = false;
         this.gizmoManager.scaleGizmoEnabled = false;
-        this.gizmoManager.attachToMesh(null);
+        this.gizmoManager.attachToNode(null);
+        this.lightGizmo.light = null;
       }
     });
   }
-
 
   initializeGizmo() {
     this.gizmoManager.positionGizmoEnabled = true;
@@ -157,27 +159,14 @@ export class ViewportComponent implements OnInit {
     this.gizmoManager.rotationGizmoEnabled = false;
     this.gizmoManager.scaleGizmoEnabled = false;
     this.gizmoManager.boundingBoxGizmoEnabled = false;
-    this.onDragObservableGizmo();
     this.onDragStartObservableGizmo();
     this.onDragEndObservableGizmo();
   }
 
-  public lock: boolean = false;
-  updateTransformCurrent() { }
-  startTransformCurrent() { this.lock = true; }
-  endTransformCurrent() { this.lock = false; }
+  public lockGizmoTransform: boolean = false;
+  startTransformCurrent() { this.lockGizmoTransform = true; }
+  endTransformCurrent() { this.lockGizmoTransform = false; }
 
-  public onDragObservableGizmo() {
-    this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.positionGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.positionGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.rotationGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.rotationGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.rotationGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.scaleGizmo.xGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.scaleGizmo.yGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-    this.gizmoManager.gizmos.scaleGizmo.zGizmo.dragBehavior.onDragObservable.add(() => { this.updateTransformCurrent(); });
-  }
 
   public onDragStartObservableGizmo() {
     this.gizmoManager.gizmos.positionGizmo.xGizmo.dragBehavior.onDragStartObservable.add(() => { this.startTransformCurrent(); });
@@ -213,19 +202,31 @@ export class ViewportComponent implements OnInit {
   }
 
   public onPointerDown = (ev) => {
-    if (this.lock) return;
+    if (this.lockGizmoTransform) return;
     if (ev.button !== 0) return;
 
     // check if we are under a mesh
     this.pickInfo = this.engineServ.getScene().pick(this.engineServ.getScene().pointerX, this.engineServ.getScene().pointerY);
     if (this.pickInfo.hit) {
-      let mesh = <Mesh | Light>this.pickInfo.pickedMesh;
-      if (mesh.id.includes("glyph")) mesh = <Mesh | Light>this.pickInfo.pickedMesh.parent;
-      let container = this.engineServ.getContainerFromType(mesh);
+      let plugGeometry = <PlugGeometry>this.pickInfo.pickedMesh;
+
+      let container = this.appServ.getContainerFromPlugGeometry(
+        plugGeometry.id.includes("glyph") ?
+          <PlugText>(this.pickInfo.pickedMesh.parent) :
+          plugGeometry
+      );
+
       if (container.locked) return;
+
       this.setSelected(container);
       this.startingPoint = this.getGroundPosition();
-      this.store.dispatch(oneSelection({ UUID: this.engineServ.getContainerFromType(mesh).UUID }));
+      this.store.dispatch(oneSelection({
+        uuid: this.appServ.getContainerFromPlugGeometry(
+          plugGeometry.id.includes("glyph") ?
+            <PlugText>(this.pickInfo.pickedMesh.parent) :
+            plugGeometry
+        ).uuid
+      }));
       if (this.startingPoint) { // we need to disconnect camera from canvas
         setTimeout(() => {
           this.engineServ.getCamera().detachControl(this.rendererCanvas.nativeElement);
@@ -244,42 +245,57 @@ export class ViewportComponent implements OnInit {
   }
 
   public onPointerMove = () => {
-    let cs;
-    this.store.pipe(select('engine'), take(1)).subscribe(s => cs = this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type);
+    let plugGeometry;
+    this.store.pipe(select('engine'), take(1))
+      .subscribe(s => plugGeometry = this.appServ.getContainerFromUuid(s.uuidCsSelected[0]).getPlugGeometry());
     if (!this.startingPoint) return;
     var current = this.getGroundPosition();
     if (!current) return;
 
     var diff = current.subtract(this.startingPoint);
-    if (cs instanceof Mesh) cs.position.addInPlace(diff);
-    if (cs instanceof Light) (<ShadowLight>cs).position.addInPlace(diff);
+    if (plugGeometry instanceof Mesh) plugGeometry.position.addInPlace(diff);
+
     this.startingPoint = current;
   }
 
   setSelected(c: Container) {
-    if (c.type instanceof Mesh) {
-      this.gizmoManager.attachToMesh(c.type);
-      if (c.isText) {
-        ViewportComponent.setBoundingBoxText(c.type);
-      } else {
-        c.type.getChildMeshes().filter(m => !m.name.startsWith("glyph-inst")).forEach((m: Mesh) => m.showBoundingBox = true);
-        c.type.showBoundingBox = true;
 
-        let bbr = this.engineServ.getScene().getBoundingBoxRenderer();
-        bbr.onBeforeBoxRenderingObservable.add((bb: BoundingBox) => {
-          bbr.backColor = bbr.frontColor = bb == this.engineServ.UUIDToBoundingBox.get(c.UUID)
-            ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
-        })
-      }
-    } else if (c.type instanceof Light) {
-      this.lightGizmo.light = c.type;
+    this.gizmoManager.attachToNode(c.getPlugTransform());
+
+    if (c.getPlugLight() != undefined) {
+      this.lightGizmo.light = <any>(c.getPlugLight());
+      return;
     }
+
+    if (c.getPlugGeometry() instanceof PlugText) {
+      ViewportComponent.setBoundingBoxText(<PlugText>c.getPlugGeometry())
+      return;
+    }
+
+    /** Plug Geometry */
+    Container.getChildren(c).map(c => c.getPlugGeometry())
+      .filter(plugGeometry => !plugGeometry?.name.startsWith("glyph-inst"))
+      .forEach((pg: PlugGeometry) => {
+        if (pg == undefined) return;
+        pg.showBoundingBox = true
+      });
+
+    if (c.getPlugGeometry() == undefined) return;
+    c.getPlugGeometry().showBoundingBox = true;
+
+    let bbr = this.engineServ.getScene().getBoundingBoxRenderer();
+    bbr.onBeforeBoxRenderingObservable.add((bb: BoundingBox) => {
+      bbr.backColor = bbr.frontColor = bb == this.appServ.uuidToBoundingBox.get(c.uuid)
+        ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
+    })
   }
 
-  static setBoundingBoxText(m: Mesh) {
-    if (!Utils.isEmptyArr(m.getChildMeshes())) m.setBoundingInfo(ViewportComponent.boundingInfoFromMeshesChildren(m.getChildren()));
-    m.showBoundingBox = true;
-    m.refreshBoundingInfo();
+  static setBoundingBoxText(pt: PlugText) {
+    if (!Utils.isEmptyArr(pt.getChildMeshes())) {
+      pt.setBoundingInfo(ViewportComponent.boundingInfoFromMeshesChildren(pt.getChildren()));
+    }
+    pt.showBoundingBox = true;
+    pt.refreshBoundingInfo();
   }
 
   static boundingInfoFromMeshesChildren(meshes) {
@@ -295,11 +311,15 @@ export class ViewportComponent implements OnInit {
     return new BoundingInfo(min, max);
   }
 
-  clearHighLightSelected(o: Mesh | Light) {
-    if (o instanceof Mesh) {
-      o.getChildMeshes().forEach((m: Mesh) => m.showBoundingBox = false);
-      o.showBoundingBox = false;
-    }
-  }
+  clearHighLightSelected(container: Container) {
+    Container.getChildren(container).map(c => c.getPlugGeometry())
+      .filter(m => !m?.name.startsWith("glyph-inst"))
+      .forEach((pg: PlugGeometry) => {
+        if (pg == undefined) return
+        pg.showBoundingBox = false;
+      });
 
+    if (container.getPlugGeometry() == undefined) return;
+    container.getPlugGeometry().showBoundingBox = false;
+  }
 }

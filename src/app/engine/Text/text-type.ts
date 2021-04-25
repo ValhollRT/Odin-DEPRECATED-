@@ -1,6 +1,6 @@
 import { InstancedMesh, Mesh } from "babylonjs";
-import { FontType } from "./FontType";
-import { GlyphMesh } from './GlyphMesh';
+import { FontType } from "./font-type";
+import { GlyphMesh } from './glyph-mesh';
 
 export enum Haling { LEFT, CENTER, RIGHT }
 export enum Valing { TOP, FIRST_LINE, CENTER, BOTTOM }

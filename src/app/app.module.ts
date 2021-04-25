@@ -16,6 +16,8 @@ import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
 import { RotationPipe } from './pipes/rotation.pipe';
 import { ServiceModule } from './services/service.module';
 import { AlertComponent } from './shared/alert/alert.component';
+import { ContainerComponent } from './shared/container/container.component';
+import { PlugComponent } from './shared/plug/plug.component';
 import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
 import { TabComponent } from './shared/tab/tab.component';
 import { TabsComponent } from './shared/tabs/tabs.component';
@@ -66,7 +68,9 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     TabsComponent,
     ExplorerPanelComponent,
     TabsPlugsPanelComponent,
-    PlugsPanelComponent
+    PlugsPanelComponent,
+    ContainerComponent,
+    PlugComponent
   ],
   imports: [
     FormsModule,

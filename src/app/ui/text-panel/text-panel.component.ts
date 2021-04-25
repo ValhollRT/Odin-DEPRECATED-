@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { Mesh } from 'babylonjs';
-import { filter, map } from 'rxjs/operators';
-import { Container } from 'src/app/engine/common/Container';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppService } from 'src/app/services/index.service';
+import { Container } from 'src/app/shared/container/container';
 import { AppState } from '../../store/app.reducer';
+import { ViewportComponent } from '../viewport/viewport.component';
+import { PlugText } from './../../engine/plugs/plug-text';
 import { EngineService, LogService } from './../../services/index.service';
-import { ViewportComponent } from './../viewport/viewport.component';
 
 @Component({
   selector: 'text-panel',
@@ -15,6 +15,8 @@ import { ViewportComponent } from './../viewport/viewport.component';
 export class TextPanelComponent implements OnInit {
 
   @ViewChild('text', { static: true }) text: ElementRef;
+  @Input() plugText: PlugText;
+
   public current: Container;
   public Writer;
   public textMesh;
@@ -22,34 +24,26 @@ export class TextPanelComponent implements OnInit {
   constructor(
     public store: Store<AppState>,
     public ls: LogService,
+    public appServ: AppService,
     public engineServ: EngineService) { }
 
   ngOnInit(): void {
-    this.store.pipe(select('engine'),
-      filter(selection => selection.UUIDCsSelected.length > 0),
-      filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
-      map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0])),
-      filter(c => c.isText))
-      .subscribe((c: Container) => {
-        this.current = c;
-        this.text.nativeElement.value = c.text.value;
-        this.ls.log(c.name, "edited text Type", "TextPanelComponent")
-      });
+    this.text.nativeElement.value = this.plugText.text.value;
   }
 
   updateText() {
-    this.current.text.value = this.text.nativeElement.value;
-    this.current.text.updateText();
-    ViewportComponent.setBoundingBoxText(<Mesh>(this.current.type));
+    this.plugText.text.value = this.text.nativeElement.value;
+    this.plugText.text.updateText();
+    ViewportComponent.setBoundingBoxText(this.plugText);
   }
 
   setHorizontalAlign(i: number) {
-    this.current.text.halign = i;
+    this.plugText.text.halign = i;
     this.updateText();
   }
 
   setVerticalAlign(i: number) {
-    this.current.text.valign = i;
+    this.plugText.text.valign = i;
     this.updateText();
   }
 }

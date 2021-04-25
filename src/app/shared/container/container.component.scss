@@ -1,0 +1,45 @@
+.container-box {
+    border: var(--main-menu-border);
+    padding: 3px;
+    margin: 2px;
+    min-width: 230px;
+    height: 46px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.container-selected {
+    background: var(--highlight-color);
+    color: black;
+
+    input[type="text"] {
+        color: black;
+    }
+}
+
+input[type="text"] {
+    background-color: transparent;
+    min-width: 100px;
+    cursor: default;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.box-hide-lock {
+    border: 1px solid grey;
+    background: dimgray;
+    margin: 2px;
+}
+
+.icon-size-hide-lock {
+    width: 15px;
+    height: 15px;
+    margin: 1px 4px;
+    background-color: white;
+}
+
+.box-hide-lock:hover {
+    border: 1px solid dimgray;
+    background: grey;
+}

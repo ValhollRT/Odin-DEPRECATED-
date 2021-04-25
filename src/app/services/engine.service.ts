@@ -1,18 +1,15 @@
 import { ElementRef, Injectable, Injector } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
-  ArcRotateCamera, Color3, Color4, Engine,
-  Light,
-  Mesh, Scene
+  Color3, Color4, Engine, Scene
 } from 'babylonjs';
 import 'babylonjs-materials';
-import { BoundingBox } from 'babylonjs/Culling/boundingBox';
 import { BehaviorSubject } from 'rxjs';
-import { Container } from 'src/app/engine/common/Container';
-import { CAMERA, LIGHT } from '../configuration/AppConstants';
-import { Grid } from '../engine/helpers/Grid';
-import { PlugBuilder } from '../engine/plugs/plugBuilder';
+import { Grid } from '../engine/helpers/grid';
+import { PlugCamera } from '../engine/plugs/plug-camera';
+import { Container } from '../shared/container/container';
 import { AppState } from '../store/app.reducer';
+import { engineIsLoaded } from './../store/actions/engine.actions';
 import { LogService } from './log.service';
 import { WindowService } from './window.service';
 
@@ -22,19 +19,13 @@ export class EngineService {
   private grid: Grid;
   private canvas: HTMLCanvasElement;
   private engine: Engine;
-  private defaultCamera: ArcRotateCamera;
+  private defaultCamera: PlugCamera;
   private scene: Scene;
 
-  // References Containers for engine
-  public typeToContainer = new Map<Mesh | Light | ArcRotateCamera, Container>();
-  public UUIDToContainer = new Map<string, Container>();
-  public UUIDToBoundingBox = new Map<string, BoundingBox>();
-  public UUIDToCamera = new Map<string, ArcRotateCamera>();
-
-  public newContainer$ = new BehaviorSubject<Container>(undefined);
+  public emitNewContainerTreeNode$ = new BehaviorSubject<Container>(undefined);
   public updateTreeNode$ = new BehaviorSubject<boolean>(false);
 
-  private selectedUUIDContainers: string[];
+
   private sceneBackgroundColor: Color3;
 
   public constructor(
@@ -42,22 +33,19 @@ export class EngineService {
     public store: Store<AppState>,
     public logService: LogService,
     public injector: Injector) {
-    store.select('engine').subscribe(en => this.selectedUUIDContainers = [...en.UUIDCsSelected]);
   }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
-
     this.engine = new Engine(this.canvas, true);
+
     this.scene = new Scene(this.engine);
     this.scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
     this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);
     this.scene.registerAfterRender(() => { });
 
-    this.defaultCamera = this.createCameraContainer(CAMERA.ARCROTATECAMERA);
-    this.scene.activeCamera = this.defaultCamera;
     this.grid = new Grid(this.scene);
-    this.createDefaultScene();
+    this.store.dispatch(engineIsLoaded({ isLoaded: true }));
   }
 
   public getCanvas(): HTMLCanvasElement { return this.canvas; }
@@ -65,56 +53,16 @@ export class EngineService {
   public getScene(): Scene { return this.scene }
   public getEngine() { return this.engine; }
 
-  public setCamera(camera: ArcRotateCamera) {
+  public setCamera(camera: PlugCamera) {
+    if (this.defaultCamera != undefined) this.defaultCamera.active = false;
+    camera.active = true;
+
     this.defaultCamera = camera;
     this.scene.activeCamera = camera;
     this.updateTreeNode();
   }
 
-  public createMesh(type: string): void {
-    let c = PlugBuilder.createContainerMesh(type, this.getScene());
-    this.typeToContainer.set(c.type, c);
-    this.UUIDToContainer.set(c.UUID, c);
-    this.UUIDToBoundingBox.set(c.UUID, (<Mesh>c.type).getBoundingInfo().boundingBox)
-    this.saveContainerToDataTree(c);
-  }
-
-  public createLight(type: string): void {
-    let c = new Container(PlugBuilder.createLight(type, this.getScene()));
-    this.typeToContainer.set(c.type, c);
-    this.UUIDToContainer.set(c.UUID, c);
-    this.saveContainerToDataTree(c);
-  }
-
-  public createCameraContainer(type: string): ArcRotateCamera {
-    let camera = PlugBuilder.createCamera(type, this.getScene());
-    let c = new Container(camera);
-    this.typeToContainer.set(c.type, c);
-    this.UUIDToContainer.set(c.UUID, c);
-    this.saveContainerToDataTree(c);
-    this.UUIDToCamera.set(c.UUID, camera);
-    return <ArcRotateCamera>c.type;
-  }
-
-  public createNewGeometryText(): void { PlugBuilder.createNewGeometryText(this); }
-
-  public saveContainerToDataTree(c: Container) { this.newContainer$.next(c); }
-  public getContainerFromUUID(UUID: string): Container { return this.UUIDToContainer.get(UUID) }
-  public getContainerFromType(type: Mesh | Light): Container { return this.typeToContainer.get(type) }
-  public createDefaultScene() {
-    this.createLight(LIGHT.DIRECTIONAL);
-    this.scene.activeCamera = this.defaultCamera;
-  }
-
-  // Get Selections methods
-  public getSelectedContainers(): string[] { return this.selectedUUIDContainers }
-  public nothingSelected(): boolean { return this.selectedUUIDContainers.length < 1 }
-  public getFirstSelected(): Container { return this.getContainerFromUUID(this.selectedUUIDContainers[0]); }
-
-  public deleteContainerRef(container: Container) {
-    this.typeToContainer.delete(container.type)
-    this.UUIDToContainer.delete(container.UUID)
-  }
+  public saveContainerToDataTree(c: Container) { this.emitNewContainerTreeNode$.next(c); }
 
   public setBackgroundColorScene(backgroundColor: string) {
     this.sceneBackgroundColor = Color3.FromHexString(backgroundColor);

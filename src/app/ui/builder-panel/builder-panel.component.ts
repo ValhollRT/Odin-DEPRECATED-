@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Mesh, VertexData } from 'babylonjs';
-import { Container } from 'src/app/engine/common/Container';
-import { EngineService } from 'src/app/services/index.service';
+import { VertexData } from 'babylonjs';
+import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
+import { AppService } from 'src/app/services/index.service';
 import { AppState } from '../../store/app.reducer';
-import { ViewportComponent } from './../viewport/viewport.component';
+import { PlugText } from './../../engine/plugs/plug-text';
 
 @Component({
   selector: 'builder-panel',
@@ -13,23 +13,26 @@ import { ViewportComponent } from './../viewport/viewport.component';
 })
 export class BuilderPanelComponent implements OnInit {
 
-  public current: Container;
+  public selected: PlugGeometry;
+  public isPlugText: boolean;
+
   constructor(
-    private engineServ: EngineService,
+    private appService: AppService,
     public store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
     this.store.pipe(select('engine')).subscribe(en => {
-      if (en.UUIDCsSelected.length == 0) { this.current = undefined; return; }
-      let container = this.engineServ.getContainerFromUUID(en.UUIDCsSelected[0]);
-      if (!(container.type instanceof Mesh)) this.current = undefined; else this.current = container;
+      if (en.uuidCsSelected.length == 0) { this.selected = undefined; return; }
+      let container = this.appService.getContainerFromUuid(en.uuidCsSelected[0]);
+      this.selected = container.getPlugGeometry();
+      this.isPlugText = this.selected instanceof PlugText
+
     });
   }
 
   updateMesh() {
-    let vd: VertexData = this.current.rebuildMesh(this.current.panel.values);
-    vd.applyToMesh(<Mesh>this.current.type, true);
-    ViewportComponent.setBoundingBoxText(<Mesh>(this.current.type));
+    let vd: VertexData = this.selected.rebuildMesh(this.selected.panel.values);
+    vd.applyToMesh(this.selected, true);
   }
 }

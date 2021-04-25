@@ -23,6 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "showCircularDependencies": false,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -122,6 +123,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "Odin"
 }

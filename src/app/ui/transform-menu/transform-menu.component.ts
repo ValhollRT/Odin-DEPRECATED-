@@ -3,7 +3,8 @@ import { select, Store } from '@ngrx/store';
 import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, TargetCamera, Vector2, Vector3 } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
-import { EngineService, LogService } from 'src/app/services/index.service';
+import { AppService, EngineService, LogService } from 'src/app/services/index.service';
+import { PlugTransform } from '../../engine/plugs/plug-transform';
 import { AppState } from '../../store/app.reducer';
 
 class TransformMenu {
@@ -37,18 +38,16 @@ export class TransformMenuComponent implements OnInit {
 
   constructor(
     public engineServ: EngineService,
+    public appServ: AppService,
     public store: Store<AppState>,
     public logServ: LogService
   ) {
     this.tm = new TransformMenu();
     this.resetAll();
     this.store
-      .pipe(select('engine'), filter(selection => selection.UUIDCsSelected.length > 0))
-      .pipe(map(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type))
-      .subscribe((o: Mesh | Light | TargetCamera) => {
-        this.isMeshSelected = o instanceof Mesh;
-        this.isLightSelected = o instanceof Light;
-        this.isCameraSelected = o instanceof TargetCamera;
+      .pipe(select('engine'), filter(selection => selection.uuidCsSelected.length > 0))
+      .pipe(map(sel => this.appServ.getContainerFromUuid(sel.uuidCsSelected[0]).getPlugTransform()))
+      .subscribe((o: PlugTransform) => {
         this.setTransformMenuSelected(o);
         this.logServ.log(this.tm, "edited transform", "TransformMenuComponent");
       });
@@ -56,7 +55,7 @@ export class TransformMenuComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  setTransformMenuSelected(o: Mesh | Light | TargetCamera) {
+  setTransformMenuSelected(o: Mesh | Light | TargetCamera | PlugTransform) {
     if (o instanceof HemisphericLight) {
       this.resetAll();
       // This is important to hide the transform panel
@@ -122,11 +121,7 @@ export class TransformMenuComponent implements OnInit {
     let x = Utils.degreeToRadians(this.rx.nativeElement.value);
     let y = Utils.degreeToRadians(this.ry.nativeElement.value);
     let z = Utils.degreeToRadians(this.rz.nativeElement.value);
-    if (this.selected instanceof Mesh) {
-      this.selected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
-    } else if (this.selected instanceof DirectionalLight || SpotLight) {
-      this.selected.direction = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
-    }
+    this.selected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
   }
 
   updateCenterAxis() {

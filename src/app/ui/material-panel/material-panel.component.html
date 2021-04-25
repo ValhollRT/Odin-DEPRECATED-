@@ -1,39 +1,33 @@
-<div *ngIf="this.currentMesh!==null && this.currentMesh !==undefined && !isGroup">
-    <div class="property-panel-group">
-        <span class="property-panel-text">Name</span>
-        <input style="width: 100%" type="text" [(ngModel)]="this.currentMesh.material.name">
-    </div>
+<div *ngIf="this.selected !== null && this.selected !== undefined">
     <div class="property-panel-group">
         <span class="property-panel-text">Ambient</span>
-        <input type="color" [ngModel]="this.currentMesh | rgbToHex:'AMBIENTCOLOR'"
+        <input type="color" [ngModel]="this.selected.ambientColor| rgbToHex"
             (ngModelChange)="hexToRgb($event, 'AMBIENTCOLOR')" value="#aaaaaa">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Diffuse</span>
-        <input type="color" [ngModel]="this.currentMesh | rgbToHex:'DIFFUSECOLOR'"
+        <input type="color" [ngModel]="this.selected.diffuseColor | rgbToHex"
             (ngModelChange)="hexToRgb($event, 'DIFFUSECOLOR')" value="#aaaaaa">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Emission</span>
-        <input type="color" [ngModel]="this.currentMesh | rgbToHex:'EMISSIVECOLOR'"
+        <input type="color" [ngModel]="this.selected.emissiveColor| rgbToHex"
             (ngModelChange)="hexToRgb($event, 'EMISSIVECOLOR')" value="#aaaaaa">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Specular</span>
-        <input type="color" [ngModel]="this.currentMesh | rgbToHex:'SPECULARCOLOR'"
+        <input type="color" [ngModel]="this.selected.specularColor| rgbToHex"
             (ngModelChange)="hexToRgb($event, 'SPECULARCOLOR')" value="#aaaaaa">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Specular Power</span>
-        <input type="range" min="0" max="1024" value="0" step="0.001"
-            [(ngModel)]="$any(this.currentMesh.material).specularPower">
-        <input type="text" min="0" max="1" value={{$any(this.currentMesh.material).specularPower}}
-            [(ngModel)]="$any(this.currentMesh.material).specularPower">
+        <input type="range" min="0" max="1024" value="0" step="0.001" [(ngModel)]="$any(this.selected).specularPower">
+        <input type="text" min="0" max="1" value={{$any(this.selected).specularPower}}
+            [(ngModel)]="$any(this.selected).specularPower">
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Alpha</span>
-        <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.currentMesh.material).alpha">
-        <input type="text" min="0" max="1" value={{this.currentMesh.material.alpha}}
-            [(ngModel)]="$any(this.currentMesh.material).alpha">
+        <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.selected).alpha">
+        <input type="text" min="0" max="1" value={{this.selected.alpha}} [(ngModel)]="$any(this.selected).alpha">
     </div>
 </div>

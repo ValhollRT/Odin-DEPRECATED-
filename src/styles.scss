@@ -207,6 +207,10 @@ body {
   mask-image: url("assets/icons/refresh.svg");
 }
 
+.icon-container {
+  mask-image: url("assets/icons/container.svg");
+}
+
 .icon-color,
 .icon-btn-color {
   background-color: var(--main-menu-color);
@@ -220,6 +224,10 @@ body {
 .icon-color:hover {
   background-color: var(--highlight-color);
   mix-blend-mode: difference;
+}
+
+.icon-plug-color {
+  background-color: var(--main-menu-color);
 }
 
 .icon-btn-color:hover {
@@ -247,7 +255,7 @@ body {
 .icon-btn-xs {
   width: 18px;
   height: 18px;
-  margin: 10px;
+  margin: 5px;
 }
 html,
 body {

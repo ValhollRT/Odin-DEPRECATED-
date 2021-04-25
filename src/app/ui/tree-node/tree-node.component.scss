@@ -6,19 +6,8 @@
   top: 0px;
   left: 0px;
   background-color: var(--main-menu-background-color);
-  width: 300px;
+  width: 400px;
   height: 100%;
-}
-
-input {
-  margin: 1px;
-  display: block;
-  width: 60px;
-  background-color: var(--input-background-color);
-  color: var(--console-debug-color);
-  font-size: bold;
-  border: 0;
-  outline: none;
 }
 
 label {
@@ -46,7 +35,7 @@ label {
 }
 
 mat-tree {
-  flex: 1;
+  flex: 1 1 0;
   font-size: 12px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -66,14 +55,6 @@ mat-tree-node {
   &:hover {
     background-color: var(--highlight-color-hover);
   }
-}
-
-.container-box {
-  border: 1px solid var(--console-debug-color);
-  width: 200px;
-  height: 20px;
-  top: 0px;
-  left: 0px;
 }
 
 button[mat-icon-button] {
@@ -130,26 +111,6 @@ button {
   background-color: #dddddd;
 }
 
-/*BOX NODE*/
-.box-node {
-  border: var(--main-menu-border);
-  padding: 3px;
-  margin: 2px;
-  min-width: 175px;
-  text-align: left;
-  display: flex;
-  align-items: center;
-}
-
-.container-selected {
-  background: var(--highlight-color);
-  color: black;
-
-  input[type="text"] {
-    color: black;
-  }
-}
-
 .attribute-box {
   width: 20px;
   height: 20px;
@@ -158,12 +119,6 @@ button {
   margin: 0px 2px;
   border: 1px solid rgba(0, 0, 0, 0.38);
   box-sizing: border-box;
-}
-
-.tree-node input[type="text"] {
-  background-color: transparent;
-  min-width: 100px;
-  cursor: default;
 }
 
 .btn-tree-header {

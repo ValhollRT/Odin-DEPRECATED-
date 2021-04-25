@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Color3, Mesh, StandardMaterial } from 'babylonjs';
+import { Color3 } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
+import { AppService } from 'src/app/services/index.service';
 import { AppState } from '../../store/app.reducer';
+import { PlugMaterial } from './../../engine/plugs/plug-material';
 import { EngineService, LogService } from './../../services/index.service';
 
 @Component({
@@ -12,20 +14,18 @@ import { EngineService, LogService } from './../../services/index.service';
 })
 export class MaterialPanelComponent implements OnInit {
 
-  public currentMesh: Mesh;
+  public selected: PlugMaterial;
   public isGroup: boolean = false;
 
-  constructor(private engineServ: EngineService, store: Store<AppState>, private logServ: LogService) {
+  constructor(private engineServ: EngineService, private appServ: AppService, store: Store<AppState>, private logServ: LogService) {
 
     store.pipe(select('engine'),
-      filter(selection => selection.UUIDCsSelected.length > 0),
-      filter(sel => this.engineServ.getContainerFromUUID(sel.UUIDCsSelected[0]).type instanceof Mesh),
-      map(s => this.engineServ.getContainerFromUUID(s.UUIDCsSelected[0]).type))
-      .subscribe((m: Mesh) => {
-        this.currentMesh = m;
-        this.isGroup = this.engineServ.getContainerFromType(m).panel == null;
-        if (this.isGroup) return;
-        this.logServ.log(m.material.name, "edited material", "MaterialPanelComponent")
+      filter(selection => selection.uuidCsSelected.length > 0),
+      map(s => this.appServ.getContainerFromUuid(s.uuidCsSelected[0]).getPlugMaterial()))
+      .subscribe((pm: PlugMaterial) => {
+        this.selected = pm;
+        if (this.selected == undefined) return;
+        this.logServ.log(pm?.name, "edited material", "MaterialPanelComponent")
       });
   }
 
@@ -33,9 +33,9 @@ export class MaterialPanelComponent implements OnInit {
 
   hexToRgb(value, attribute): void {
 
-    if (attribute === "AMBIENTCOLOR") { (<StandardMaterial>this.currentMesh.material).ambientColor = Color3.FromHexString(value); }
-    if (attribute === "DIFFUSECOLOR") { (<StandardMaterial>this.currentMesh.material).diffuseColor = Color3.FromHexString(value); }
-    if (attribute === "EMISSIVECOLOR") { (<StandardMaterial>this.currentMesh.material).emissiveColor = Color3.FromHexString(value); }
-    if (attribute === "SPECULARCOLOR") { (<StandardMaterial>this.currentMesh.material).specularColor = Color3.FromHexString(value); }
+    if (attribute === "AMBIENTCOLOR") { this.selected.ambientColor = Color3.FromHexString(value); }
+    if (attribute === "DIFFUSECOLOR") { this.selected.diffuseColor = Color3.FromHexString(value); }
+    if (attribute === "EMISSIVECOLOR") { this.selected.emissiveColor = Color3.FromHexString(value); }
+    if (attribute === "SPECULARCOLOR") { this.selected.specularColor = Color3.FromHexString(value); }
   }
 }

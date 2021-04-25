@@ -1,0 +1,22 @@
+.plug-box {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    margin: 0 2px;
+    border: 1px solid grey;
+    background: dimgray;
+}
+
+.plug-icon {
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    position: relative;
+    margin: auto;
+    height: 33px;
+    margin: 4px;
+}
+
+.plug-box:hover {
+    border: 1px solid dimgray;
+    background: grey;
+}

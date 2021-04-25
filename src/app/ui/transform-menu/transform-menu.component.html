@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="input-group" *ngIf="isMeshSelected===true">
+        <div class="input-group">
             <div class="title-section-menu">Rotation</div>
             <div>
                 <div (dblclick)="resetRotations()" (click)="selected.rotation.x = 0" href="#" class="resetButton">X
@@ -43,46 +43,7 @@
                     (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
             </div>
         </div>
-        <div class="input-group" *ngIf="isLightSelected===true">
-            <div class="title-section-menu">Target</div>
-            <div>
-                <div (dblclick)="resetDirections()" (click)="selected.direction.x = 0" href="#" class="resetButton">X
-                </div>
-                <input #rx type="number" [ngModel]="selected.direction.x | precision" min="-99999" max="99999" step="1"
-                    (ngModelChange)="selected.direction.x = $event">
-            </div>
-            <div>
-                <div (dblclick)="resetDirections()" (click)="selected.direction.y = 0" href="#" class="resetButton">Y
-                </div>
-                <input #ry type="number" [ngModel]="selected.direction.y | precision" min="-99999" max="99999" step="1"
-                    (ngModelChange)="selected.direction.y = $event">
-            </div>
-            <div>
-                <div (dblclick)="resetDirections()" (click)="selected.direction.z = 0" href="#" class="resetButton">Z
-                </div>
-                <input #rz type="number" [ngModel]="selected.direction.z | precision" min="-99999" max="99999" step="1"
-                    (ngModelChange)="selected.direction.z = $event">
-            </div>
-        </div>
-        <div class="input-group" *ngIf="isCameraSelected===true">
-            <div class="title-section-menu">Target</div>
-            <div>
-                <div (dblclick)="resetTarget()" (click)="selected.target.x = 0" href="#" class="resetButton">X</div>
-                <input #rx type="number" [ngModel]="selected.target.x | precision" min="-99999" max="99999" step="1"
-                    (ngModelChange)="selected.target.x = $event">
-            </div>
-            <div>
-                <div (dblclick)="resetTarget()" (click)="selected.target.y = 0" href="#" class="resetButton">Y</div>
-                <input #ry type="number" [ngModel]="selected.target.y | precision" min="-99999" max="99999" step="1"
-                    (ngModelChange)="selected.target.y = $event">
-            </div>
-            <div>
-                <div (dblclick)="resetDirections()" (click)="selected.target.z = 0" href="#" class="resetButton">Z</div>
-                <input #rz type="number" [ngModel]="selected.target.z | precision" min="-99999" max="99999" step="1"
-                    (ngModelChange)="selected.target.z = $event">
-            </div>
-        </div>
-        <div class="input-group" *ngIf="isMeshSelected===true">
+        <div class="input-group">
             <div class="title-section-menu">Scaling</div>
             <div>
                 <div (dblclick)="resetScalings()" (click)="selected.scaling.x = 1" href="#" class="resetButton">X</div>
@@ -101,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div class="col-transform-menu" *ngIf="isMeshSelected===true">
+    <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Center</div>
             <div>
@@ -127,7 +88,6 @@
             <div for="screenPositionY">Y</label>
             <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
         </div -->
-        <!-- <pre style="color:white">{{ tm | json }}</pre> -->
     </div>
     <div style="clear: both;"></div>
 </div>
