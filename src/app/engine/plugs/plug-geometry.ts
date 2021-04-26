@@ -53,7 +53,7 @@ export class PlugGeometry extends Mesh implements Plug {
                 break;
             case GEOM.DISC:
                 this.panel = new DiscPanel();
-                this.rebuildMesh = VertexData.CreateCylinder;
+                this.rebuildMesh = VertexData.CreateDisc;
                 break;
             case GEOM.ICOSPHERE:
                 this.panel = new IcoSpherePanel();
