@@ -84,7 +84,6 @@ export class InputNumberComponent implements OnInit {
       if (distance == this.lastDistance) return; /** prevent change value  */
       this.eLastClientX = e.clientX;
 
-      console.log(e.clientX)
       this.lastDistance = distance;
       this.setValue(this.getValue() + (direction * this.getStep(e)));
     }
@@ -153,7 +152,6 @@ export class InputNumberComponent implements OnInit {
   }
 
   setDefaultValue() {
-    console.log("reset", this._reset)
     this.setValue(this._reset)
   }
 }
