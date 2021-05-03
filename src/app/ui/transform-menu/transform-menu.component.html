@@ -1,93 +1,43 @@
 <div #transformMenuValue class="container" *ngIf="(selected != undefined ) && (selected != null)">
+
     <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Position</div>
-            <div>
-                <div (dblclick)="resetPositions()" (click)="selected.position.x = 0" href="#" class="resetButton">X
-                </div>
-                <input type="number" [ngModel]="selected.position.x | precision"
-                    (ngModelChange)="setPosition($event, 'x')" min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetPositions()" (click)="selected.position.y = 0" href="#" class="resetButton">Y
-                </div>
-                <input type="number" [ngModel]="selected.position.y | precision"
-                    (ngModelChange)="setPosition($event, 'y')" min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetPositions()" (click)="selected.position.z = 0" href="#" class="resetButton">Z
-                </div>
-                <input type="number" [ngModel]="selected.position.z | precision"
-                    (ngModelChange)="setPosition($event, 'z')" min="-99999" max="99999" step="1">
-            </div>
+            <input-number [bind]="selected.position" [param]="'x'" [label]="'x'" [resetValue]=0></input-number>
+            <input-number [bind]="selected.position" [param]="'y'" [label]="'y'" [resetValue]=0></input-number>
+            <input-number [bind]="selected.position" [param]="'z'" [label]="'z'" [resetValue]=0></input-number>
         </div>
-
         <div class="input-group">
             <div class="title-section-menu">Rotation</div>
-            <div>
-                <div (dblclick)="resetRotations()" (click)="selected.rotation.x = 0" href="#" class="resetButton">X
-                </div>
-                <input #rx type="number" [ngModel]="selected.rotation.x | rotation"
-                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetRotations()" (click)="selected.rotation.y = 0" href="#" class="resetButton">Y
-                </div>
-                <input #ry type="number" [ngModel]="selected.rotation.y | rotation"
-                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetRotations()" (click)="selected.rotation.z = 0" href="#" class="resetButton">Z
-                </div>
-                <input #rz type="number" [ngModel]="selected.rotation.z | rotation"
-                    (ngModelChange)=updateRotation($event) min="-99999" max="99999" step="1">
-            </div>
-        </div>
-        <div class="input-group">
-            <div class="title-section-menu">Scaling</div>
-            <div>
-                <div (dblclick)="resetScalings()" (click)="selected.scaling.x = 1" href="#" class="resetButton">X</div>
-                <input type="number" [ngModel]="selected.scaling.x | precision"
-                    (ngModelChange)="selected.scaling.x = $event" min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetScalings()" (click)="selected.scaling.y = 1" href="#" class="resetButton">Y</div>
-                <input type="number" [ngModel]="selected.scaling.y | precision"
-                    (ngModelChange)="selected.scaling.y = $event" min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetScalings()" (click)="selected.scaling.z = 1" href="#" class="resetButton">Z</div>
-                <input type="number" [ngModel]="selected.scaling.z | precision"
-                    (ngModelChange)="selected.scaling.z = $event" min="-99999" max="99999" step="1">
-            </div>
+            <input-number [bind]="selected.rotation" [param]="'x'" [label]="'x'" [resetValue]=0 [pipe]="'rotation'"
+                [pipeInput]=pipeInputRotation>
+            </input-number>
+            <input-number [bind]="selected.rotation" [param]="'y'" [label]="'y'" [resetValue]=0 [pipe]="'rotation'"
+                [pipeInput]=pipeInputRotation>
+            </input-number>
+            <input-number [bind]="selected.rotation" [param]="'z'" [label]="'z'" [resetValue]=0 [pipe]="'rotation'"
+                [pipeInput]=pipeInputRotation>
+            </input-number>
         </div>
     </div>
     <div class="col-transform-menu">
         <div class="input-group">
-            <div class="title-section-menu">Center</div>
-            <div>
-                <div (dblclick)="resetCenters()" (click)="resetPivotX()" href="#" class="resetButton">X</div>
-                <input #cx type="number" [ngModel]="selected.getPivotPoint().x | precision"
-                    (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetCenters()" (click)="resetPivotY()" href="#" class="resetButton">Y</div>
-                <input #cy type="number" [ngModel]="selected.getPivotPoint().y | precision"
-                    (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
-            </div>
-            <div>
-                <div (dblclick)="resetCenters()" (click)="resetPivotZ()" href="#" class="resetButton">Z</div>
-                <input #cz type="number" [ngModel]="selected.getPivotPoint().z | precision"
-                    (ngModelChange)="updateCenterAxis()" min="-99999" max="99999" step="1">
-            </div>
+            <div class="title-section-menu">Scaling</div>
+            <input-number [bind]="selected.scaling" [param]="'x'" [label]="'x'" [step]=0.1 [resetValue]=1>
+            </input-number>
+            <input-number [bind]="selected.scaling" [param]="'y'" [label]="'y'" [step]=0.1 [resetValue]=1>
+            </input-number>
+            <input-number [bind]="selected.scaling" [param]="'z'" [label]="'z'" [step]=0.1 [resetValue]=1>
+            </input-number>
         </div>
-        <!-- div class="input-group">
-            <div class="title-section-menu">Screen position</div>
-            <div for="screenPositionX">X</div>
-            <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
-            <div for="screenPositionY">Y</label>
-            <input type="number" min="-99999" max="99999" step="1" disabled style="color: grey">
-        </div -->
+        <!--
+        <div class="input-group">
+            <div class="title-section-menu">Center</div>
+            <input-number [bind]="selected.center" [param]="'x'" [resetValue]=0></input-number>
+            <input-number [bind]="selected.center" [param]="'y'" [resetValue]=0></input-number>
+            <input-number [bind]="selected.center" [param]="'z'" [resetValue]=0></input-number>
+        </div>
+        -->
     </div>
     <div style="clear: both;"></div>
 </div>

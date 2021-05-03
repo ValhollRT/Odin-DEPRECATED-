@@ -18,6 +18,7 @@ import { EngineService, LogService } from './../../services/index.service';
 export class LightPanelComponent implements OnInit {
 
   public selected: PlugDirectionalLight | PlugSpotLight | PlugPointLight | PlugHemisphericLight;
+
   constructor(public engineServ: EngineService,
     private appServ: AppService,
     private store: Store<AppState>,

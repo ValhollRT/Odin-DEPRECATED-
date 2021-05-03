@@ -1,6 +1,5 @@
 import { PropertyPanel } from "src/app/ui/builder-panel/property-panel";
 
-
 export interface GeometryPanel {
 	values: any;
 	properties: PropertyPanel<any>[];
@@ -16,7 +15,7 @@ export class BoxPanel implements GeometryPanel {
 }
 
 export class CylinderPanel implements GeometryPanel {
-	values = { arc: 10, diameter: 10, height: 10, width: 10, subdivisions: 10, tessellation: 10 };
+	values = { arc: 1, diameter: 10, height: 10, width: 10, subdivisions: 10, tessellation: 10 };
 	properties: PropertyPanel<any>[] = [
 		new PropertyPanel<string>({ controlType: 'number', key: 'arc', label: 'Arc', value: 'p.arc' }),
 		new PropertyPanel<string>({ controlType: 'number', key: 'diameter', label: 'Diameter', value: 'p.diameter' }),
@@ -27,7 +26,7 @@ export class CylinderPanel implements GeometryPanel {
 }
 
 export class DiscPanel implements GeometryPanel {
-	values = { arc: 10, radius: 10, tessellation: 10 };
+	values = { arc: 1, radius: 10, tessellation: 10 };
 	properties: PropertyPanel<any>[] = [
 		new PropertyPanel<string>({ controlType: 'number', key: 'arc', label: 'Arc', value: 'p.arc' }),
 		new PropertyPanel<string>({ controlType: 'number', key: 'radius', label: 'Radius', value: 'p.diameter' }),

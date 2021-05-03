@@ -3,6 +3,7 @@ import { select, Store } from '@ngrx/store';
 import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, TargetCamera, Vector2, Vector3 } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
+import { RotationPipe } from 'src/app/pipes/rotation.pipe';
 import { AppService, EngineService, LogService } from 'src/app/services/index.service';
 import { PlugTransform } from '../../engine/plugs/plug-transform';
 import { AppState } from '../../store/app.reducer';
@@ -35,6 +36,8 @@ export class TransformMenuComponent implements OnInit {
   @ViewChild('cx', { static: false }) cx: ElementRef;
   @ViewChild('cy', { static: false }) cy: ElementRef;
   @ViewChild('cz', { static: false }) cz: ElementRef;
+
+  public rotationPipe = new RotationPipe();
 
   constructor(
     public engineServ: EngineService,
@@ -99,46 +102,10 @@ export class TransformMenuComponent implements OnInit {
     }
   }
 
-  setPosition(value: string, axis: string) {
-    let pos = this.selected.position;
-    switch (axis) {
-      case 'x':
-        this.selected.position = new Vector3(Number(value), pos.y, pos.z)
-        break;
-      case 'y':
-        this.selected.position = new Vector3(pos.x, Number(value), pos.z)
-        break;
-      case 'z':
-        this.selected.position = new Vector3(pos.x, pos.y, Number(value))
-        break;
-      default:
-        break;
-    }
-
-  }
-
-  updateRotation(event: any) {
-    let x = Utils.degreeToRadians(this.rx.nativeElement.value);
-    let y = Utils.degreeToRadians(this.ry.nativeElement.value);
-    let z = Utils.degreeToRadians(this.rz.nativeElement.value);
-    this.selected.rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
-  }
-
-  updateCenterAxis() {
-    this.selected.showSubMeshesBoundingBox = true;
-    this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, this.cz.nativeElement.value));
-  }
-
-  resetPivotX() { this.selected.setPivotPoint(new Vector3(0, this.cy.nativeElement.value, this.cz.nativeElement.value)); }
-  resetPivotY() { this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, 0, this.cz.nativeElement.value)); }
-  resetPivotZ() { this.selected.setPivotPoint(new Vector3(this.cx.nativeElement.value, this.cy.nativeElement.value, 0)); }
-
-  resetPositions() { this.selected.position = new Vector3(0, 0, 0); }
-  resetRotations() { this.selected.rotation = new Vector3(0, 0, 0); }
-  resetDirections() { this.selected.direction = new Vector3(0, 0, 0); }
-  resetTarget() { this.selected.target = new Vector3(0, 0, 0); }
-  resetScalings() { this.selected.scaling = new Vector3(1, 1, 1); }
-  resetCenters() { this.selected.setPivotPoint(new Vector3(0, 0, 0)); }
+  pipeInputRotation = (el: HTMLInputElement): number => {
+    let rad = Utils.degreeToRadians(parseFloat(el.value) || 0);
+    return Utils.precision(rad, 3);
+  };
 
   resetAll() {
     this.tm.position = new Vector3(0, 0, 0);

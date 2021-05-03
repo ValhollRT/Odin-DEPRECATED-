@@ -8,15 +8,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { RotationPipe } from 'src/app/pipes/rotation.pipe';
 import { environment } from '../environments/environment';
 import { AllAngularMaterialModule } from './all-angular-material.module';
 import { AppComponent } from './app.component';
+import { DynamicPipe } from './pipes/dynamic-pipe.pipe';
 import { PrecisionPipe } from './pipes/precision.pipe';
 import { RgbToHexPipe } from './pipes/rgb-to-hex.pipe';
-import { RotationPipe } from './pipes/rotation.pipe';
 import { ServiceModule } from './services/service.module';
 import { AlertComponent } from './shared/alert/alert.component';
 import { ContainerComponent } from './shared/container/container.component';
+import { InputNumberComponent } from './shared/input/input-number/input-number.component';
 import { PlugComponent } from './shared/plug/plug.component';
 import { PopupWindowComponent } from './shared/popup-window/popup-window.component';
 import { TabComponent } from './shared/tab/tab.component';
@@ -52,6 +54,7 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     RotationPipe,
     RgbToHexPipe,
     PrecisionPipe,
+    DynamicPipe,
     TreeNodeComponent,
     ContentPanelComponent,
     SidebarPropertiesComponent,
@@ -70,7 +73,8 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     TabsPlugsPanelComponent,
     PlugsPanelComponent,
     ContainerComponent,
-    PlugComponent
+    PlugComponent,
+    InputNumberComponent
   ],
   imports: [
     FormsModule,
@@ -90,7 +94,7 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     AngularFireAnalyticsModule,
     AngularFirestoreModule
   ],
-  providers: [folderDatabase],
+  providers: [folderDatabase, RotationPipe],
   bootstrap: [AppComponent]
 })
 

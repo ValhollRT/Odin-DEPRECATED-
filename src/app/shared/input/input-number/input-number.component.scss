@@ -1,0 +1,51 @@
+.stepper {
+    cursor: col-resize;
+}
+
+.stepper:hover {
+    background: #5a5a5a;
+}
+
+.stepper-number {
+    cursor: col-resize;
+}
+
+.stepper.is-scrubbing {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.resetButton {
+    background: linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+    background-color: #768d87;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    padding: 2px 2px;
+    height: 17px;
+}
+
+.resetButton:hover {
+    background: linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+    background-color: #6c7c7c;
+}
+
+.group-input-number {
+    display: flex;
+    margin: 1px 0px;
+    justify-content: center;
+}
+
+.drag-zone {
+    position: absolute;
+    width: 10000px;
+    height: 10000px;
+    top: -50%;
+    right: -3000px;
+    opacity: 0.1;
+    background-color: orange;
+    z-index: 100;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}

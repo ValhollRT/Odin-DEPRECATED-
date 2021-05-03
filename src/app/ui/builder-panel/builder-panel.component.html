@@ -7,10 +7,9 @@
 			<div class="property-panel-group"
 				style="margin: 2px 0px; display: flex; flex-direction: row; justify-content: space-between;">
 				<span class="property-panel-text">{{p.label}}</span>
-				<div [ngSwitch]="p.controlType">
-					<input style="display: inline-block;" *ngSwitchCase="'number'" [id]="p.key" type="number" min="0"
-						max="9999" [(ngModel)]=this.selected.panel.values[p.key] (change)=updateMesh()>
-				</div>
+				<input-number [bind]="selected.panel.values" [param]="p.key" [label]="'R'" [step]=0.1
+					[resetValue]=selected.panel.values[p.key] [change]=updateMesh()>
+				</input-number>
 			</div>
 		</div>
 	</div>

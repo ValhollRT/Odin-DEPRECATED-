@@ -27,7 +27,6 @@ export class BuilderPanelComponent implements OnInit {
       let container = this.appService.getContainerFromUuid(en.uuidCsSelected[0]);
       this.selected = container.getPlugGeometry();
       this.isPlugText = this.selected instanceof PlugText
-
     });
   }
 

@@ -1,9 +1,9 @@
 <div *ngIf="this.selected!=null || this.selected!=undefined">
     <div class="property-panel-group">
         <span class="property-panel-text">Intensity</span>
-        <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.selected).intensity">
-        <input type="text" min="0" max="1" value={{this.selected.intensity}}
-            [(ngModel)]="$any(this.selected).intensity">
+        <input-number [bind]="selected" [param]="'intensity'" [label]="'R'" [step]=0.1 [min]=-20 [max]=20
+            [resetValue]="selected['intensity']">
+        </input-number>
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Diffuse</span>

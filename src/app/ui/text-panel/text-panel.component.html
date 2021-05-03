@@ -22,16 +22,14 @@
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Line height</span>
-        <input type="range" min="-50" max="50" value="0" step="0.01" [(ngModel)]="this.plugText.text.lineHeight"
-            (ngModelChange)="updateText()">
-        <input type="text" value={{this.plugText.text.lineHeight}} [(ngModel)]="this.plugText.text.lineHeight"
-            (ngModelChange)="updateText()">
+        <input-number [change]=updateText() [bind]="this.plugText.text" [param]="'lineHeight'" [label]="'R'" [step]=0.1
+            [resetValue]="this.plugText.text['lineHeight']">
+        </input-number>
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Letter spacing</span>
-        <input type="range" min="-50" max="50" value="0" step="0.01" [(ngModel)]="this.plugText.text.letterSpacing"
-            (ngModelChange)="updateText()">
-        <input type="text" value={{this.plugText.text.letterSpacing}} [(ngModel)]="this.plugText.text.letterSpacing"
-            (ngModelChange)="updateText()">
+        <input-number [change]=updateText() [bind]="this.plugText.text" [param]="'letterSpacing'" [label]="'R'"
+            [step]=0.1 [resetValue]="this.plugText.text['letterSpacing']">
+        </input-number>
     </div>
 </div>

@@ -6,7 +6,7 @@ import { Utils } from '../engine/Utils/Utils';
 })
 export class RotationPipe implements PipeTransform {
 
-  transform(value: number): number {
+  transform(value: number, pipeArgs: any[]): number {
     return Utils.precision(Utils.radiansToDegrees(value), 3);
   }
 }

@@ -20,14 +20,15 @@
             (ngModelChange)="hexToRgb($event, 'SPECULARCOLOR')" value="#aaaaaa">
     </div>
     <div class="property-panel-group">
-        <span class="property-panel-text">Specular Power</span>
-        <input type="range" min="0" max="1024" value="0" step="0.001" [(ngModel)]="$any(this.selected).specularPower">
-        <input type="text" min="0" max="1" value={{$any(this.selected).specularPower}}
-            [(ngModel)]="$any(this.selected).specularPower">
+        <span class="property-panel-text">Alpha</span>
+        <input-number [bind]="selected" [param]="'alpha'" [label]="'R'" [step]=0.1 [min]=0 [max]=1
+            [resetValue]="selected['alpha']">
+        </input-number>
     </div>
     <div class="property-panel-group">
-        <span class="property-panel-text">Alpha</span>
-        <input type="range" min="0" max="1" value="0" step="0.001" [(ngModel)]="$any(this.selected).alpha">
-        <input type="text" min="0" max="1" value={{this.selected.alpha}} [(ngModel)]="$any(this.selected).alpha">
+        <span class="property-panel-text">Specular Power</span>
+        <input-number [bind]="selected" [param]="'specularPower'" [label]="'R'" [step]=0.1
+            [resetValue]="selected['specularPower']">
+        </input-number>
     </div>
 </div>
