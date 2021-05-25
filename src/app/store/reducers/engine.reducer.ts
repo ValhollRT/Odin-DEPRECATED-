@@ -19,7 +19,6 @@ let _engineReducer = createReducer(
   on(addSelection, (state, { uuid: uuid }) => ({ ...state, uuidCsSelected: [...state.uuidCsSelected, uuid] })),
   on(removeSelection, (state, { uuid: uuid }) => ({ ...state, uuidCsSelected: [uuid] })),
   on(clearSelection, (state) => ({ ...state, prevUuidCsSelected: [...state.uuidCsSelected], uuidCsSelected: [] })),
-  on(clearSelection, (state) => ({ ...state, prevUuidCsSelected: [], uuidCsSelected: [] })),
   on(engineIsLoaded, (state) => ({ ...state, isLoaded: true })),
 );
 

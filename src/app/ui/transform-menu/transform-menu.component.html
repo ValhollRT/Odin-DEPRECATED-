@@ -1,5 +1,4 @@
-<div #transformMenuValue class="container" *ngIf="(selected != undefined ) && (selected != null)">
-
+<div #transformMenuValue class="container" *ngIf="(selected != undefined )">
     <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Position</div>
@@ -30,14 +29,15 @@
             <input-number [bind]="selected.scaling" [param]="'z'" [label]="'z'" [step]=0.1 [resetValue]=1>
             </input-number>
         </div>
-        <!--
         <div class="input-group">
             <div class="title-section-menu">Center</div>
-            <input-number [bind]="selected.center" [param]="'x'" [resetValue]=0></input-number>
-            <input-number [bind]="selected.center" [param]="'y'" [resetValue]=0></input-number>
-            <input-number [bind]="selected.center" [param]="'z'" [resetValue]=0></input-number>
+            <input-number [bind]="selected.origin" [param]="'x'" [label]="'x'" [resetValue]=0 [callbackFn]=setCenter>
+            </input-number>
+            <input-number [bind]="selected.origin" [param]="'y'" [label]="'y'" [resetValue]=0 [callbackFn]=setCenter>
+            </input-number>
+            <input-number [bind]="selected.origin" [param]="'z'" [label]="'z'" [resetValue]=0 [callbackFn]=setCenter>
+            </input-number>
         </div>
-        -->
     </div>
     <div style="clear: both;"></div>
 </div>

@@ -46,3 +46,5 @@ testem.log
 Thumbs.db
 
 .commands
+
+ignore.ts

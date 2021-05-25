@@ -259,18 +259,15 @@ export class ViewportComponent implements OnInit {
   }
 
   setSelected(c: Container) {
-
     this.gizmoManager.attachToNode(c.getPlugTransform());
+    c.getPlugTransform().axis.setVisible(true);
 
     if (c.getPlugLight() != undefined) {
       this.lightGizmo.light = <any>(c.getPlugLight());
       return;
     }
 
-    if (c.getPlugGeometry() instanceof PlugText) {
-      ViewportComponent.setBoundingBoxText(<PlugText>c.getPlugGeometry())
-      return;
-    }
+    // if (c.getPlugGeometry() instanceof PlugText) ViewportComponent.setBoundingBoxText(<PlugText>c.getPlugGeometry());
 
     /** Plug Geometry */
     Container.getChildren(c).map(c => c.getPlugGeometry())
@@ -283,11 +280,13 @@ export class ViewportComponent implements OnInit {
     if (c.getPlugGeometry() == undefined) return;
     c.getPlugGeometry().showBoundingBox = true;
 
+    let bbSelected = c.getPlugGeometry().getBoundingInfo().boundingBox
+
     let bbr = this.engineServ.getScene().getBoundingBoxRenderer();
     bbr.onBeforeBoxRenderingObservable.add((bb: BoundingBox) => {
-      bbr.backColor = bbr.frontColor = bb == this.appServ.uuidToBoundingBox.get(c.uuid)
-        ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
+      bbr.frontColor = bbr.backColor = bb == bbSelected ? new Color3(.3, .6, .85) : new Color3(.9, .9, .9);
     })
+
   }
 
   static setBoundingBoxText(pt: PlugText) {
@@ -319,6 +318,7 @@ export class ViewportComponent implements OnInit {
         pg.showBoundingBox = false;
       });
 
+    container.getPlugTransform().axis.setVisible(false);
     if (container.getPlugGeometry() == undefined) return;
     container.getPlugGeometry().showBoundingBox = false;
   }

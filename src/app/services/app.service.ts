@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ArcRotateCamera, BoundingBox, Light, Vector3 } from 'babylonjs';
+import { ArcRotateCamera, BoundingBox, Light, Mesh, Vector3 } from 'babylonjs';
 import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
 import { PlugSpotLight } from 'src/app/engine/plugs/plug-light/plug-spot-light';
 import { EngineService } from 'src/app/services/engine.service';
@@ -25,7 +25,7 @@ export class AppService {
   // References Containers
   public plugToContainer = new Map<Node | PlugGeometry | Light, Container>();
   public uuidToContainer = new Map<string, Container>();
-  public uuidToBoundingBox = new Map<string, BoundingBox>();
+  public uuidToBBox = new Map<string, BoundingBox>();
   public uuidToCamera = new Map<string, ArcRotateCamera>();
 
   private selectedUuidContainers: string[];
@@ -145,8 +145,8 @@ export class AppService {
   public getContainerFromPlugGeometry(type: Node | PlugGeometry): Container { return this.plugToContainer.get(type) }
 
   // Get Selections methods
-  public getSelectedContainers(): string[] { return this.selectedUuidContainers }
   public noSelected(): boolean { return this.selectedUuidContainers.length < 1 }
+  public getSelectedContainers(): string[] { return this.selectedUuidContainers }
   public getFirstSelected(): Container { return this.getContainerFromUuid(this.selectedUuidContainers[0]); }
 
   /** Map object in Scene */
@@ -156,7 +156,7 @@ export class AppService {
 
   addPlugGeometryToMapScene(c: Container) {
     this.plugToContainer.set(c.getPlugGeometry(), c);
-    this.uuidToBoundingBox.set(c.uuid, (c.getPlugGeometry()).getBoundingInfo().boundingBox)
+    this.uuidToBBox.set(c.uuid, (c.getPlugGeometry()).getBoundingInfo().boundingBox);
   }
 
   addCameraToMapScene(c: Container, camera: ArcRotateCamera) { this.uuidToCamera.set(c.uuid, camera); }

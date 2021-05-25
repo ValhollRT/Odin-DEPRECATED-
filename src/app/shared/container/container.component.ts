@@ -2,8 +2,10 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { fromEvent, merge } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
 import { AppService } from 'src/app/services/index.service';
 import { addSelection, oneSelection } from 'src/app/store/actions';
+import { Plug } from './../../engine/plugs/plug';
 import { LogService } from './../../services/log.service';
 import { AppState } from './../../store/app.reducer';
 import { flatTreeContainer } from './../../ui/tree-node/tree-node.component';
@@ -20,6 +22,7 @@ export class ContainerComponent implements OnInit {
   @ViewChild('container') containerEl: ElementRef;
 
   dataContainer: Container;
+  listPlugs: Plug[];
   public readOnlyInput: boolean = true;
 
   constructor(
@@ -30,6 +33,7 @@ export class ContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataContainer = this.appServ.getContainerFromUuid(this.data.uuid);
+    this.listPlugs = this.dataContainer.plugs.filter((p) => p instanceof PlugGeometry && p.panel != undefined)
   }
 
   ngAfterViewInit(): void {
@@ -38,9 +42,6 @@ export class ContainerComponent implements OnInit {
 
   selectContainer(event: any) {
     this.data.selected = !this.data.selected;
-    this.logServ.log(this.data, "container clicked", "TreeNodeComponent");
-
-
     if (event.shiftKey) {
       // this.store.dispatch(addSelection({ uuid: this.data.uuid }));
     }
@@ -50,6 +51,7 @@ export class ContainerComponent implements OnInit {
     else {
       this.store.dispatch(oneSelection({ uuid: this.data.uuid }));
     }
+    this.logServ.log(this.data, "container clicked", "TreeNodeComponent");
   }
 
   hide() {

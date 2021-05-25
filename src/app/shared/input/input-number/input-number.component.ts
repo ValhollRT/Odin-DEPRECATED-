@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'input-number',
@@ -18,8 +18,9 @@ export class InputNumberComponent implements OnInit {
   @Input('resetValue') resetValue: number;
   @Input('label') label: string;
   @Input('pipe') pipe: any;
-  @Input('pipeInput') pipeInput: (el: HTMLInputElement) => number;
+  @Input('pipeInput') pipeInput: (el: HTMLInputElement, param: string) => number;
   @Input('change') change: () => void;
+  @Input('callbackFn') callbackFn: (value: number, oldValue: number, param: string) => void;
 
   public _curDown = false;
   public _mouseDownX: number = 0;
@@ -27,7 +28,7 @@ export class InputNumberComponent implements OnInit {
   public lastDistance: number = 0;
   public _reset: number;
 
-  constructor() { }
+  constructor(public ngZone: NgZone) { }
 
   ngOnInit(): void { }
 
@@ -65,7 +66,6 @@ export class InputNumberComponent implements OnInit {
   onMouseDown = (e) => {
     let el = this.inputNumber.nativeElement as HTMLInputElement;
     this._mouseDownX = e.clientX;
-    this._mouseDownValue = this.setValue(this.inputNumber.nativeElement.value);
     this._changeStart();
   }
 
@@ -75,18 +75,20 @@ export class InputNumberComponent implements OnInit {
 
   public eLastClientX: number
   onMouseMove = (e: MouseEvent) => {
-    if (this._curDown === true) {
-      e.preventDefault();
+    this.ngZone.runOutsideAngular(() => {
+      if (this._curDown === true) {
+        e.preventDefault();
 
-      let direction = e.clientX > this.eLastClientX ? 1 : -1;
-      let distance: number = (e.clientX - this._mouseDownX);
+        let direction = e.clientX > this.eLastClientX ? 1 : -1;
+        let distance: number = (e.clientX - this._mouseDownX);
 
-      if (distance == this.lastDistance) return; /** prevent change value  */
-      this.eLastClientX = e.clientX;
+        if (distance == this.lastDistance) return; /** prevent change value  */
+        this.eLastClientX = e.clientX;
 
-      this.lastDistance = distance;
-      this.setValue(this.getValue() + (direction * this.getStep(e)));
-    }
+        this.lastDistance = distance;
+        this.setValue(this.getValue() + (direction * this.getStep(e)));
+      }
+    });
   }
 
   getStep(e) {
@@ -117,18 +119,22 @@ export class InputNumberComponent implements OnInit {
     return parseFloat(this.inputNumber.nativeElement.value) || 0;
   }
 
-  setValue(amount: number): number {
-    let value: number;
-    value = Math.max(Math.min(amount, this.max), this.min);
-    if (Number.isNaN(value)) return;
+  setValue(amount: number): void {
+    this.ngZone.runOutsideAngular(() => {
+      let value: number;
+      value = Math.max(Math.min(amount, this.max), this.min);
+      if (Number.isNaN(value)) return;
 
-    value = this._roundValue(value);
-    this.inputNumber.nativeElement.value = value;
+      value = this._roundValue(value);
+      this.inputNumber.nativeElement.value = value;
 
-    if (this.pipeInput != undefined) this.value[this.param] = this.pipeInput(this.inputNumber.nativeElement)
-    else this.value[this.param] = value;
+      let oldValue = this.value[this.param];
+      if (this.pipeInput != undefined) this.value[this.param] = this.pipeInput(this.inputNumber.nativeElement, this.param)
+      else this.value[this.param] = value;
 
-    return value;
+      if (this.callbackFn != undefined) this.callbackFn(value, oldValue, this.param);
+      return value;
+    });
   }
 
 

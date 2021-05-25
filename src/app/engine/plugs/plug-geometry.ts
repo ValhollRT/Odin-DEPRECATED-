@@ -39,6 +39,7 @@ export class PlugGeometry extends Mesh implements Plug {
         let material = container.getPlugMaterial();
         if (material == undefined) return;
         this.material = material;
+        this.enable = false;
     }
 
     private getDefaultGeometryData(type: String) {

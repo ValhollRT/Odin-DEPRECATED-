@@ -1,6 +1,7 @@
 import {
     Color3,
     DynamicTexture,
+    LinesMesh,
     Mesh,
     Scene,
     StandardMaterial,
@@ -9,35 +10,39 @@ import {
 
 export class AxisHelper extends Mesh {
     // show axis
+    private axisX: LinesMesh;
+    private axisY: LinesMesh;
+    private axisZ: LinesMesh;
+
     constructor(size: number, scene: Scene) {
         super("axisWorld", scene);
-        let axisX = Mesh.CreateLines("axisX", [
+        this.axisX = Mesh.CreateLines("axisX", [
             Vector3.Zero(), new Vector3(size, 0, 0), new Vector3(size * 0.95, 0.05 * size, 0),
             new Vector3(size, 0, 0), new Vector3(size * 0.95, -0.05 * size, 0)
         ], scene);
-        axisX.color = new Color3(1, 0, 0);
-        let xChar = this.makeTextPlane("X", "red", size / 10, scene);
-        xChar.position = new Vector3(0.9 * size, -0.05 * size, 0);
-        let axisY = Mesh.CreateLines("axisY", [
+        this.axisX.color = new Color3(1, 0, 0);
+        this.axisY = Mesh.CreateLines("axisY", [
             Vector3.Zero(), new Vector3(0, size, 0), new Vector3(-0.05 * size, size * 0.95, 0),
             new Vector3(0, size, 0), new Vector3(0.05 * size, size * 0.95, 0)
         ], scene);
-        axisY.color = new Color3(0, 1, 0);
-        let yChar = this.makeTextPlane("Y", "green", size / 10, scene);
-        yChar.position = new Vector3(0, 0.9 * size, -0.05 * size);
-        let axisZ = Mesh.CreateLines("axisZ", [
+        this.axisY.color = new Color3(0, 1, 0);
+
+        this.axisZ = Mesh.CreateLines("axisZ", [
             Vector3.Zero(), new Vector3(0, 0, size), new Vector3(0, -0.05 * size, size * 0.95),
             new Vector3(0, 0, size), new Vector3(0, 0.05 * size, size * 0.95)
         ], scene);
-        axisZ.color = new Color3(0, 0, 1);
-        let zChar = this.makeTextPlane("Z", "blue", size / 10, scene);
-        zChar.position = new Vector3(0, 0.05 * size, 0.9 * size);
-        axisX.isPickable = false;
-        axisY.isPickable = false;
-        axisZ.isPickable = false;
-        xChar.isPickable = false;
-        yChar.isPickable = false;
-        zChar.isPickable = false;
+        this.axisZ.color = new Color3(0, 0, 1);
+        this.axisX.isPickable = false;
+        this.axisY.isPickable = false;
+        this.axisZ.isPickable = false;
+
+        this.axisX.renderingGroupId = 2;
+        this.axisY.renderingGroupId = 2;
+        this.axisZ.renderingGroupId = 2;
+
+        this.axisX.parent = this;
+        this.axisY.parent = this;
+        this.axisZ.parent = this;
     }
 
     makeTextPlane(text, color, size, scene: Scene) {
@@ -52,5 +57,11 @@ export class AxisHelper extends Mesh {
         plane.material = material;
         return plane;
     };
+
+    setVisible(visible: boolean) {
+        this.axisX.isVisible = visible;
+        this.axisY.isVisible = visible;
+        this.axisZ.isVisible = visible;
+    }
 
 }

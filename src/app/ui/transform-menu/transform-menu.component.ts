@@ -1,12 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { DirectionalLight, HemisphericLight, Light, Mesh, ShadowLight, SpotLight, TargetCamera, Vector2, Vector3 } from 'babylonjs';
 import { filter, map } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { RotationPipe } from 'src/app/pipes/rotation.pipe';
 import { AppService, EngineService, LogService } from 'src/app/services/index.service';
+import { Container } from 'src/app/shared/container/container';
 import { PlugTransform } from '../../engine/plugs/plug-transform';
 import { AppState } from '../../store/app.reducer';
+import { PlugGeometry } from './../../engine/plugs/plug-geometry';
+
 
 class TransformMenu {
   position: Vector3;
@@ -24,6 +27,7 @@ class TransformMenu {
 export class TransformMenuComponent implements OnInit {
 
   selected: any;
+  selectedGeometry: PlugGeometry;
   isMeshSelected: Boolean = false;
   isLightSelected: Boolean = false;
   isCameraSelected: Boolean = false;
@@ -43,22 +47,30 @@ export class TransformMenuComponent implements OnInit {
     public engineServ: EngineService,
     public appServ: AppService,
     public store: Store<AppState>,
-    public logServ: LogService
+    public logServ: LogService,
+    public ngZone: NgZone
   ) {
     this.tm = new TransformMenu();
     this.resetAll();
     this.store
       .pipe(select('engine'), filter(selection => selection.uuidCsSelected.length > 0))
-      .pipe(map(sel => this.appServ.getContainerFromUuid(sel.uuidCsSelected[0]).getPlugTransform()))
-      .subscribe((o: PlugTransform) => {
-        this.setTransformMenuSelected(o);
+      .pipe(map(sel => this.appServ.getContainerFromUuid(sel.uuidCsSelected[0])))
+      .subscribe((c: Container) => {
+        this.setTransformMenuSelected(c.getPlugTransform());
+        this.selectedGeometry = c.getPlugGeometry();
         this.logServ.log(this.tm, "edited transform", "TransformMenuComponent");
+      });
+
+    this.store
+      .pipe(select('engine'), filter(selection => selection.uuidCsSelected.length == 0))
+      .subscribe((en: any) => {
+        this.selected = undefined; this.selectedGeometry = undefined;
       });
   }
 
   ngOnInit(): void { }
 
-  setTransformMenuSelected(o: Mesh | Light | TargetCamera | PlugTransform) {
+  setTransformMenuSelected(o: Light | TargetCamera | PlugTransform) {
     if (o instanceof HemisphericLight) {
       this.resetAll();
       // This is important to hide the transform panel
@@ -102,9 +114,34 @@ export class TransformMenuComponent implements OnInit {
     }
   }
 
-  pipeInputRotation = (el: HTMLInputElement): number => {
+  pipeInputRotation = (el: HTMLInputElement, param: string): number => {
     let rad = Utils.degreeToRadians(parseFloat(el.value) || 0);
     return Utils.precision(rad, 3);
+  };
+
+  computeMatrix() {
+    this.selected.computeWorldMatrix(true);
+    this.selected.originZero.computeWorldMatrix(true);
+    this.selectedGeometry.computeWorldMatrix(true);
+  }
+
+  setCenter = (value: number, oldValue: number, param: string): void => {
+    this.computeMatrix();
+
+    let geomPos = (<PlugTransform>this.selected).origin.clone()
+    geomPos[param] = value;
+    this.selectedGeometry.position = geomPos.negate();
+    this.computeMatrix();
+
+
+    let move = new Vector3(0, 0, 0);
+    move[param] = value - oldValue;
+    this.selected.locallyTranslate(move);
+
+    this.computeMatrix();
+    console.log(geomPos.negate());
+    (<PlugTransform>this.selected).originZero.position = geomPos.negate().clone();
+    this.computeMatrix();
   };
 
   resetAll() {

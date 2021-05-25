@@ -87,7 +87,6 @@ export class Container {
       this.children.forEach(c => c.plugGeometry.visibility = 1);
     }
 
-
     if (this.plugLight != undefined) {
       (<any>this.plugLight).setEnabled(!this.hidden);
 
@@ -119,7 +118,7 @@ export class Container {
     let worldMatrix = this.plugTransform.getWorldMatrix();
 
     this.parent = parent;
-    this.plugTransform.parent = parent.plugTransform;
+    this.plugTransform.parent = parent.getPlugTransform().originZero;
 
     this.plugGeometry?.refreshBoundingInfo();
     this.plugTransform._worldMatrix = worldMatrix;
