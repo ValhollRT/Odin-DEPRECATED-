@@ -1,0 +1,19 @@
+{
+  "name": "installer-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/main.js",
+  "scripts": {
+    "electron-compile": "tsc -p . && electron .",
+    "electron-run": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/electron": "^1.6.10",
+    "electron": "^13.1.7"
+  },
+  "dependencies": {
+    "typescript": "^4.3.5"
+  }
+}
