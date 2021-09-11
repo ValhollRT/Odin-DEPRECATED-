@@ -14,15 +14,14 @@ import { BtnFooter } from './../../shared/popup-window/popup-window.component';
 export class SceneSettingsComponent implements OnInit {
 
   isOpen = false;
-  sceneSettings: SceneSettings;
   saveBtnFooter: BtnFooter;
+  sceneSettings: SceneSettings = { backgroundColor: "", userId: "" };
 
   constructor(
     private store: Store<AppState>,
     private appService: AppService,
     public engineServ: EngineService,
     public logService: LogService) {
-    this.sceneSettings = {} as SceneSettings;
     // https://stackoverflow.com/questions/39074765/typescript-service-is-undefined-when-calling-a-function-from-common-service
     this.saveBtnFooter = { name: "Save", event: this.saveSettingsToDatabase.bind(this) };
   }
@@ -35,7 +34,7 @@ export class SceneSettingsComponent implements OnInit {
     });
 
     this.store.select('engine').subscribe(engine => {
-      this.sceneSettings = engine.sceneSettings;
+      this.sceneSettings = { ...engine.sceneSettings };
       this.loadSettingsOnViewport();
     });
   }

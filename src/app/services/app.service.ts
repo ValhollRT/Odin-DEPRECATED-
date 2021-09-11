@@ -101,6 +101,7 @@ export class AppService {
   setSceneSettings(settings: SceneSettings): void {
     this.sceneSettings = { ...settings, userId: this.userId };
     this.databaseServ.setSceneSettings(this.sceneSettings);
+    this.store.dispatch(setSettings({ sceneSettings: { ...this.sceneSettings } }));
   }
 
   /** Generate Containers and Plugs */
