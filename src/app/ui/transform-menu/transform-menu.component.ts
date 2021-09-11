@@ -139,7 +139,6 @@ export class TransformMenuComponent implements OnInit {
     this.selected.locallyTranslate(move);
 
     this.computeMatrix();
-    console.log(geomPos.negate());
     (<PlugTransform>this.selected).originZero.position = geomPos.negate().clone();
     this.computeMatrix();
   };

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { User } from '../models/User.model';
 import { login, signUp } from '../store/actions/session.actions';
 import { AppState } from '../store/app.reducer';
+import { DatabaseService } from './database.service';
 import { LogService } from './log.service';
 
 @Injectable({
@@ -19,6 +20,7 @@ export class SessionService {
   constructor(
     private store: Store<AppState>,
     private logServ: LogService,
+    private databaseServ: DatabaseService,
     public afAuth: AngularFireAuth,
     private firestore: AngularFirestore) {
     this.user = this.afAuth.authState;
@@ -55,10 +57,10 @@ export class SessionService {
     return this.afAuth.signOut();
   }
 
-  signUpWithEmail(email: string, pass: string): Promise<firebase.auth.UserCredential> {
+  signUpWithEmail(displayName: string, email: string, pass: string): Promise<firebase.auth.UserCredential> {
     return this.afAuth.createUserWithEmailAndPassword(email, pass).then(fUser => {
-      const newUser = this.firebaseAuthCredentialToUser(fUser);
-      this.firestore.doc(`${newUser.uid}/user`).set({ ...newUser });
+      const newUser = this.firebaseAuthCredentialToUser(fUser, displayName);
+      this.databaseServ.addNewUser(newUser)
       this.store.dispatch(signUp({ user: newUser }));
       return fUser;
     });
@@ -66,12 +68,12 @@ export class SessionService {
 
   signInWithEmail(email: string, pass: string): Promise<firebase.auth.UserCredential> {
     return this.afAuth.signInWithEmailAndPassword(email, pass).then(fUser => {
-      const newUser = this.firebaseAuthCredentialToUser(fUser);
-      this.store.dispatch(signUp({ user: newUser }));
+      const user = this.firebaseAuthCredentialToUser(fUser, "");
+      this.store.dispatch(signUp({ user: user }));
       return fUser;
     });
   }
-  firebaseAuthCredentialToUser(fUser: firebase.auth.UserCredential): User {
-    return new User(fUser.user.uid, fUser.user.displayName, fUser.user.email);
+  firebaseAuthCredentialToUser(fUser: firebase.auth.UserCredential, displayName: string): User {
+    return new User(fUser.user.uid, displayName, fUser.user.email);
   }
 }

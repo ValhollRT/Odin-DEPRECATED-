@@ -42,6 +42,12 @@ import { ToolMenuComponent } from './ui/tool-menu/tool-menu.component';
 import { TransformMenuComponent } from './ui/transform-menu/transform-menu.component';
 import { TreeNodeComponent } from './ui/tree-node/tree-node.component';
 import { ViewportComponent } from './ui/viewport/viewport.component';
+import { CreateNewMaterialComponent } from './ui/create-new-material/create-new-material.component';
+import { UploadNewAudioComponent } from './ui/upload-new-audio/upload-new-audio.component';
+import { UploadNewImageComponent } from './ui/upload-new-image/upload-new-image.component';
+import { UploadNewFontComponent } from './ui/upload-new-font/upload-new-font.component';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 
 @NgModule({
   declarations: [
@@ -74,7 +80,11 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     PlugsPanelComponent,
     ContainerComponent,
     PlugComponent,
-    InputNumberComponent
+    InputNumberComponent,
+    CreateNewMaterialComponent,
+    UploadNewAudioComponent,
+    UploadNewImageComponent,
+    UploadNewFontComponent
   ],
   imports: [
     FormsModule,
@@ -92,7 +102,9 @@ import { ViewportComponent } from './ui/viewport/viewport.component';
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAnalyticsModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    ReactiveFormsModule
   ],
   providers: [folderDatabase, RotationPipe],
   bootstrap: [AppComponent]

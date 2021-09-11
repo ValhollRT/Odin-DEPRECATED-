@@ -1,9 +1,9 @@
 <popup-window [title]="'Settings'" [isOpen]="this.isOpen" (emitCloseDialog)="closeDialog()"
     [buttonsFooter]="[ this.saveBtnFooter ]">
-    <div *ngIf="this.tempSceneSettings != null" class="container">
+    <div *ngIf="this.sceneSettings != null" class="container">
         <div class="property-panel-group">
             <span class="property-panel-text">Background color</span>
-            <input type="color" [(ngModel)]="this.tempSceneSettings.backgroundColor" value="#000000">
+            <input type="color" [(ngModel)]="this.sceneSettings.backgroundColor" value="#000000">
         </div>
     </div>
 </popup-window>

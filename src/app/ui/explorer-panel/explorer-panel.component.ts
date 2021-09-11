@@ -2,7 +2,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, ElementRef, Injectable, ViewChild } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
+import { PopupDialogAction } from 'src/app/models';
+import { openCreateNewMaterial, openUploadNewAudio, openUploadNewFont, openUploadNewImage } from 'src/app/store/actions';
+import { AppState } from 'src/app/store/app.reducer';
 import { DatabaseService, Directory } from './../../services/database.service';
 
 
@@ -209,7 +213,8 @@ export class ExplorerPanelComponent {
   data: FolderNode[];
   constructor(
     private database: folderDatabase,
-    private databaseServ: DatabaseService) {
+    private databaseServ: DatabaseService,
+    private store: Store<AppState>) {
 
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<FolderFlatNode>(this.getLevel, this.isExpandable);
@@ -363,6 +368,7 @@ export class ExplorerPanelComponent {
     if (this.selectedNode != undefined) this.selectedNode.active = false;
     this.selectedNode = node;
     node.active = true;
+    this.readFolderContent(node);
   }
 
   desactiveFolder(event) {
@@ -448,5 +454,48 @@ export class ExplorerPanelComponent {
     this.databaseServ.deleteFolder(this.selectedNode.id).then(() => {
       this.refreshTreeFolder();
     });;
+  }
+
+  openCreateNewMaterialDialog() {
+    this.store.dispatch(openCreateNewMaterial({ createNewMaterial: new PopupDialogAction(true) }))
+  }
+
+  openUploadNewImageDialog() {
+    this.store.dispatch(openUploadNewImage({ uploadNewImage: new PopupDialogAction(true) }))
+  }
+  openUploadNewAudioDialog() {
+    this.store.dispatch(openUploadNewAudio({ uploadNewAudio: new PopupDialogAction(true) }))
+  }
+  openUploadNewFontDialog() {
+    this.store.dispatch(openUploadNewFont({ uploadNewFont: new PopupDialogAction(true) }))
+  }
+
+
+  addMaterial() {
+    if (!!this.selectedNode.id) {
+      this.databaseServ.addNewMaterial(this.selectedNode.id).then(() => {
+        this.refreshTreeFolder();
+      });
+    }
+  }
+
+  addImage() { }
+  addFont() { }
+  addAudio() { }
+
+  public contentFolder: any[] = [];
+  async readFolderContent(node: FolderFlatNode) {
+    this.contentFolder = []
+    let result = await this.databaseServ.getFolderContent(node.id)
+    result.docs.forEach(d => {
+      this.contentFolder.push({ ...d.data(), type: "material" });
+    });
+  }
+
+  setBackgroundColor(item: any) {
+    let styles = {
+      'background-color': `rgb(${item.diffuse.r},${item.diffuse.g},${item.diffuse.b})`,
+    };
+    return styles;
   }
 }

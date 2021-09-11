@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { ArcRotateCamera, BoundingBox, Light, Mesh, Vector3 } from 'babylonjs';
+import { ArcRotateCamera, BoundingBox, Light, Vector3 } from 'babylonjs';
 import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
 import { PlugSpotLight } from 'src/app/engine/plugs/plug-light/plug-spot-light';
 import { EngineService } from 'src/app/services/engine.service';
@@ -16,9 +17,11 @@ import { AppState } from '../store/app.reducer';
 import { PlugDirectionalLight } from './../engine/plugs/plug-light/plug-directional-light';
 import { PlugHemisphericLight } from './../engine/plugs/plug-light/plug-hemispheric-light';
 import { PlugText } from './../engine/plugs/plug-text';
+import { DatabaseService } from './database.service';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
+
 
   sceneSettings: SceneSettings;
 
@@ -27,17 +30,25 @@ export class AppService {
   public uuidToContainer = new Map<string, Container>();
   public uuidToBBox = new Map<string, BoundingBox>();
   public uuidToCamera = new Map<string, ArcRotateCamera>();
+  public userId: string;
 
   private selectedUuidContainers: string[];
 
   constructor(
     public engineServ: EngineService,
+    public databaseServ: DatabaseService,
     public store: Store<AppState>,
+    private firestore: AngularFirestore
   ) {
     this.sceneSettings = new SceneSettings();
-    this.loadSceneSettings();
     store.select('engine').subscribe(en => {
       this.selectedUuidContainers = [...en.uuidCsSelected];
+    });
+    store.select('session').subscribe(session => {
+      if (session.user) this.userId = session.user.uid;
+      else this.userId = undefined;
+      console.log("user --- ", this.userId);
+      this.loadSceneSettings().then
     });
   }
 
@@ -61,23 +72,26 @@ export class AppService {
   }
 
   /** Settings */
-  loadSceneSettings() {
-    // TODO Load from firebase
+  async loadSceneSettings() {
+    if (this.userId === undefined || this.userId === null) {
+      return this.loadDefaultSceneSettings();
+    }
 
-    //Default Settings
-    this.loadDefaultSceneSettings();
+    let userDocId = await this.databaseServ.getUserDocId(this.userId);
+    let setting = await this.databaseServ.getSceneSettings(userDocId.docs[0].id);
+    if (setting.docs.length == 1) setting.docs[0].data() as SceneSettings
+    else return this.loadDefaultSceneSettings();
+
   }
 
   loadDefaultSceneSettings() {
-    this.sceneSettings.backgroundColor = "#000000";
-  }
-
-  getSceneSettings(): SceneSettings {
-    return { ... this.sceneSettings };
+    this.sceneSettings.backgroundColor = "#333335";
+    return this.sceneSettings;
   }
 
   setSceneSettings(settings: SceneSettings): void {
-    this.sceneSettings = { ...settings };
+    this.sceneSettings = { ...settings, userId: this.userId };
+    this.databaseServ.setSceneSettings(this.sceneSettings);
   }
 
   /** Generate Containers and Plugs */
@@ -160,4 +174,8 @@ export class AppService {
   }
 
   addCameraToMapScene(c: Container, camera: ArcRotateCamera) { this.uuidToCamera.set(c.uuid, camera); }
+}
+
+function where(arg0: string, arg1: string, userId: string): any {
+  throw new Error('Function not implemented.');
 }

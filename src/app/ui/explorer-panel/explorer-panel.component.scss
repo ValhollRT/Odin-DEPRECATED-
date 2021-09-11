@@ -92,7 +92,7 @@ mat-icon {
     width: 10px;
 }
 
-button {
+.arrow-folder {
     color: var(--console-debug-color);
     background: transparent;
     border: none;
@@ -197,4 +197,32 @@ input[type="text"] {
     background-color: transparent;
     min-width: 100px;
     cursor: default;
+}
+
+.explorer-view{
+    background-color: #111;
+    width: 74%;
+    height: 200px;
+    position: relative;
+    float: right;
+    padding: 4px;
+    overflow-y: auto;
+}
+
+.icon-explorer-material{
+    width: 60px;
+    height: 60px;
+    background-color: #3c3b3b;
+    margin: 2px;
+}
+
+.grid-icons{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2px;
+    grid-auto-rows: minmax(auto, auto);
+}
+
+.explorer-icon{
+    width: 40px; height: 40px;margin: auto; background-color:red; margin-top: 4px;
 }
