@@ -13,6 +13,7 @@ import { PlugMaterial } from '../engine/plugs/plug-material';
 import { PlugTransform } from '../engine/plugs/plug-transform';
 import { Utils } from '../engine/Utils/Utils';
 import { SceneSettings } from '../models/SceneSettings.model';
+import { setSettings } from '../store/actions/engine.actions';
 import { AppState } from '../store/app.reducer';
 import { PlugDirectionalLight } from './../engine/plugs/plug-light/plug-directional-light';
 import { PlugHemisphericLight } from './../engine/plugs/plug-light/plug-hemispheric-light';
@@ -23,7 +24,10 @@ import { DatabaseService } from './database.service';
 export class AppService {
 
 
-  sceneSettings: SceneSettings;
+  public sceneSettings = {
+    backgroundColor: "#333335",
+    userId: undefined
+  } as SceneSettings;
 
   // References Containers
   public plugToContainer = new Map<Node | PlugGeometry | Light, Container>();
@@ -40,15 +44,15 @@ export class AppService {
     public store: Store<AppState>,
     private firestore: AngularFirestore
   ) {
-    this.sceneSettings = new SceneSettings();
     store.select('engine').subscribe(en => {
       this.selectedUuidContainers = [...en.uuidCsSelected];
     });
     store.select('session').subscribe(session => {
       if (session.user) this.userId = session.user.uid;
       else this.userId = undefined;
-      console.log("user --- ", this.userId);
-      this.loadSceneSettings().then
+      this.loadSceneSettings().then(settings => {
+        this.store.dispatch(setSettings({ sceneSettings: { ...settings } }));
+      });
     });
   }
 
@@ -72,20 +76,25 @@ export class AppService {
   }
 
   /** Settings */
-  async loadSceneSettings() {
+  async loadSceneSettings(): Promise<SceneSettings> {
     if (this.userId === undefined || this.userId === null) {
       return this.loadDefaultSceneSettings();
     }
 
     let userDocId = await this.databaseServ.getUserDocId(this.userId);
-    let setting = await this.databaseServ.getSceneSettings(userDocId.docs[0].id);
-    if (setting.docs.length == 1) setting.docs[0].data() as SceneSettings
-    else return this.loadDefaultSceneSettings();
+    let setting = await this.databaseServ.getSceneSettings(this.userId);
+    if (setting.docs.length == 1) {
+      return setting.docs[0].data() as SceneSettings
+    }
+    else {
+      return this.loadDefaultSceneSettings();
+    }
 
   }
 
   loadDefaultSceneSettings() {
     this.sceneSettings.backgroundColor = "#333335";
+    this.sceneSettings.userId = undefined;
     return this.sceneSettings;
   }
 

@@ -22,28 +22,29 @@ export class SceneSettingsComponent implements OnInit {
     private appService: AppService,
     public engineServ: EngineService,
     public logService: LogService) {
-    this.sceneSettings = new SceneSettings();
+    this.sceneSettings = {} as SceneSettings;
     // https://stackoverflow.com/questions/39074765/typescript-service-is-undefined-when-calling-a-function-from-common-service
-    this.saveBtnFooter = { name: "Save", event: this.saveSettings.bind(this) };
+    this.saveBtnFooter = { name: "Save", event: this.saveSettingsToDatabase.bind(this) };
   }
 
   ngOnInit() {
     this.store.select('ui').subscribe(ui => {
       this.appService.loadSceneSettings().then(settings => {
-        console.log(settings);
-        this.sceneSettings = settings;
         this.isOpen = ui.sceneSettings.open;
-        this.setSettings(settings);
       });
+    });
+
+    this.store.select('engine').subscribe(engine => {
+      this.sceneSettings = engine.sceneSettings;
+      this.loadSettingsOnViewport();
     });
   }
 
-  setSettings(settings: SceneSettings) {
-    this.engineServ.setBackgroundColorScene(settings.backgroundColor)
+  saveSettingsToDatabase(): void {
+    this.appService.setSceneSettings(this.sceneSettings);
   }
 
-  saveSettings(): void {
-    this.appService.setSceneSettings(this.sceneSettings);
+  loadSettingsOnViewport() {
     this.engineServ.setBackgroundColorScene(this.sceneSettings.backgroundColor)
   }
 

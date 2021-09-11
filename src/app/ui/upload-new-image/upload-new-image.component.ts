@@ -74,7 +74,7 @@ export class UploadNewImageComponent implements OnInit {
       this.porcentaje = Math.round(porcentaje);
       if (this.porcentaje == 100) {
         this.finalizado = true;
-        console.log("arachivo -- " ,archivo, "referencia -- ", referencia, "tarea -- ", tarea);
+        console.log("archivo -- " ,archivo, "referencia -- ", referencia, "tarea -- ", tarea);
       }
     });
 
