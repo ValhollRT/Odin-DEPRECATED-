@@ -1,4 +1,4 @@
-import { openUploadNewAudio, openUploadNewFont, openUploadNewImage } from './../actions/ui.actions';
+import { folderExplorerId, openUploadNewAudio, openUploadNewFont, openUploadNewImage } from './../actions/ui.actions';
 import { createReducer, on } from '@ngrx/store';
 import { PopupDialogAction } from '../../models/';
 import { SidebarPanelAction } from '../../models/menuActions/SidebarPanelAction.model';
@@ -14,6 +14,7 @@ export interface State {
     uploadNewFont: PopupDialogAction;
     console: PopupDialogAction;
     login: PopupDialogAction;
+    folderExplorerId: string;
 }
 
 export const initialState: State = {
@@ -25,7 +26,8 @@ export const initialState: State = {
     uploadNewImage: { open: false },
     uploadNewFont: { open: false },
     console: { open: false },
-    login: { open: false }
+    login: { open: false },
+    folderExplorerId: ""
 }
 
 let _uiReducer = createReducer(
@@ -38,7 +40,8 @@ let _uiReducer = createReducer(
     on(openUploadNewImage, (state, { uploadNewImage }) => ({ ...state, uploadNewImage })),
     on(openUploadNewFont, (state, { uploadNewFont }) => ({ ...state, uploadNewFont })),
     on(openConsole, (state, { console }) => ({ ...state, console })),
-    on(openLogin, (state, { login }) => ({ ...state, login }))
+    on(openLogin, (state, { login }) => ({ ...state, login })),
+    on(folderExplorerId, (state, { folderExplorerId }) => ({ ...state, folderExplorerId }))
 );
 
 export function uiReducer(state, action) {

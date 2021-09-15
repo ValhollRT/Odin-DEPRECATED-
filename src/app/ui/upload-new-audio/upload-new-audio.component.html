@@ -1,4 +1,16 @@
-<popup-window [title]="'Upload new Audio'" [isOpen]="this.isOpen" [width]="350" (emitCloseDialog)="closeDialog()"
-    [buttonsFooter]="[ this.saveBtnFooter ]">
-    <div>AUDIO</div>
+<popup-window [title]="'Upload new Audio'" [isOpen]="this.isOpen" [width]="350" (emitCloseDialog)="closeDialog()" [buttonsFooter]="[this.saveBtnFooter]">
+    <div class="container-main">
+        <div class=".container-form">
+            <form [formGroup]="fileFormGroup" (ngSubmit)="uploadNewAudio()">
+                <div class="file has-name is-boxed">
+                    <label class="file-label"></label>
+                    <input type="file" class="file" formControlName="fileFormControl" (change)="changeFile($event)" />
+                    <span class="file-cta"> </span>
+                </div>
+                <progress *ngIf="percent > 0 && percent < 100" class="progress is-large is-success" value="{{ percent }}" max="100">
+          {{ percent }}%
+        </progress>
+            </form>
+        </div>
+    </div>
 </popup-window>

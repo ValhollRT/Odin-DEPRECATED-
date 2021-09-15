@@ -58,14 +58,17 @@ mat-tree {
 
 mat-tree-node {
     font-size: 12px;
-
     min-height: 0px;
     color: var(--console-debug-color);
 }
-mat-tree-node > mat-tree-node {
+
+mat-tree-node>mat-tree-node {
     padding-left: 20px !important;
 }
+
+
 /*Style Tree Node*/
+
 mat-tree-node {
     &:hover {
         background-color: var(--highlight-color-hover);
@@ -98,8 +101,12 @@ mat-icon {
     border: none;
 }
 
+
 /* Track */
+
+
 /* width */
+
 ::-webkit-scrollbar {
     width: 4px;
 }
@@ -109,13 +116,17 @@ mat-icon {
     border-radius: 10px;
 }
 
+
 /* Handle */
+
 ::-webkit-scrollbar-thumb {
     background: var(--console-debug-color);
     border-radius: 10px;
 }
 
+
 /* Handle on hover */
+
 ::-webkit-scrollbar-thumb:hover {
     background: var(--console-debug-color);
 }
@@ -134,7 +145,9 @@ mat-icon {
     background-color: #dddddd;
 }
 
+
 /*BOX NODE*/
+
 .box-node {
     border: var(--main-menu-border);
     padding: 3px;
@@ -148,7 +161,6 @@ mat-icon {
 .container-selected {
     background: var(--highlight-color);
     color: black;
-
     input[type="text"] {
         color: black;
     }
@@ -199,7 +211,7 @@ input[type="text"] {
     cursor: default;
 }
 
-.explorer-view{
+.explorer-view {
     background-color: #111;
     width: 74%;
     height: 200px;
@@ -209,20 +221,33 @@ input[type="text"] {
     overflow-y: auto;
 }
 
-.icon-explorer-material{
+.icon-explorer-material {
     width: 60px;
-    height: 60px;
+    height: 75px;
     background-color: #3c3b3b;
     margin: 2px;
 }
 
-.grid-icons{
+.grid-icons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 2px;
     grid-auto-rows: minmax(auto, auto);
 }
 
-.explorer-icon{
-    width: 40px; height: 40px;margin: auto; background-color:red; margin-top: 4px;
+.explorer-icon {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    background-color: red;
+    margin-top: 4px;
+}
+
+.file-name-icon {
+    width: 95%;
+    color: white;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: inherit;
 }

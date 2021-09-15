@@ -1,15 +1,22 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, ElementRef, Injectable, ViewChild } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from '@angular/material/tree';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
 import { PopupDialogAction } from 'src/app/models';
-import { openCreateNewMaterial, openUploadNewAudio, openUploadNewFont, openUploadNewImage } from 'src/app/store/actions';
+import {
+  folderExplorerId,
+  openCreateNewMaterial,
+  openUploadNewAudio,
+  openUploadNewFont,
+  openUploadNewImage,
+} from 'src/app/store/actions';
 import { AppState } from 'src/app/store/app.reducer';
 import { DatabaseService, Directory } from './../../services/database.service';
-
-
 
 /**
  * Node for to-do item
@@ -32,13 +39,14 @@ export class FolderFlatNode {
   expandable: boolean;
 }
 
-
-const TREE_DATA = {}
+const TREE_DATA = {};
 
 @Injectable()
 export class folderDatabase {
   dataChange = new BehaviorSubject<FolderNode[]>([]);
-  get data(): FolderNode[] { return this.dataChange.value; }
+  get data(): FolderNode[] {
+    return this.dataChange.value;
+  }
   constructor() {
     this.initialize();
   }
@@ -92,7 +100,11 @@ export class folderDatabase {
     const parentNode = this.getParentFromNodes(node);
     const newItem = { name: name } as FolderNode;
     if (parentNode != null) {
-      parentNode.children.splice(parentNode.children.indexOf(node) + 1, 0, newItem);
+      parentNode.children.splice(
+        parentNode.children.indexOf(node) + 1,
+        0,
+        newItem
+      );
     } else {
       this.data.splice(this.data.indexOf(node) + 1, 0, newItem);
     }
@@ -141,7 +153,7 @@ export class folderDatabase {
   copyPasteItem(from: FolderNode, to: FolderNode): FolderNode {
     const newItem = this.insertItem(to, from.name);
     if (from.children) {
-      from.children.forEach(child => {
+      from.children.forEach((child) => {
         this.copyPasteItem(child, newItem);
       });
     }
@@ -152,7 +164,7 @@ export class folderDatabase {
   copyPasteItemAbove(from: FolderNode, to: FolderNode): FolderNode {
     const newItem = this.insertItemAbove(to, from.name);
     if (from.children) {
-      from.children.forEach(child => {
+      from.children.forEach((child) => {
         this.copyPasteItem(child, newItem);
       });
     }
@@ -162,7 +174,7 @@ export class folderDatabase {
   copyPasteItemBelow(from: FolderNode, to: FolderNode): FolderNode {
     const newItem = this.insertItemBelow(to, from.name);
     if (from.children) {
-      from.children.forEach(child => {
+      from.children.forEach((child) => {
         this.copyPasteItem(child, newItem);
       });
     }
@@ -174,7 +186,7 @@ export class folderDatabase {
     if (index > -1) {
       nodes.splice(index, 1);
     } else {
-      nodes.forEach(node => {
+      nodes.forEach((node) => {
         if (node.children && node.children.length > 0) {
           this.deleteNode(node.children, nodeToDelete);
         }
@@ -186,10 +198,9 @@ export class folderDatabase {
 @Component({
   selector: 'explorer-panel',
   templateUrl: './explorer-panel.component.html',
-  styleUrls: ['./explorer-panel.component.scss']
+  styleUrls: ['./explorer-panel.component.scss'],
 })
 export class ExplorerPanelComponent {
-
   flatNodeMap = new Map<FolderFlatNode, FolderNode>();
   nestedNodeMap = new Map<FolderNode, FolderFlatNode>();
 
@@ -214,13 +225,24 @@ export class ExplorerPanelComponent {
   constructor(
     private database: folderDatabase,
     private databaseServ: DatabaseService,
-    private store: Store<AppState>) {
+    private store: Store<AppState>
+  ) {
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      this.getLevel,
+      this.isExpandable,
+      this.getChildren
+    );
+    this.treeControl = new FlatTreeControl<FolderFlatNode>(
+      this.getLevel,
+      this.isExpandable
+    );
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
 
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel, this.isExpandable, this.getChildren);
-    this.treeControl = new FlatTreeControl<FolderFlatNode>(this.getLevel, this.isExpandable);
-    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-    database.dataChange.subscribe(data => {
+    database.dataChange.subscribe((data) => {
       this.dataSource.data = [];
       this.dataSource.data = data;
     });
@@ -232,34 +254,35 @@ export class ExplorerPanelComponent {
   isExpandable = (node: FolderFlatNode) => node.expandable;
   getChildren = (node: FolderNode): FolderNode[] => node.children;
   hasChild = (_: number, _nodeData: FolderFlatNode) => _nodeData.expandable;
-  hasNoContent = (_: number, _nodeData: FolderFlatNode) => _nodeData.name === '';
-
+  hasNoContent = (_: number, _nodeData: FolderFlatNode) =>
+    _nodeData.name === '';
 
   transformer = (node: FolderNode, level: number) => {
     const existingNode = this.nestedNodeMap.get(node);
-    const flatNode = existingNode && existingNode.name === node.name
-      ? existingNode
-      : new FolderFlatNode();
+    const flatNode =
+      existingNode && existingNode.name === node.name
+        ? existingNode
+        : new FolderFlatNode();
     flatNode.name = node.name;
     flatNode.level = level;
     flatNode.id = node.id;
     flatNode.children = node.children;
     flatNode.parent = node.parent;
-    flatNode.expandable = (node.children && node.children.length > 0);
+    flatNode.expandable = node.children && node.children.length > 0;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
-  }
+  };
 
   public fDbFlatNodes = new Map<string, FolderNode>();
   refreshTreeFolder() {
     this.flatNodeMap.clear();
     this.nestedNodeMap.clear();
-    this.fDbFlatNodes.clear()
+    this.fDbFlatNodes.clear();
 
     this.databaseServ.getDirectories().subscribe((dirs: any) => {
-      dirs.forEach(e => {
-        let folder = new FolderNode;
+      dirs.forEach((e) => {
+        let folder = new FolderNode();
         folder.id = e.id;
         folder.name = e.data().name;
         folder.children = [];
@@ -267,9 +290,9 @@ export class ExplorerPanelComponent {
         this.fDbFlatNodes.set(folder.id, folder);
       });
 
-      this.fDbFlatNodes.forEach(f => this.moveFolderToChildren(f))
-      Array.from(this.fDbFlatNodes.keys()).forEach(k => {
-        if (k.startsWith("DELETE")) this.fDbFlatNodes.delete(k)
+      this.fDbFlatNodes.forEach((f) => this.moveFolderToChildren(f));
+      Array.from(this.fDbFlatNodes.keys()).forEach((k) => {
+        if (k.startsWith('DELETE')) this.fDbFlatNodes.delete(k);
       });
 
       this.database.dataChange.next(Array.from(this.fDbFlatNodes.values()));
@@ -277,34 +300,39 @@ export class ExplorerPanelComponent {
   }
 
   moveFolderToChildren(f: FolderNode) {
-    if (f.parent == "" || f.parent == undefined) return;
-    if (f.children.length > 0) f.children.forEach(folder => this.moveFolderToChildren(folder))
+    if (f.parent == '' || f.parent == undefined) return;
+    if (f.children.length > 0)
+      f.children.forEach((folder) => this.moveFolderToChildren(folder));
     let parent: FolderNode = this.fDbFlatNodes.get(f.parent);
-    let parentDelete: FolderNode = this.fDbFlatNodes.get("DELETE" + f.parent);
+    let parentDelete: FolderNode = this.fDbFlatNodes.get('DELETE' + f.parent);
     if (parent != undefined) {
       if (parent.children.indexOf(f) != -1) return;
-      parent.children.push(f)
+      parent.children.push(f);
     }
 
     if (parentDelete != undefined) {
       if (parentDelete.children.indexOf(f) != -1) return;
-      parentDelete.children.push(f)
+      parentDelete.children.push(f);
     }
 
-    this.fDbFlatNodes.set("DELETE" + f.id, f);
+    this.fDbFlatNodes.set('DELETE' + f.id, f);
     this.fDbFlatNodes.delete(f.id);
   }
 
   /** Whether all the descendants of the node are selected */
   descendantsAllSelected(node: FolderFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    return descendants.every(child => this.checklistSelection.isSelected(child));
+    return descendants.every((child) =>
+      this.checklistSelection.isSelected(child)
+    );
   }
 
   /** Whether part of the descendants are selected */
   descendantsPartiallySelected(node: FolderFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
-    const result = descendants.some(child => this.checklistSelection.isSelected(child));
+    const result = descendants.some((child) =>
+      this.checklistSelection.isSelected(child)
+    );
     return result && !this.descendantsAllSelected(node);
   }
 
@@ -318,9 +346,11 @@ export class ExplorerPanelComponent {
   }
 
   addNewFolder() {
-    this.databaseServ.createFolder(this.selectedNode == undefined ? '' : this.selectedNode.id).then(() => {
-      this.refreshTreeFolder();
-    });
+    this.databaseServ
+      .createFolder(this.selectedNode == undefined ? '' : this.selectedNode.id)
+      .then(() => {
+        this.refreshTreeFolder();
+      });
   }
 
   /** Save the node to database */
@@ -340,7 +370,10 @@ export class ExplorerPanelComponent {
     event.preventDefault();
     // Handle node expand
     if (this.dragNodeExpandOverNode && node === this.dragNodeExpandOverNode) {
-      if ((Date.now() - this.dragNodeExpandOverTime) > this.dragNodeExpandOverWaitTimeMs) {
+      if (
+        Date.now() - this.dragNodeExpandOverTime >
+        this.dragNodeExpandOverWaitTimeMs
+      ) {
         if (!this.treeControl.isExpanded(node)) {
           this.treeControl.expand(node);
           //this.cd.detectChanges();
@@ -369,37 +402,51 @@ export class ExplorerPanelComponent {
     this.selectedNode = node;
     node.active = true;
     this.readFolderContent(node);
+    this.store.dispatch(
+      folderExplorerId({ folderExplorerId: this.selectedNode.id })
+    );
   }
 
   desactiveFolder(event) {
     event.stopPropagation();
     if (this.selectedNode != undefined) this.selectedNode.active = false;
     this.selectedNode = undefined;
+    this.store.dispatch(
+      folderExplorerId({ folderExplorerId: this.selectedNode.id })
+    );
   }
-
 
   handleDrop(event, node) {
     if (node !== this.dragNode) {
       let newItem: FolderNode;
       if (this.dragNodeExpandOverArea === 1) {
-        newItem = this.database.copyPasteItemAbove(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
-        if (this.dragNode.parent == node.id) this.dragNode.parent = node.parent
+        newItem = this.database.copyPasteItemAbove(
+          this.flatNodeMap.get(this.dragNode),
+          this.flatNodeMap.get(node)
+        );
+        if (this.dragNode.parent == node.id) this.dragNode.parent = node.parent;
         else this.dragNode.parent = node.id;
-        let dir: Directory = { ... this.dragNode, parent: node.id }
+        let dir: Directory = { ...this.dragNode, parent: node.id };
         this.databaseServ.setNewParentFolder(this.dragNode.id, dir).then(() => {
           this.refreshTreeFolder();
         });
       } else if (this.dragNodeExpandOverArea === -1) {
-        newItem = this.database.copyPasteItemBelow(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
+        newItem = this.database.copyPasteItemBelow(
+          this.flatNodeMap.get(this.dragNode),
+          this.flatNodeMap.get(node)
+        );
         this.dragNode.parent = node.id;
-        let dir: Directory = { ... this.dragNode, parent: node.id }
+        let dir: Directory = { ...this.dragNode, parent: node.id };
         this.databaseServ.setNewParentFolder(this.dragNode.id, dir).then(() => {
           this.refreshTreeFolder();
         });
       } else {
-        newItem = this.database.copyPasteItem(this.flatNodeMap.get(this.dragNode), this.flatNodeMap.get(node));
+        newItem = this.database.copyPasteItem(
+          this.flatNodeMap.get(this.dragNode),
+          this.flatNodeMap.get(node)
+        );
         this.dragNode.parent = node.id;
-        let dir: Directory = { ... this.dragNode, parent: node.id }
+        let dir: Directory = { ...this.dragNode, parent: node.id };
         this.databaseServ.setNewParentFolder(this.dragNode.id, dir).then(() => {
           this.refreshTreeFolder();
         });
@@ -430,11 +477,10 @@ export class ExplorerPanelComponent {
         case -1:
           return 'drop-below';
         default:
-          return 'drop-center'
+          return 'drop-center';
       }
     }
   }
-
 
   deleteItem(node: FolderFlatNode) {
     this.database.deleteItem(this.flatNodeMap.get(node));
@@ -443,7 +489,8 @@ export class ExplorerPanelComponent {
   renameFolder(event, node) {
     if (node.name == event) return;
     node.name = this.flatNodeMap.get(node).name = event;
-    this.databaseServ.renameFolder(node.id, new Directory(event, node.parent))
+    this.databaseServ
+      .renameFolder(node.id, new Directory(event, node.parent))
       .then(() => {
         this.refreshTreeFolder();
       });
@@ -453,48 +500,56 @@ export class ExplorerPanelComponent {
     if (this.selectedNode == undefined) return;
     this.databaseServ.deleteFolder(this.selectedNode.id).then(() => {
       this.refreshTreeFolder();
-    });;
+    });
   }
 
   openCreateNewMaterialDialog() {
-    this.store.dispatch(openCreateNewMaterial({ createNewMaterial: new PopupDialogAction(true) }))
+    this.store.dispatch(
+      openCreateNewMaterial({ createNewMaterial: new PopupDialogAction(true) })
+    );
   }
 
   openUploadNewImageDialog() {
-    this.store.dispatch(openUploadNewImage({ uploadNewImage: new PopupDialogAction(true) }))
+    this.store.dispatch(
+      openUploadNewImage({ uploadNewImage: new PopupDialogAction(true) })
+    );
   }
   openUploadNewAudioDialog() {
-    this.store.dispatch(openUploadNewAudio({ uploadNewAudio: new PopupDialogAction(true) }))
+    this.store.dispatch(
+      openUploadNewAudio({ uploadNewAudio: new PopupDialogAction(true) })
+    );
   }
   openUploadNewFontDialog() {
-    this.store.dispatch(openUploadNewFont({ uploadNewFont: new PopupDialogAction(true) }))
+    this.store.dispatch(
+      openUploadNewFont({ uploadNewFont: new PopupDialogAction(true) })
+    );
   }
-
-
-  addMaterial() {
-    if (!!this.selectedNode.id) {
-      this.databaseServ.addNewMaterial(this.selectedNode.id).then(() => {
-        this.refreshTreeFolder();
-      });
-    }
-  }
-
-  addImage() { }
-  addFont() { }
-  addAudio() { }
 
   public contentFolder: any[] = [];
   async readFolderContent(node: FolderFlatNode) {
-    this.contentFolder = []
-    let result = await this.databaseServ.getFolderContent(node.id)
-    result.docs.forEach(d => {
-      this.contentFolder.push({ ...d.data(), type: "material" });
+    this.contentFolder = [];
+    let materials = await this.databaseServ.getMaterialsFromFolderId(node.id);
+    let images = await this.databaseServ.getImagesFromFolderId(node.id);
+    let fonts = await this.databaseServ.getFontsFromFolderId(node.id);
+
+    materials.docs.forEach((d) => {
+      this.contentFolder.push({ ...d.data(), type: 'MATERIAL' });
+    });
+
+    images.docs.forEach((d) => {
+      this.contentFolder.push({ ...d.data(), type: 'IMAGE' });
+    });
+
+    fonts.docs.forEach((d) => {
+      this.contentFolder.push({ ...d.data(), type: 'FONT' });
     });
   }
 
   setBackgroundColor(item: any) {
     let styles = {
-      'background-color': `rgb(${item.diffuse.r},${item.diffuse.g},${item.diffuse.b})`,
+      'background-color': `rgb(${item.diffuse.r * 255},${
+        item.diffuse.g * 255
+      },${item.diffuse.b * 255})`,
     };
     return styles;
   }

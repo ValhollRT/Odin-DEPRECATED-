@@ -10,3 +10,4 @@ export const openUploadNewImage = createAction("[UI] Open Upload new Image", pro
 export const openUploadNewFont = createAction("[UI] Open Upload new Font", props<{ uploadNewFont: PopupDialogAction }>());
 export const openConsole = createAction("[UI] Open Console", props<{ console: PopupDialogAction }>());
 export const openLogin = createAction("[UI] Open Login", props<{ login: PopupDialogAction }>());
+export const folderExplorerId = createAction("[UI] folder Id explorer", props<{ folderExplorerId: string }>());

@@ -1,6 +1,5 @@
 <div class="group-input-number" id="stepper_1">
     <div (click)="setDefaultValue()" class="resetButton">{{this.label | uppercase}}</div>
-    <input #inputNumber type="number" class="stepper-number" (change)=change()
-        [ngModel]="value[param] | dynamicPipe:pipe:[] | number:'0.0-3'">
+    <input #inputNumber type="number" class="stepper-number" (change)="change" [ngModel]="value[param] | dynamicPipe:pipe:[] | number:'0.0-3'">
     <div #dragZone [ngStyle]="{'display': this._curDown ? 'block' : 'none' }" class="drag-zone"></div>
 </div>
