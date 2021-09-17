@@ -183,12 +183,20 @@ body {
     mask-image: url("assets/icons/settings.svg");
 }
 
+.icon-import {
+    mask-image: url("assets/icons/import.svg");
+}
+
 .icon-user {
     mask-image: url("assets/icons/user.svg");
 }
 
 .icon-font {
     mask-image: url("assets/icons/font.svg");
+}
+
+.icon-audio {
+    mask-image: url("assets/icons/audio.svg");
 }
 
 .icon-camera {
@@ -246,9 +254,9 @@ body {
 }
 
 .icon-xs {
-    width: 14px;
-    height: 14px;
-    margin: 2px 3px;
+    width: 16px;
+    height: 16px;
+    padding: 9px;
 }
 
 .icon-m {

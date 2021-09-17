@@ -1,28 +1,36 @@
 <div style="width: 100%; position: relative; display: flex; margin: 5px">
-    <div class="icon-btn-color icon-folder-add icon-xs" title="Add folder" (click)="addNewFolder()"></div>
-    <div class="icon-btn-color icon-folder-delete icon-xs" title="Delete folder" (click)="deleteFolder()"></div>
-    <div class="icon-btn-color icon-refresh icon-xs" title="Refresh database" (click)="refreshTreeFolder()"></div>
-    <div style="
-      display: flex;
-      align-items: center;
-      margin-left: 20px;
-      width: 100%;
-      justify-content: space-evenly;
-    ">
-        <button (click)="openCreateNewMaterialDialog()">Material</button>
-        <button (click)="openUploadNewImageDialog()">Images</button>
-        <button (click)="openUploadNewFontDialog()">Fonts</button>
-        <button (click)="openUploadNewAudioDialog()">Audio</button>
+    <div style="display: flex; align-items: center">
+        <div style="display: flex; align-items: center">
+            <div style="color: white; margin-right: 5px">folder</div>
+            <div style="margin-right: 5px" class="icon-btn-color icon-folder-add icon-xs" title="Add folder" (click)="addNewFolder()"></div>
+            <div style="margin-right: 5px" class="icon-btn-color icon-folder-delete icon-xs" title="Delete folder" (click)="deleteFolder()"></div>
+            <div class="icon-btn-color icon-refresh icon-xs" title="Refresh database" (click)="refreshTreeFolder()"></div>
+        </div>
+        <div>
+            <ul class="import-subMenu" style="display: flex; align-items: center">
+                <div style="color: white; margin-right: 5px">Import</div>
+                <li>
+                    <div class="icon-btn-color icon-import icon-xs" title="Import Asset"></div>
+                    <ul>
+                        <li><a (click)="openCreateNewMaterialDialog()">Material</a></li>
+                        <li><a (click)="openUploadNewImageDialog()">Images</a></li>
+                        <li><a (click)="openUploadNewFontDialog()">Fonts</a></li>
+                        <li><a (click)="openUploadNewAudioDialog()">Audio</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <div>
     <div class="explorer-view grid-icons">
-        <div class="icon-explorer-material" *ngFor="let item of contentFolder">
+        <div class="icon-explorer" [ngStyle]="selectedItemStyle(item)" *ngFor="let item of contentFolder" (click)="clickIconExplorer($event, item)" (dblclick)="dblClickIconExplorer($event, item)">
             <div *ngIf="item.type == 'MATERIAL'" class="icon-material explorer-icon" [ngStyle]="setBackgroundColor(item)"></div>
             <img *ngIf="item.type == 'IMAGE'" style="width: 50px; height: 50px; margin: 1px" [src]="item.url" />
             <div *ngIf="item.type == 'FONT'" style="color: white; font-size: 37px">
                 Aa
             </div>
+            <div *ngIf="item.type == 'AUDIO'" class="icon-audio explorer-icon icon-btn-color"></div>
             <div class="file-name-icon">{{ item.name }}</div>
         </div>
     </div>

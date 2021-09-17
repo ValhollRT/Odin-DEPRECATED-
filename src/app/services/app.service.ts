@@ -12,6 +12,7 @@ import { PlugPointLight } from '../engine/plugs/plug-light/plug-point-light';
 import { PlugMaterial } from '../engine/plugs/plug-material';
 import { PlugTransform } from '../engine/plugs/plug-transform';
 import { Utils } from '../engine/Utils/Utils';
+import { MaterialDto } from '../models/MaterialDto.model';
 import { SceneSettings } from '../models/SceneSettings.model';
 import { setSettings } from '../store/actions/engine.actions';
 import { AppState } from '../store/app.reducer';
@@ -22,11 +23,9 @@ import { DatabaseService } from './database.service';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
-
-
   public sceneSettings = {
-    backgroundColor: "#333335",
-    userId: undefined
+    backgroundColor: '#333335',
+    userId: undefined,
   } as SceneSettings;
 
   // References Containers
@@ -44,13 +43,13 @@ export class AppService {
     public store: Store<AppState>,
     private firestore: AngularFirestore
   ) {
-    store.select('engine').subscribe(en => {
+    store.select('engine').subscribe((en) => {
       this.selectedUuidContainers = [...en.uuidCsSelected];
     });
-    store.select('session').subscribe(session => {
+    store.select('session').subscribe((session) => {
       if (session.user) this.userId = session.user.uid;
       else this.userId = undefined;
-      this.loadSceneSettings().then(settings => {
+      this.loadSceneSettings().then((settings) => {
         this.store.dispatch(setSettings({ sceneSettings: { ...settings } }));
       });
     });
@@ -60,18 +59,22 @@ export class AppService {
   public createDefaultScene() {
     let container = this.newContainer();
     container.setPlugLight(new PlugDirectionalLight(container));
-    container.name = "Light";
+    container.name = 'Light';
 
     let x = Utils.degreeToRadians(-15);
     let y = Utils.degreeToRadians(-30);
     let z = Utils.degreeToRadians(-30);
-    container.getPlugTransform().rotation = new Vector3(Utils.precision(x, 3), Utils.precision(y, 3), Utils.precision(z, 3));
+    container.getPlugTransform().rotation = new Vector3(
+      Utils.precision(x, 3),
+      Utils.precision(y, 3),
+      Utils.precision(z, 3)
+    );
 
     container = this.newContainer();
     let defaultPlugCamera = new PlugCamera(container);
     defaultPlugCamera.active = true;
     container.setPlugCamera(defaultPlugCamera);
-    container.name = "Camera"
+    container.name = 'Camera';
     this.engineServ.setCamera(defaultPlugCamera);
   }
 
@@ -84,16 +87,14 @@ export class AppService {
     let userDocId = await this.databaseServ.getUserDocId(this.userId);
     let setting = await this.databaseServ.getSceneSettings(this.userId);
     if (setting.docs.length == 1) {
-      return setting.docs[0].data() as SceneSettings
-    }
-    else {
+      return setting.docs[0].data() as SceneSettings;
+    } else {
       return this.loadDefaultSceneSettings();
     }
-
   }
 
   loadDefaultSceneSettings() {
-    this.sceneSettings.backgroundColor = "#333335";
+    this.sceneSettings.backgroundColor = '#333335';
     this.sceneSettings.userId = undefined;
     return this.sceneSettings;
   }
@@ -101,7 +102,9 @@ export class AppService {
   setSceneSettings(settings: SceneSettings): void {
     this.sceneSettings = { ...settings, userId: this.userId };
     this.databaseServ.setSceneSettings(this.sceneSettings);
-    this.store.dispatch(setSettings({ sceneSettings: { ...this.sceneSettings } }));
+    this.store.dispatch(
+      setSettings({ sceneSettings: { ...this.sceneSettings } })
+    );
   }
 
   /** Generate Containers and Plugs */
@@ -128,22 +131,28 @@ export class AppService {
     container.setPlugMaterial(new PlugMaterial(container));
   }
 
+  addPlugMaterialFromDto(material : MaterialDto){
+    if (this.noSelected()) return;
+    let container = this.getFirstSelected();
+    container.setPlugMaterial(PlugMaterial.fromDto(material, container));
+  }
+
   addPlugLight(lightType: any) {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
     let pl;
     switch (lightType) {
       case LIGHT.DIRECTIONAL:
-        container.setPlugLight(pl = new PlugDirectionalLight(container));
+        container.setPlugLight((pl = new PlugDirectionalLight(container)));
         break;
       case LIGHT.SPOT:
-        container.setPlugLight(pl = new PlugSpotLight(container));
+        container.setPlugLight((pl = new PlugSpotLight(container)));
         break;
       case LIGHT.POINT:
-        container.setPlugLight(pl = new PlugPointLight(container));
+        container.setPlugLight((pl = new PlugPointLight(container)));
         break;
       case LIGHT.HEMISPHERIC:
-        container.setPlugLight(pl = new PlugHemisphericLight(container));
+        container.setPlugLight((pl = new PlugHemisphericLight(container)));
         break;
     }
     this.addContainerToMapScene(container);
@@ -160,18 +169,28 @@ export class AppService {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
     container.setPlugGeometry(new PlugText(container));
-    container.name = "Text"
+    container.name = 'Text';
     this.addPlugGeometryToMapScene(container);
   }
 
   /** References Containers */
-  public getContainerFromUuid(uuid: string): Container { return this.uuidToContainer.get(uuid) }
-  public getContainerFromPlugGeometry(type: Node | PlugGeometry): Container { return this.plugToContainer.get(type) }
+  public getContainerFromUuid(uuid: string): Container {
+    return this.uuidToContainer.get(uuid);
+  }
+  public getContainerFromPlugGeometry(type: Node | PlugGeometry): Container {
+    return this.plugToContainer.get(type);
+  }
 
   // Get Selections methods
-  public noSelected(): boolean { return this.selectedUuidContainers.length < 1 }
-  public getSelectedContainers(): string[] { return this.selectedUuidContainers }
-  public getFirstSelected(): Container { return this.getContainerFromUuid(this.selectedUuidContainers[0]); }
+  public noSelected(): boolean {
+    return this.selectedUuidContainers.length < 1;
+  }
+  public getSelectedContainers(): string[] {
+    return this.selectedUuidContainers;
+  }
+  public getFirstSelected(): Container {
+    return this.getContainerFromUuid(this.selectedUuidContainers[0]);
+  }
 
   /** Map object in Scene */
   addContainerToMapScene(c: Container) {
@@ -180,12 +199,13 @@ export class AppService {
 
   addPlugGeometryToMapScene(c: Container) {
     this.plugToContainer.set(c.getPlugGeometry(), c);
-    this.uuidToBBox.set(c.uuid, (c.getPlugGeometry()).getBoundingInfo().boundingBox);
+    this.uuidToBBox.set(
+      c.uuid,
+      c.getPlugGeometry().getBoundingInfo().boundingBox
+    );
   }
 
-  addCameraToMapScene(c: Container, camera: ArcRotateCamera) { this.uuidToCamera.set(c.uuid, camera); }
-}
-
-function where(arg0: string, arg1: string, userId: string): any {
-  throw new Error('Function not implemented.');
+  addCameraToMapScene(c: Container, camera: ArcRotateCamera) {
+    this.uuidToCamera.set(c.uuid, camera);
+  }
 }

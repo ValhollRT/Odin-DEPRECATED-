@@ -57,14 +57,14 @@ export class UploadNewAudioComponent implements OnInit {
           return empty();
         }),
         switchMap((url) => {
-          let image: AudioDto = {
+          let audio: AudioDto = {
             name: this.filename,
             guid: fileGUIDName,
             url: url,
             folderId: this.folderId,
             date: new Date(),
           };
-          return this.databaseServ.addAudioToDatabase(image);
+          return this.databaseServ.addAudioToDatabase(audio);
         })
       )
       .subscribe((url) => {

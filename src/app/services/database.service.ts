@@ -112,13 +112,13 @@ export class DatabaseService {
 
     return this.db(this.MATERIAL).add({
       name: newMaterial.name,
-      diffuse: {
+      diffuseColor: {
         r: diffuseColorRGB.r,
         g: diffuseColorRGB.g,
         b: diffuseColorRGB.b,
       },
-      specular: { r: 0, g: 0, b: 0 },
-      ambient: { r: 0, g: 0, b: 0 },
+      specularColor: { r: 0, g: 0, b: 0 },
+      ambientColor: { r: 0, g: 0, b: 0 },
       date: new Date(),
       folderId: this.folderId,
     });

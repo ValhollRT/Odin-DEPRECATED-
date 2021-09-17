@@ -8,6 +8,7 @@ import {
 import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
 import { PopupDialogAction } from 'src/app/models';
+import { AppService } from 'src/app/services/index.service';
 import {
   folderExplorerId,
   openCreateNewMaterial,
@@ -18,9 +19,6 @@ import {
 import { AppState } from 'src/app/store/app.reducer';
 import { DatabaseService, Directory } from './../../services/database.service';
 
-/**
- * Node for to-do item
- */
 export class FolderNode {
   id: string;
   name: string;
@@ -28,7 +26,6 @@ export class FolderNode {
   children: FolderNode[];
 }
 
-/** Flat to-do item node with expandable and level information */
 export class FolderFlatNode {
   id: string;
   name: string;
@@ -73,7 +70,6 @@ export class folderDatabase {
     }, []);
   }
 
-  /** Add an item to to-do list */
   insertItem(parent: FolderNode, name: string): FolderNode {
     if (!parent.children) {
       parent.children = [];
@@ -225,6 +221,7 @@ export class ExplorerPanelComponent {
   constructor(
     private database: folderDatabase,
     private databaseServ: DatabaseService,
+    public appServ: AppService,
     private store: Store<AppState>
   ) {
     this.treeFlattener = new MatTreeFlattener(
@@ -412,7 +409,7 @@ export class ExplorerPanelComponent {
     if (this.selectedNode != undefined) this.selectedNode.active = false;
     this.selectedNode = undefined;
     this.store.dispatch(
-      folderExplorerId({ folderExplorerId: this.selectedNode.id })
+      folderExplorerId({ folderExplorerId: this.selectedNode?.id })
     );
   }
 
@@ -531,26 +528,77 @@ export class ExplorerPanelComponent {
     let materials = await this.databaseServ.getMaterialsFromFolderId(node.id);
     let images = await this.databaseServ.getImagesFromFolderId(node.id);
     let fonts = await this.databaseServ.getFontsFromFolderId(node.id);
+    let audios = await this.databaseServ.getAudiosFromFolderId(node.id);
 
     materials.docs.forEach((d) => {
-      this.contentFolder.push({ ...d.data(), type: 'MATERIAL' });
+      this.contentFolder.push({
+        ...d.data(),
+        type: 'MATERIAL',
+        id: d.id,
+        selected: false,
+      });
     });
 
     images.docs.forEach((d) => {
-      this.contentFolder.push({ ...d.data(), type: 'IMAGE' });
+      this.contentFolder.push({
+        ...d.data(),
+        type: 'IMAGE',
+        id: d.id,
+        selected: false,
+      });
     });
 
     fonts.docs.forEach((d) => {
-      this.contentFolder.push({ ...d.data(), type: 'FONT' });
+      this.contentFolder.push({
+        ...d.data(),
+        type: 'FONT',
+        id: d.id,
+        selected: false,
+      });
+    });
+
+    audios.docs.forEach((d) => {
+      this.contentFolder.push({
+        ...d.data(),
+        type: 'AUDIO',
+        id: d.id,
+        selected: false,
+      });
     });
   }
 
   setBackgroundColor(item: any) {
     let styles = {
-      'background-color': `rgb(${item.diffuse.r * 255},${
-        item.diffuse.g * 255
-      },${item.diffuse.b * 255})`,
+      'background-color': `rgb(${item.diffuseColor.r * 255},${
+        item.diffuseColor.g * 255
+      },${item.diffuseColor.b * 255})`,
     };
     return styles;
+  }
+
+  selectedItemStyle(item: any) {
+    if (!item.selected) return;
+    let styles = {
+      border: `1px solid var(--console-debug-color)`,
+    };
+    return styles;
+  }
+
+  dblClickIconExplorer(event, node) {
+    console.log('node', node);
+    if (node.type == 'MATERIAL') this.appServ.addPlugMaterialFromDto(node);
+    // if (node.type == 'IMAGE') this.appServ.addPlugImageFromDto(node)
+    // if (node.type == 'AUDIO') this.appServ.addPlugAudioFromDto(node)
+  }
+
+  clickIconExplorer(event, node) {
+    this.clearSelectionExploreIcons();
+    node.selected = true;
+  }
+
+  clearSelectionExploreIcons() {
+    this.contentFolder.forEach((item) => {
+      item.selected = false;
+    });
   }
 }
