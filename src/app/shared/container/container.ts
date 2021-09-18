@@ -1,5 +1,6 @@
 import { PlugCamera } from 'src/app/engine/plugs/plug-camera';
 import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
+import { PlugTexture } from 'src/app/engine/plugs/plug-texture';
 import { Plug } from '../../engine/plugs/plug';
 import { PlugMaterial } from '../../engine/plugs/plug-material';
 import { PlugTransform } from '../../engine/plugs/plug-transform';
@@ -20,6 +21,7 @@ export class Container {
   private plugTransform: PlugTransform
   private plugGeometry: PlugGeometry;
   private plugMaterial: PlugMaterial;
+  private plugTexture: PlugTexture;
   private plugLight: Plug;
   private plugCamera: PlugCamera;
 
@@ -36,6 +38,7 @@ export class Container {
   getPlugTransform(): PlugTransform { return this.plugTransform; }
   getPlugGeometry(): PlugGeometry { return this.plugGeometry; }
   getPlugMaterial(): PlugMaterial { return this.plugMaterial; }
+  getPlugTexture(): PlugTexture { return this.plugTexture; }
   getPlugLight(): Plug { return this.plugLight; }
   getPlugCamera(): Plug { return this.plugCamera; }
 
@@ -51,6 +54,15 @@ export class Container {
     }
     this.plugMaterial = pm;
     this.plugs.push(pm);
+  }
+
+  setPlugTexture(pt: PlugTexture) {
+    if (this.plugTexture != undefined) {
+      this.plugs = this.plugs.filter(p => p.uuid != this.plugTexture.uuid);
+      this.plugTexture.dispose();
+    }
+    this.plugTexture = pt;
+    this.plugs.push(pt);
   }
 
   setPlugGeometry(pg: PlugGeometry) {

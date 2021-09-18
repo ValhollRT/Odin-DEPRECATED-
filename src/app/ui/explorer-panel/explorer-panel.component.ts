@@ -585,9 +585,8 @@ export class ExplorerPanelComponent {
   }
 
   dblClickIconExplorer(event, node) {
-    console.log('node', node);
     if (node.type == 'MATERIAL') this.appServ.addPlugMaterialFromDto(node);
-    // if (node.type == 'IMAGE') this.appServ.addPlugImageFromDto(node)
+    if (node.type == 'IMAGE') this.appServ.addPlugTextureFromDto(node);
     // if (node.type == 'AUDIO') this.appServ.addPlugAudioFromDto(node)
   }
 

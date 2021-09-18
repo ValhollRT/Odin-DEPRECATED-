@@ -1,3 +1,4 @@
+import { TexturePanelComponent } from './ui/texture-panel/texture-panel.component';
 import { Injector, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
@@ -84,7 +85,8 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
     CreateNewMaterialComponent,
     UploadNewAudioComponent,
     UploadNewImageComponent,
-    UploadNewFontComponent
+    UploadNewFontComponent,
+    TexturePanelComponent
   ],
   imports: [
     FormsModule,

@@ -30,10 +30,12 @@ export class PlugMaterial extends StandardMaterial implements Plug {
     this.openPanel = () => {
       return new SidebarPanelAction(SidebarPanel.MATERIAL, true);
     };
-    let geometry = container.getPlugGeometry();
-    if (geometry == undefined) return;
-    geometry.material = this;
+
     this.diffuseColor = new Color3(1, 1, 1);
+    let geometry = container.getPlugGeometry();
+    let texture = container.getPlugTexture();
+    if (geometry != undefined) geometry.material = this;
+    if (texture != undefined) this.diffuseTexture = texture;
   }
 
   getIcon() {
