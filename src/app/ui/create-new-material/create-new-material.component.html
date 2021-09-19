@@ -1,0 +1,12 @@
+<popup-window [title]="'Create new Material'" [isOpen]="this.isOpen" [width]="350" (emitCloseDialog)="closeDialog()" [buttonsFooter]="[this.saveBtnFooter]">
+    <div style="margin: 10px">
+        <div class="property-panel-group">
+            <span class="property-panel-text">Name</span>
+            <input class="property-panel-text" type="text" [(ngModel)]="newMaterial.name" />
+        </div>
+        <div class="property-panel-group">
+            <span class="property-panel-text">Diffuse</span>
+            <input type="color" [(ngModel)]="newMaterial.diffuseColor" value="#aaaaaa" />
+        </div>
+    </div>
+</popup-window>

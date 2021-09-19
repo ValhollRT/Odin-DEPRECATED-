@@ -1,5 +1,7 @@
 .container {
-    position: relative;
+    position: absolute;
+    top: 40%;
+    left: 50%;
     background-color: var(--main-menu-background-color);
     z-index: 100;
     opacity: 0;

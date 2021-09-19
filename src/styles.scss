@@ -2,447 +2,485 @@
 // For more information: https://material.angular.io/guide/theming
 @import "~@angular/material/theming";
 // Plus imports for other components in your app.
-
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 @include mat-core();
-
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $Odin-primary: mat-palette($mat-indigo);
 $Odin-accent: mat-palette($mat-pink, A200, A100, A400);
-
 // The warn palette is optional (defaults to red).
 $Odin-warn: mat-palette($mat-red);
-
 // Create the theme object (a Sass map containing all of the palettes).
 $Odin-theme: mat-light-theme($Odin-primary, $Odin-accent, $Odin-warn);
-
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($Odin-theme);
 
 /* colors */
+
 * {
-  --main-menu-background-color: #222;
-  --main-menu-background-color-hover: #fff;
-  --main-menu-color: #fff;
-  --main-menu-mute-color: #888;
-  --input-background-color: #444;
-  --main-menu-color-hover: #000;
-  --main-menu-border: 1px solid #333;
-  --separator-border: #333;
-  --console-debug-color: rgb(255, 187, 0);
-  --highlight-color: rgb(255, 187, 0);
-  --highlight-color-hover: rgba(255, 187, 0, 0.1);
-  --active-color-button: rgb(255, 230, 125);
+    --main-menu-background-color: #222;
+    --main-menu-background-color-hover: #fff;
+    --main-menu-color: #fff;
+    --main-menu-mute-color: #888;
+    --input-background-color: #444;
+    --main-menu-color-hover: #000;
+    --main-menu-border: 1px solid #333;
+    --separator-border: #333;
+    --console-debug-color: rgb(255, 187, 0);
+    --highlight-color: rgb(255, 187, 0);
+    --highlight-color-hover: rgba(255, 187, 0, 0.1);
+    --active-color-button: rgb(255, 230, 125);
 }
 
+
 /* general */
+
 a:link {
-  text-decoration: none;
-  color: var(--console-debug-color);
+    text-decoration: none;
+    color: var(--console-debug-color);
 }
 
 a:hover {
-  color: var(--console-debug-color);
-  text-decoration: none;
-  cursor: pointer;
+    color: var(--console-debug-color);
+    text-decoration: none;
+    cursor: pointer;
 }
 
 a:visited {
-  color: var(--console-debug-color);
-  text-decoration: none;
+    color: var(--console-debug-color);
+    text-decoration: none;
 }
 
 * {
-  outline: none !important;
-  letter-spacing: 0.5px;
-  box-sizing: border-box;
+    outline: none !important;
+    letter-spacing: 0.5px;
+    box-sizing: border-box;
 }
 
 *:focus {
-  outline: none !important;
+    outline: none !important;
 }
 
 textarea:focus,
 input:focus {
-  outline: none !important;
+    outline: none !important;
 }
 
 a {
-  text-decoration: none !important;
-  outline: none !important;
+    text-decoration: none !important;
+    outline: none !important;
 }
 
 h3,
 p,
 span {
-  color: var(--main-menu-color);
+    color: var(--main-menu-color);
 }
 
+
 /* engine style */
+
 html,
 body,
 app-root {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    text-align: center;
 }
 
+
 /* general */
+
 .float-left {
-  float: left;
+    float: left;
 }
 
 .float-right {
-  float: right;
+    float: right;
 }
 
 .clear-both {
-  clear: both;
+    clear: both;
 }
 
 .mute-color {
-  color: var(--main-menu-mute-color);
+    color: var(--main-menu-mute-color);
 }
 
+
 /* icons */
+
 .icon-console {
-  mask-image: url("assets/icons/terminal.svg");
+    mask-image: url("assets/icons/terminal.svg");
+}
+
+.icon-texture {
+    mask-image: url("assets/icons/texture.svg");
 }
 
 .icon-expand {
-  mask-image: url("assets/icons/expand.svg");
+    mask-image: url("assets/icons/expand.svg");
 }
 
 .icon-minimize {
-  mask-image: url("assets/icons/minim.svg");
+    mask-image: url("assets/icons/minim.svg");
 }
 
 .icon-axis {
-  mask-image: url("assets/icons/axis.svg");
+    mask-image: url("assets/icons/axis.svg");
 }
 
 .icon-material {
-  mask-image: url("assets/icons/material.svg");
+    mask-image: url("assets/icons/material.svg");
 }
 
 .icon-geometry {
-  mask-image: url("assets/icons/geometry.svg");
+    mask-image: url("assets/icons/geometry.svg");
 }
 
 .icon-trash {
-  mask-image: url("assets/icons/trash.svg");
+    mask-image: url("assets/icons/trash.svg");
 }
 
 .icon-unhide {
-  mask-image: url("assets/icons/eyeOpened.svg");
+    mask-image: url("assets/icons/eyeOpened.svg");
 }
 
 .icon-hide {
-  mask-image: url("assets/icons/eyeClosed.svg");
+    mask-image: url("assets/icons/eyeClosed.svg");
 }
 
 .icon-unlock {
-  mask-image: url("assets/icons/unlock.svg");
+    mask-image: url("assets/icons/unlock.svg");
 }
 
 .icon-lock {
-  mask-image: url("assets/icons/lock.svg");
+    mask-image: url("assets/icons/lock.svg");
 }
 
 .icon-light {
-  mask-image: url("assets/icons/light.svg");
+    mask-image: url("assets/icons/light.svg");
 }
 
 .icon-info {
-  mask-image: url("assets/icons/info.svg");
+    mask-image: url("assets/icons/info.svg");
 }
 
 .icon-close {
-  mask-image: url("assets/icons/close.svg");
+    mask-image: url("assets/icons/close.svg");
 }
 
 .icon-settings {
-  mask-image: url("assets/icons/settings.svg");
+    mask-image: url("assets/icons/settings.svg");
+}
+
+.icon-import {
+    mask-image: url("assets/icons/import.svg");
 }
 
 .icon-user {
-  mask-image: url("assets/icons/user.svg");
+    mask-image: url("assets/icons/user.svg");
 }
 
 .icon-font {
-  mask-image: url("assets/icons/font.svg");
+    mask-image: url("assets/icons/font.svg");
+}
+
+.icon-audio {
+    mask-image: url("assets/icons/audio.svg");
 }
 
 .icon-camera {
-  mask-image: url("assets/icons/camera.svg");
+    mask-image: url("assets/icons/camera.svg");
+}
+
+.icon-HBD {
+    mask-image: url("assets/icons/HBD.svg");
 }
 
 .icon-folder {
-  mask-image: url("assets/icons/folder.svg");
+    mask-image: url("assets/icons/folder.svg");
 }
 
 .icon-folder-add {
-  mask-image: url("assets/icons/add.svg");
+    mask-image: url("assets/icons/add.svg");
 }
 
 .icon-folder-delete {
-  mask-image: url("assets/icons/minus.svg");
+    mask-image: url("assets/icons/minus.svg");
 }
 
 .icon-refresh {
-  mask-image: url("assets/icons/refresh.svg");
+    mask-image: url("assets/icons/refresh.svg");
 }
 
 .icon-container {
-  mask-image: url("assets/icons/container.svg");
+    mask-image: url("assets/icons/container.svg");
 }
 
 .icon-color,
 .icon-btn-color {
-  background-color: var(--main-menu-color);
+    background-color: var(--main-menu-color);
 }
 
 .icon-color-active,
 .icon-btn-color-active {
-  background-color: greenyellow;
+    background-color: greenyellow;
 }
 
 .icon-color:hover {
-  background-color: var(--highlight-color);
-  mix-blend-mode: difference;
+    background-color: var(--highlight-color);
+    mix-blend-mode: difference;
 }
 
 .icon-plug-color {
-  background-color: var(--main-menu-color);
+    background-color: var(--main-menu-color);
 }
 
 .icon-btn-color:hover {
-  background-color: var(--highlight-color);
-  mix-blend-mode: difference;
+    background-color: var(--highlight-color);
+    mix-blend-mode: difference;
 }
 
 .icon-xxs {
-  width: 13px;
-  height: 13px;
-  margin: 4px;
+    width: 13px;
+    height: 13px;
+    margin: 4px;
 }
 
 .icon-xs {
-  width: 14px;
-  height: 14px;
-  margin: 2px 3px;
+    width: 16px;
+    height: 16px;
+    padding: 9px;
 }
 
 .icon-m {
-  width: 20px;
-  height: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-xl {
+    width: 72px;
+    height: 72px;
 }
 
 .icon-btn-xs {
-  width: 18px;
-  height: 18px;
-  margin: 5px;
+    width: 18px;
+    height: 18px;
+    margin: 5px;
 }
+
 html,
 body {
-  height: 100%;
+    height: 100%;
 }
 
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 input {
-  height: 17px;
-  display: block;
-  width: 65px;
-  background-color: var(--input-background-color);
-  color: var(--console-debug-color);
-  border: 0;
-  outline: none;
+    height: 17px;
+    display: block;
+    width: 65px;
+    background-color: var(--input-background-color);
+    color: var(--console-debug-color);
+    border: 0;
+    outline: none;
 }
 
 button {
-  height: 20px;
-  display: block;
-  background-color: var(--input-background-color);
-  color: var(--console-debug-color);
-  border: 0;
-  outline: none;
+    height: 20px;
+    display: block;
+    background-color: var(--input-background-color);
+    color: var(--console-debug-color);
+    border: 0;
+    outline: none;
+}
+
+input[type="file"] {
+    width: 100%;
+    height: 22px;
+    color: var(--console-debug-color);
+    border: 0;
+    outline: none;
 }
 
 button:hover {
-  background-color: var(--console-debug-color);
-  color: var(--input-background-color);
+    background-color: var(--console-debug-color);
+    color: var(--input-background-color);
 }
 
 button:active {
-  background-color: var(--active-color-button);
-  color: var(--input-background-color);
+    background-color: var(--active-color-button);
+    color: var(--input-background-color);
 }
 
 .separator {
-  margin: 0px 20px 10px 20px;
-  height: 1px;
-  border-width: 0;
-  color: gray;
-  background-color: var(--separator-border);
+    margin: 0px 20px 10px 20px;
+    height: 1px;
+    border-width: 0;
+    color: gray;
+    background-color: var(--separator-border);
 }
 
+
 /*PROPERTY PANEL*/
+
+
 /*MENU SIDEBAR*/
 
 .property-panel-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2px;
 }
 
 .property-panel-text {
-  font-size: 10px;
-  color: var(--console-debug-color);
-  min-width: 100px;
-  text-align: left;
+    font-size: 10px;
+    color: var(--console-debug-color);
+    min-width: 100px;
+    text-align: left;
 }
 
 .property-panel-group input[type="range"] {
-  width: 100%;
-  margin: 4px 0;
-  background-color: transparent;
-  -webkit-appearance: none;
+    width: 100%;
+    margin: 4px 0;
+    background-color: transparent;
+    -webkit-appearance: none;
 }
 
 .property-panel-group .separator {
-  width: 100%;
-  -webkit-appearance: none;
+    width: 100%;
+    -webkit-appearance: none;
 }
 
 .property-panel-group input[type="range"]:focus {
-  outline: none;
+    outline: none;
 }
 
 .property-panel-group input[type="range"]::-webkit-slider-runnable-track {
-  background: rgba(25, 25, 25, 1);
-  border: 0px solid rgba(0, 0, 0, 0);
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
+    background: rgba(25, 25, 25, 1);
+    border: 0px solid rgba(0, 0, 0, 0);
+    border: 0;
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
 }
 
 .property-panel-group input[type="range"]::-webkit-slider-thumb {
-  margin-top: -4px;
-  width: 10px;
-  height: 10px;
-  background: #ffd100;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
-  -webkit-appearance: none;
+    margin-top: -4px;
+    width: 10px;
+    height: 10px;
+    background: #ffd100;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-appearance: none;
 }
 
 .property-panel-group input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: #878787;
+    background: #878787;
 }
 
 .property-panel-group input[type="range"]::-moz-range-track {
-  background: rgba(25, 25, 25, 1);
-  border: 0px solid rgba(0, 0, 0, 0);
-  border: 0;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
+    background: rgba(25, 25, 25, 1);
+    border: 0px solid rgba(0, 0, 0, 0);
+    border: 0;
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
 }
 
 .property-panel-group input[type="range"]::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  background: #ffd100;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
+    width: 10px;
+    height: 10px;
+    background: #ffd100;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .property-panel-group input[type="range"]::-ms-track {
-  background: transparent;
-  border-color: transparent;
-  border-width: 5px 0;
-  color: transparent;
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    border-width: 5px 0;
+    color: transparent;
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
 }
 
 .property-panel-group input[type="range"]::-ms-fill-lower {
-  background: #000000;
-  border: 0px solid rgba(0, 0, 0, 0);
-  border: 0;
+    background: #000000;
+    border: 0px solid rgba(0, 0, 0, 0);
+    border: 0;
 }
 
 .property-panel-group input[type="range"]::-ms-fill-upper {
-  background: rgba(25, 25, 25, 1);
-  border: 0px solid rgba(0, 0, 0, 0);
-  border: 0;
+    background: rgba(25, 25, 25, 1);
+    border: 0px solid rgba(0, 0, 0, 0);
+    border: 0;
 }
 
 .property-panel-group input[type="range"]::-ms-thumb {
-  width: 10px;
-  height: 10px;
-  background: #ffd100;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 0px;
+    width: 10px;
+    height: 10px;
+    background: #ffd100;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0px;
 }
 
 .property-panel-group input[type="range"]:focus::-ms-fill-lower {
-  background: rgba(25, 25, 25, 1);
+    background: rgba(25, 25, 25, 1);
 }
 
 .property-panel-group input[type="range"]:focus::-ms-fill-upper {
-  background: #878787;
+    background: #878787;
 }
 
 .property-panel-group input[type="color"] {
-  border: 0px;
-  appearance: none;
-  background-color: transparent;
-  padding: 0px;
-  margin-left: 10px;
-  width: 77px;
-  height: 20px;
+    border: 0px;
+    appearance: none;
+    background-color: transparent;
+    padding: 0px;
+    margin-left: 10px;
+    width: 77px;
+    height: 20px;
 }
 
 .property-panel-group input[type="text"] {
-  width: 40px;
-  margin-left: 12px;
+    width: 40px;
+    margin-left: 12px;
 }
 
 .property-panel-group input[type="password"] {
-  width: 40px;
-  margin-left: 12px;
+    width: 40px;
+    margin-left: 12px;
 }
+
 
 /** Mat tree */
 
 .input-group {
-  padding: 5px;
-  margin: 5px;
-  border: var(--main-menu-border);
+    padding: 5px;
+    margin: 5px;
+    border: var(--main-menu-border);
 }

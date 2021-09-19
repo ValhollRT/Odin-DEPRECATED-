@@ -1,5 +1,4 @@
-export class SceneSettings {
+export interface SceneSettings {
+    userId: string;
     backgroundColor: string;
-
-    constructor() { }
 }

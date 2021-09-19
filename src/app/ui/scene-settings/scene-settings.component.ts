@@ -14,30 +14,37 @@ import { BtnFooter } from './../../shared/popup-window/popup-window.component';
 export class SceneSettingsComponent implements OnInit {
 
   isOpen = false;
-  tempSceneSettings: SceneSettings;
   saveBtnFooter: BtnFooter;
+  sceneSettings: SceneSettings = { backgroundColor: "", userId: "" };
 
   constructor(
     private store: Store<AppState>,
     private appService: AppService,
     public engineServ: EngineService,
     public logService: LogService) {
-    this.tempSceneSettings = new SceneSettings();
     // https://stackoverflow.com/questions/39074765/typescript-service-is-undefined-when-calling-a-function-from-common-service
-    this.saveBtnFooter = { name: "Save", event: this.saveSettings.bind(this) };
+    this.saveBtnFooter = { name: "Save", event: this.saveSettingsToDatabase.bind(this) };
   }
 
   ngOnInit() {
     this.store.select('ui').subscribe(ui => {
-      this.tempSceneSettings = this.appService.getSceneSettings();
-      this.isOpen = ui.sceneSettings.open;
+      this.appService.loadSceneSettings().then(settings => {
+        this.isOpen = ui.sceneSettings.open;
+      });
+    });
+
+    this.store.select('engine').subscribe(engine => {
+      this.sceneSettings = { ...engine.sceneSettings };
+      this.loadSettingsOnViewport();
     });
   }
 
-  saveSettings(): void {
-    this.appService.setSceneSettings(this.tempSceneSettings);
-    this.engineServ.setBackgroundColorScene(this.tempSceneSettings.backgroundColor)
-    // TODO call update settings engine
+  saveSettingsToDatabase(): void {
+    this.appService.setSceneSettings(this.sceneSettings);
+  }
+
+  loadSettingsOnViewport() {
+    this.engineServ.setBackgroundColorScene(this.sceneSettings.backgroundColor)
   }
 
   closeDialog() {

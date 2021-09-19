@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 
   signUpWithEmail() {
     this.showAlert = false;
-    this.session.signUpWithEmail(this.signInUp.email, this.signInUp.password)
+    this.session.signUpWithEmail(this.signInUp.displayName, this.signInUp.email, this.signInUp.password)
       .then(user => {
         this.message = `The user ${user.user.email} was created successfully.`
         this.typeAlert = AlertType.SUCCESS;

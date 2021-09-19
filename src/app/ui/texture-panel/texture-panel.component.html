@@ -1,0 +1,44 @@
+<div *ngIf="this.selected != null || this.selected != undefined">
+    <div class="property-panel-group">
+        <span class="property-panel-text">U-Offset</span>
+        <input-number [bind]="selected" [param]="'uOffset'" [label]="'R'" [step]="0.1" [min]="-99999" [max]="99999" [resetValue]="selected['uOffset']">
+        </input-number>
+    </div>
+    <div class="property-panel-group">
+        <span class="property-panel-text">V-Offset</span>
+        <input-number [bind]="selected" [param]="'vOffset'" [label]="'R'" [step]="0.1" [min]="-99999" [max]="99999" [resetValue]="selected['vOffset']">
+        </input-number>
+    </div>
+
+    <div class="property-panel-group">
+        <span class="property-panel-text">U-Angle</span>
+        <input-number [bind]="selected" [param]="'uAng'" [label]="'R'" [step]="0.1" [min]="-99999" [max]="99999" [resetValue]="selected['uAng']">
+        </input-number>
+    </div>
+    <div class="property-panel-group">
+        <span class="property-panel-text">V-Angle</span>
+        <input-number [bind]="selected" [param]="'vAng'" [label]="'R'" [step]="0.1" [min]="-99999" [max]="99999" [resetValue]="selected['vAng']">
+        </input-number>
+    </div>
+
+    <div class="property-panel-group">
+        <span class="property-panel-text">U-Scale</span>
+        <input-number [bind]="selected" [param]="'uScale'" [label]="'R'" [step]="0.1" [min]="-99999" [max]="99999" [resetValue]="selected['uScale']">
+        </input-number>
+    </div>
+    <div class="property-panel-group">
+        <span class="property-panel-text">V-Scale</span>
+        <input-number [bind]="selected" [param]="'vScale'" [label]="'R'" [step]="0.1" [min]="-99999" [max]="99999" [resetValue]="selected['vScale']">
+        </input-number>
+    </div>
+    <!-- <select name="select" (change)="onChange($event.target.value)">
+        <option value="0">Explicit</option>
+        <option value="1">Spherical</option>
+        <option value="2" selected>Planar</option>
+        <option value="3">Cubic</option>
+        <option value="4">Projection</option>
+        <option value="5">SkyBox</option>
+        <option value="6">InvCubic</option>
+        <option value="7">EquiRectangular</option>
+  </select> -->
+</div>

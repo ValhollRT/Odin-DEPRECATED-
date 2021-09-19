@@ -1,10 +1,10 @@
 <div>
     <div class="title-section-menu">Text</div>
-    <textarea #text (input)=updateText() style="margin: 5px" rows="4" cols="50"></textarea>
-    <div style="display: flex;">
+    <textarea #text (input)="updateText()" style="margin: 5px; width: 275px" rows="4" cols="50"></textarea>
+    <div style="">
         <div class="input-group">
             <div class="title-section-menu">Horizontal Justification</div>
-            <div style="display: flex;">
+            <div style="display: flex">
                 <button (click)="setHorizontalAlign(0)">left</button>
                 <button (click)="setHorizontalAlign(1)">center</button>
                 <button (click)="setHorizontalAlign(2)">right</button>
@@ -12,8 +12,10 @@
         </div>
         <div class="input-group">
             <div class="title-section-menu">Vertical Justification</div>
-            <div style="display: flex;">
-                <button [ngClass]="['this.current.mesh', 'off']" (click)="setVerticalAlign(0)">Top</button>
+            <div style="display: flex">
+                <button [ngClass]="['this.current.mesh', 'off']" (click)="setVerticalAlign(0)">
+          Top
+        </button>
                 <button (click)="setVerticalAlign(1)">first line</button>
                 <button (click)="setVerticalAlign(2)">center</button>
                 <button (click)="setVerticalAlign(3)">bottom</button>
@@ -22,14 +24,12 @@
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Line height</span>
-        <input-number [change]=updateText() [bind]="this.plugText.text" [param]="'lineHeight'" [label]="'R'" [step]=0.1
-            [resetValue]="this.plugText.text['lineHeight']">
+        <input-number [change]="updateText()" [bind]="this.plugText.text" [param]="'lineHeight'" [label]="'R'" [step]="0.1" [resetValue]="this.plugText.text['lineHeight']">
         </input-number>
     </div>
     <div class="property-panel-group">
         <span class="property-panel-text">Letter spacing</span>
-        <input-number [change]=updateText() [bind]="this.plugText.text" [param]="'letterSpacing'" [label]="'R'"
-            [step]=0.1 [resetValue]="this.plugText.text['letterSpacing']">
+        <input-number [change]="updateText()" [bind]="this.plugText.text" [param]="'letterSpacing'" [label]="'R'" [step]="0.1" [resetValue]="this.plugText.text['letterSpacing']">
         </input-number>
     </div>
 </div>

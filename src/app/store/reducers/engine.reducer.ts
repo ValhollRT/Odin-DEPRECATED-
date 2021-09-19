@@ -1,17 +1,23 @@
 import { createReducer, on } from '@ngrx/store';
 import { addSelection, clearSelection, oneSelection, removeSelection } from '../actions';
-import { engineIsLoaded } from './../actions/engine.actions';
+import { SceneSettings } from './../../models/SceneSettings.model';
+import { engineIsLoaded, setSettings } from './../actions/engine.actions';
 
 export interface State {
   uuidCsSelected: string[];
   prevUuidCsSelected: string[];
   isLoaded: boolean;
+  sceneSettings: SceneSettings;
 }
 
 export const initialState: State = {
   uuidCsSelected: [],
   prevUuidCsSelected: [],
-  isLoaded: false
+  isLoaded: false,
+  sceneSettings: {
+    backgroundColor: "#333335",
+    userId: undefined
+  } as SceneSettings
 }
 let _engineReducer = createReducer(
   initialState,
@@ -20,6 +26,7 @@ let _engineReducer = createReducer(
   on(removeSelection, (state, { uuid: uuid }) => ({ ...state, uuidCsSelected: [uuid] })),
   on(clearSelection, (state) => ({ ...state, prevUuidCsSelected: [...state.uuidCsSelected], uuidCsSelected: [] })),
   on(engineIsLoaded, (state) => ({ ...state, isLoaded: true })),
+  on(setSettings, (state, { sceneSettings: sceneSettings }) => ({ ...state, sceneSettings: { ...sceneSettings } })),
 );
 
 export function engineReducer(state, action) {

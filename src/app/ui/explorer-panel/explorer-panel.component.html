@@ -1,39 +1,78 @@
-<div style="width: 100%; position: relative; display: flex; margin: 5px;">
-    <div class="icon-btn-color icon-folder-add icon-xxs" title="Add folder" (click)="addNewFolder()"></div>
-    <div class="icon-btn-color icon-folder-delete icon-xxs" title="Delete folder" (click)="deleteFolder()"></div>
-    <div class="icon-btn-color icon-refresh icon-xxs" title="Refresh database" (click)="refreshTreeFolder()"></div>
+<div style="width: 100%; position: relative; display: flex; margin: 5px">
+    <div style="display: flex; align-items: center; height: 20px;">
+        <div style="display: flex; align-items: center">
+            <div style="color: white; margin-right: 5px">folder</div>
+            <div style="margin-right: 5px" class="icon-btn-color icon-folder-add icon-xs" title="Add folder" (click)="addNewFolder()"></div>
+            <div style="margin-right: 5px" class="icon-btn-color icon-folder-delete icon-xs" title="Delete folder" (click)="deleteFolder()"></div>
+            <div class="icon-btn-color icon-refresh icon-xs" title="Refresh database" (click)="refreshTreeFolder()"></div>
+        </div>
+        <div>
+            <ul class="import-subMenu" style="display: flex; align-items: center">
+                <div style="color: white; margin-right: 5px">Import</div>
+                <li>
+                    <div class="icon-btn-color icon-import icon-xs" title="Import Asset"></div>
+                    <ul>
+                        <li><a (click)="openCreateNewMaterialDialog()">Material</a></li>
+                        <li><a (click)="openUploadNewImageDialog()">Images</a></li>
+                        <li><a (click)="openUploadNewFontDialog()">Fonts</a></li>
+                        <li><a (click)="openUploadNewAudioDialog()">Audio</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <div>
-    <div style="background-color: #111; width: 60%; height: 200px; position: relative; float: right;"></div>
-    <div style="width: 40%; height: 200px; position: relative;" (click)="desactiveFolder($event)">
+    <div class="explorer-view grid-icons">
+        <div class="icon-explorer" [ngStyle]="selectedItemStyle(item)" *ngFor="let item of contentFolder" (click)="clickIconExplorer($event, item)" (dblclick)="dblClickIconExplorer($event, item)">
+            <div *ngIf="item.type == 'MATERIAL'" class="icon-material explorer-icon" [ngStyle]="setBackgroundColor(item)"></div>
+            <img *ngIf="item.type == 'IMAGE'" style="width: 50px; height: 50px; margin: 1px" [src]="item.url" />
+            <div *ngIf="item.type == 'FONT'" style="color: white; font-size: 37px">
+                Aa
+            </div>
+            <div *ngIf="item.type == 'AUDIO'" class="icon-audio explorer-icon icon-btn-color"></div>
+            <div class="file-name-icon">{{ item.name }}</div>
+        </div>
+    </div>
+    <div style="width: 40%; height: 200px; position: relative" (click)="desactiveFolder($event)">
         <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="10"
-                (dragover)="handleDragOver($event, node);" (dragend)="handleDragEnd($event);"
-                (drop)="handleDrop($event, node);" [ngClass]="getStyle(node)">
-                <button mat-icon-button disabled></button>
-                <span class="checklist-leaf-node" draggable="true" (dragstart)="handleDragStart($event, node);"
-                    (click)="setActiveFolder($event, node)" [ngClass]="{'active-node': node.active===true}">
-                    <input type="text" [ngModel]="node.name" #box (keyup.enter)="renameFolder(box.value, node)"
-                        (blur)="renameFolder(box.value, node)" class="nodeContent"
-                        [ngClass]="{'drag-start': dragNode===node}" [readonly]="this.isReadOnly"
-                        (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
-                </span>
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="10" (dragover)="handleDragOver($event, node)" (dragend)="handleDragEnd($event)" (drop)="handleDrop($event, node)" [ngClass]="getStyle(node)">
+                <button class="arrow-folder" mat-icon-button disabled></button>
+                <span class="checklist-leaf-node" draggable="true" (dragstart)="handleDragStart($event, node)" (click)="setActiveFolder($event, node)" [ngClass]="{ 'active-node': node.active === true }">
+          <input
+            type="text"
+            [ngModel]="node.name"
+            #box
+            (keyup.enter)="renameFolder(box.value, node)"
+            (blur)="renameFolder(box.value, node)"
+            class="nodeContent"
+            [ngClass]="{ 'drag-start': dragNode === node }"
+            [readonly]="this.isReadOnly"
+            (dblclick)="this.isReadOnly = false"
+            (blur)="this.isReadOnly = true"
+          />
+        </span>
             </mat-tree-node>
-            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="10"
-                (dragover)="handleDragOver($event, node);" (dragend)="handleDragEnd($event);"
-                (drop)="handleDrop($event, node);" [ngClass]="getStyle(node)">
-                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.item">
-                    <mat-icon class="mat-icon-rtl-mirror">
-                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-                    </mat-icon>
-                </button>
-                <span class="checklist-leaf-node" draggable="true" (dragstart)="handleDragStart($event, node);"
-                    (click)="setActiveFolder($event, node)" [ngClass]="{'active-node': node.active===true}">
-                    <input type="text" [ngModel]="node.name" #box (keyup.enter)="renameFolder(box.value, node)"
-                        (blur)="renameFolder(box.value, node)" class="nodeContent"
-                        [ngClass]="{'drag-start': dragNode===node}" [readonly]="this.isReadOnly"
-                        (dblclick)="this.isReadOnly = false" (blur)="this.isReadOnly=true">
-                </span>
+            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="10" (dragover)="handleDragOver($event, node)" (dragend)="handleDragEnd($event)" (drop)="handleDrop($event, node)" [ngClass]="getStyle(node)">
+                <button class="arrow-folder" mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.item">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button>
+                <span class="checklist-leaf-node" draggable="true" (dragstart)="handleDragStart($event, node)" (click)="setActiveFolder($event, node)" [ngClass]="{ 'active-node': node.active === true }">
+          <input
+            type="text"
+            [ngModel]="node.name"
+            #box
+            (keyup.enter)="renameFolder(box.value, node)"
+            (blur)="renameFolder(box.value, node)"
+            class="nodeContent"
+            [ngClass]="{ 'drag-start': dragNode === node }"
+            [readonly]="this.isReadOnly"
+            (dblclick)="this.isReadOnly = false"
+            (blur)="this.isReadOnly = true"
+          />
+        </span>
             </mat-tree-node>
         </mat-tree>
         <span #emptyItem></span>

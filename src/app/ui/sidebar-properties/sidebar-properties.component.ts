@@ -7,23 +7,26 @@ import { AppState } from '../../store/app.reducer';
 @Component({
   selector: 'sidebar-properties',
   templateUrl: './sidebar-properties.component.html',
-  styleUrls: ['./sidebar-properties.component.scss']
+  styleUrls: ['./sidebar-properties.component.scss'],
 })
 export class SidebarPropertiesComponent implements OnInit {
-
   expandTransformation: boolean = false;
   expandGeometry: boolean = false;
   expandMaterial: boolean = false;
   expandLight: boolean = false;
   expandCamera: boolean = false;
+  expandTexture: boolean = false;
+  expandAudio: boolean = false;
 
-  constructor(
-    private store: Store<AppState>
-  ) { }
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.store.pipe(select('ui'), filter(v => v.action !== undefined))
-      .subscribe(ui => {
+    this.store
+      .pipe(
+        select('ui'),
+        filter((v) => v.action !== undefined)
+      )
+      .subscribe((ui) => {
         this.collapseAllPanels();
         switch (ui.action.panel) {
           case SidebarPanel.TRANSFORMATION:
@@ -40,6 +43,12 @@ export class SidebarPropertiesComponent implements OnInit {
             break;
           case SidebarPanel.CAMERA:
             this.expandCamera = true;
+            break;
+          case SidebarPanel.TEXTURE:
+            this.expandTexture = true;
+            break;
+          case SidebarPanel.AUDIO:
+            this.expandAudio = true;
             break;
           default:
             break;
