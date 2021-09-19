@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { empty } from 'rxjs';
+import { empty, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { PopupDialogAction } from 'src/app/models';
@@ -52,7 +52,7 @@ export class UploadNewImageComponent implements OnInit {
           this.percent = Math.round(percent);
           if (this.percent == 100) {
             this.finished = true;
-            return ref.getDownloadURL();
+            return timer(2000).pipe(switchMap(() => ref.getDownloadURL()));
           }
           return empty();
         }),
@@ -64,7 +64,9 @@ export class UploadNewImageComponent implements OnInit {
             folderId: this.folderId,
             date: new Date(),
           };
-          return this.databaseServ.addImageToDatabase(image);
+          return timer(2000).pipe(
+            switchMap(() => this.databaseServ.addImageToDatabase(image))
+          );
         })
       )
       .subscribe((url) => {});
