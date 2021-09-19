@@ -7,7 +7,7 @@ import { Utils } from 'src/app/engine/Utils/Utils';
 import { PopupDialogAction } from 'src/app/models';
 import { FontDto } from 'src/app/models/FontDto.model';
 import { BtnFooter } from 'src/app/shared/popup-window/popup-window.component';
-import { openUploadNewFont, openUploadNewImage } from 'src/app/store/actions';
+import { openUploadNewFont } from 'src/app/store/actions';
 import { AppState } from 'src/app/store/app.reducer';
 import { DatabaseService } from './../../services/database.service';
 
@@ -67,9 +67,7 @@ export class UploadNewFontComponent implements OnInit {
           return this.databaseServ.addFontToDatabase(font);
         })
       )
-      .subscribe((url) => {
-        console.log(url);
-      });
+      .subscribe((url) => {});
   }
 
   closeDialog() {

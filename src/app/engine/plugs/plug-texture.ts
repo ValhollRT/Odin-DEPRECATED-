@@ -27,6 +27,7 @@ export class PlugTexture extends Texture implements Plug {
     this.uuid = this.name;
     let pm = container.getPlugMaterial();
     if (pm != undefined) pm.diffuseTexture = this;
+    this.hasAlpha = true;
     this.openPanel = () => {
       return new SidebarPanelAction(SidebarPanel.TEXTURE, true);
     };

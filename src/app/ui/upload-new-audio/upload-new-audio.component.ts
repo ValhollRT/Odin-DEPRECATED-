@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { empty } from 'rxjs';
+import { empty, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Utils } from 'src/app/engine/Utils/Utils';
 import { PopupDialogAction } from 'src/app/models';
 import { AudioDto } from 'src/app/models/AudioDto.model';
 import { BtnFooter } from 'src/app/shared/popup-window/popup-window.component';
-import { openUploadNewAudio, openUploadNewFont, openUploadNewImage } from 'src/app/store/actions';
+import { openUploadNewAudio } from 'src/app/store/actions';
 import { AppState } from 'src/app/store/app.reducer';
 import { DatabaseService } from './../../services/database.service';
 
@@ -52,7 +52,7 @@ export class UploadNewAudioComponent implements OnInit {
           this.percent = Math.round(percent);
           if (this.percent == 100) {
             this.finished = true;
-            return ref.getDownloadURL();
+            return timer(2000).pipe(switchMap(() => ref.getDownloadURL()));
           }
           return empty();
         }),
@@ -64,12 +64,12 @@ export class UploadNewAudioComponent implements OnInit {
             folderId: this.folderId,
             date: new Date(),
           };
-          return this.databaseServ.addAudioToDatabase(audio);
+          return timer(2000).pipe(
+            switchMap(() => this.databaseServ.addAudioToDatabase(audio))
+          );
         })
       )
-      .subscribe((url) => {
-        console.log(url);
-      });
+      .subscribe((val) => {});
   }
 
   closeDialog() {

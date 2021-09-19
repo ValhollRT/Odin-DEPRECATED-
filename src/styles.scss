@@ -207,6 +207,10 @@ body {
     mask-image: url("assets/icons/camera.svg");
 }
 
+.icon-HBD {
+    mask-image: url("assets/icons/HBD.svg");
+}
+
 .icon-folder {
     mask-image: url("assets/icons/folder.svg");
 }
@@ -266,6 +270,11 @@ body {
 .icon-m {
     width: 20px;
     height: 20px;
+}
+
+.icon-xl {
+    width: 72px;
+    height: 72px;
 }
 
 .icon-btn-xs {

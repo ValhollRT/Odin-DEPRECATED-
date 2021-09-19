@@ -16,6 +16,7 @@ export class SidebarPropertiesComponent implements OnInit {
   expandLight: boolean = false;
   expandCamera: boolean = false;
   expandTexture: boolean = false;
+  expandAudio: boolean = false;
 
   constructor(private store: Store<AppState>) {}
 
@@ -45,6 +46,9 @@ export class SidebarPropertiesComponent implements OnInit {
             break;
           case SidebarPanel.TEXTURE:
             this.expandTexture = true;
+            break;
+          case SidebarPanel.AUDIO:
+            this.expandAudio = true;
             break;
           default:
             break;

@@ -8,6 +8,7 @@ import { PlugSpotLight } from 'src/app/engine/plugs/plug-light/plug-spot-light';
 import { EngineService } from 'src/app/services/engine.service';
 import { Container } from 'src/app/shared/container/container';
 import { LIGHT } from '../configuration/app-constants';
+import { PlugAudio } from '../engine/plugs/plug-audio';
 import { PlugCamera } from '../engine/plugs/plug-camera';
 import { PlugPointLight } from '../engine/plugs/plug-light/plug-point-light';
 import { PlugMaterial } from '../engine/plugs/plug-material';
@@ -22,6 +23,7 @@ import { AppState } from '../store/app.reducer';
 import { PlugDirectionalLight } from './../engine/plugs/plug-light/plug-directional-light';
 import { PlugHemisphericLight } from './../engine/plugs/plug-light/plug-hemispheric-light';
 import { PlugText } from './../engine/plugs/plug-text';
+import { AudioDto } from './../models/AudioDto.model';
 import { DatabaseService } from './database.service';
 
 @Injectable({ providedIn: 'root' })
@@ -147,79 +149,10 @@ export class AppService {
     container.setPlugTexture(PlugTexture.fromDto(image.url, container));
   }
 
-  _addPlugTextureFromDto(image: ImageDto) {
+  addPlugAudioFromDto(audio: AudioDto) {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
-
-    this.getImage(image.url)
-      .then((blob) => {
-        console.log(blob);
-        const imageObjectURL = URL.createObjectURL(blob);
-        const safeblobUrl =
-          this.sanitizer.bypassSecurityTrustResourceUrl(imageObjectURL);
-        console.log(safeblobUrl);
-        // PlugTexture.fromDto(image, container);
-      })
-      .catch((error) => {
-        console.log();
-      });
-  }
-
-  __addPlugTextureFromDto(image: ImageDto) {
-    this.databaseServ
-      .refImageCloudStorage('c22ffb29-9d82-ef20-2b23-b8eb50534bc2.png')
-      .getDownloadURL()
-      .toPromise()
-      .then(function (url) {
-        // `url` is the download URL for 'images/stars.jpg'
-
-        // This can be downloaded directly:
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-        xhr.onload = function (event) {
-          var blob = xhr.response;
-          console.log(blob);
-        };
-        xhr.open('GET', url);
-        xhr.send();
-      })
-      .catch(function (error) {
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-          case 'storage/object-not-found':
-            // File doesn't exist
-            break;
-
-          case 'storage/unauthorized':
-            // User doesn't have permission to access the object
-            break;
-
-          case 'storage/canceled':
-            // User canceled the upload
-            break;
-          case 'storage/unknown':
-            // Unknown error occurred, inspect the server response
-            break;
-        }
-      });
-  }
-
-  async getImage(url = '') {
-    // Opciones por defecto estan marcadas con un *
-    const response = await fetch(url, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      mode: 'no-cors', // no-cors, *cors, same-origin
-      //cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'omit', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'image/png',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    });
-    return response.blob(); // parses JSON response into native JavaScript objects
+    container.setPlugAudio(PlugAudio.fromDto(audio.guid, container));
   }
 
   addPlugLight(lightType: any) {

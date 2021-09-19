@@ -159,7 +159,6 @@ export class DatabaseService {
 
   // Audios
   public uploadAudioToStorage(filename: string, data: any) {
-    console.log(filename.split('.')[1]);
     return this.storage.upload('/audios/' + filename, data);
   }
 
@@ -181,7 +180,6 @@ export class DatabaseService {
   }
 
   public uploadFontToStorage(filename: string, data: any) {
-    console.log(filename.split('.')[1]);
     return this.storage.upload('/fonts/' + filename, data);
   }
 

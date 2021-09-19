@@ -67,9 +67,7 @@ export class UploadNewImageComponent implements OnInit {
           return this.databaseServ.addImageToDatabase(image);
         })
       )
-      .subscribe((url) => {
-        console.log(url);
-      });
+      .subscribe((url) => {});
   }
 
   closeDialog() {
