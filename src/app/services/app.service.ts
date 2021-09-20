@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { ArcRotateCamera, BoundingBox, Light, Vector3 } from 'babylonjs';
 import { PlugGeometry } from 'src/app/engine/plugs/plug-geometry';
@@ -45,9 +43,7 @@ export class AppService {
   constructor(
     public engineServ: EngineService,
     public databaseServ: DatabaseService,
-    public store: Store<AppState>,
-    private sanitizer: DomSanitizer,
-    private firestore: AngularFirestore
+    public store: Store<AppState>
   ) {
     store.select('engine').subscribe((en) => {
       this.selectedUuidContainers = [...en.uuidCsSelected];
@@ -64,17 +60,21 @@ export class AppService {
   /** Default Scene */
   public createDefaultScene() {
     let container = this.newContainer();
-    container.setPlugLight(new PlugDirectionalLight(container));
-    container.name = 'Light';
+    let transformLight = container.getPlugTransform();
 
-    let x = Utils.degreeToRadians(-15);
+    let light = new PlugHemisphericLight(container);
+    light.intensity = 0.6;
+    container.setPlugLight(light);
+    container.name = 'AmbientLight';
+    let x = Utils.degreeToRadians(0);
     let y = Utils.degreeToRadians(-30);
-    let z = Utils.degreeToRadians(-30);
-    container.getPlugTransform().rotation = new Vector3(
+    let z = Utils.degreeToRadians(-90);
+    transformLight.rotation = new Vector3(
       Utils.precision(x, 3),
       Utils.precision(y, 3),
       Utils.precision(z, 3)
     );
+    transformLight.position = new Vector3(25, 25, -75);
 
     container = this.newContainer();
     let defaultPlugCamera = new PlugCamera(container);
@@ -179,7 +179,7 @@ export class AppService {
   addPlugCamera() {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
-    container.setPlugCamera(new PlugCamera(container)); 
+    container.setPlugCamera(new PlugCamera(container));
     this.addContainerToMapScene(container);
   }
 

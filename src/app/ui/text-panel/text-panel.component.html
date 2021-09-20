@@ -4,7 +4,7 @@
     <div style="">
         <div class="input-group">
             <div class="title-section-menu">Horizontal Justification</div>
-            <div style="display: flex">
+            <div style="display: flex; justify-content: center">
                 <button (click)="setHorizontalAlign(0)">left</button>
                 <button (click)="setHorizontalAlign(1)">center</button>
                 <button (click)="setHorizontalAlign(2)">right</button>
@@ -12,7 +12,7 @@
         </div>
         <div class="input-group">
             <div class="title-section-menu">Vertical Justification</div>
-            <div style="display: flex">
+            <div style="display: flex; justify-content: center">
                 <button [ngClass]="['this.current.mesh', 'off']" (click)="setVerticalAlign(0)">
           Top
         </button>

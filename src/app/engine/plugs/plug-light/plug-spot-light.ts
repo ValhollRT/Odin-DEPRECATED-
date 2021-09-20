@@ -19,7 +19,7 @@ export class PlugSpotLight extends SpotLight implements Plug {
 
   constructor(container: Container, uuid?: string) {
     super(uuid == undefined ? Utils.generatorUuid() : uuid,
-      new Vector3(100, 100, 100), new Vector3(-1, -1, 1), 20, 1,
+      new Vector3(0 , 0, 0), new Vector3(-1, -1, 1), 20, 1,
       AppModule.injector.get(EngineService).getScene());
     this.uuid = this.name;
 
