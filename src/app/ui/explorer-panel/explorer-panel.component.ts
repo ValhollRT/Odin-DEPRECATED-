@@ -588,6 +588,7 @@ export class ExplorerPanelComponent {
     if (node.type == 'MATERIAL') this.appServ.addPlugMaterialFromDto(node);
     if (node.type == 'IMAGE') this.appServ.addPlugTextureFromDto(node);
     if (node.type == 'AUDIO') this.appServ.addPlugAudioFromDto(node);
+    if (node.type == 'FONT') this.appServ.addPlugText(node.url);
   }
 
   clickIconExplorer(event, node) {

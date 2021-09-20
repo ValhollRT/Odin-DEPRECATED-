@@ -179,14 +179,14 @@ export class AppService {
   addPlugCamera() {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
-    container.setPlugCamera(new PlugCamera(container));
+    container.setPlugCamera(new PlugCamera(container)); 
     this.addContainerToMapScene(container);
   }
 
-  async addPlugText() {
+  async addPlugText(url: string) {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
-    container.setPlugGeometry(new PlugText(container));
+    container.setPlugGeometry(new PlugText(container, url));
     container.name = 'Text';
     this.addPlugGeometryToMapScene(container);
   }

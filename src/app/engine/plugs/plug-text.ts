@@ -9,29 +9,33 @@ import { Plug } from './plug';
 import { PlugGeometry } from './plug-geometry';
 
 export class PlugText extends PlugGeometry implements Plug {
+  public uuid: string;
+  containerUuid: string;
+  enable: boolean;
+  icon: string = 'icon-font';
+  title: string;
+  colorTile: string;
+  getIcon() {
+    return this.icon;
+  }
+  openPanel: () => SidebarPanelAction;
+  panel: GeometryPanel;
+  copy: () => Plug;
+  text: TextType;
+  public rebuildMesh: (options: any) => VertexData;
 
-    public uuid: string;
-    containerUuid: string;
-    enable: boolean;
-    icon: string = 'icon-font';
-    title: string;
-    colorTile: string;
-    getIcon() { return this.icon }
-    openPanel: () => SidebarPanelAction;
-    panel: GeometryPanel;
-    copy: () => Plug;
-    text: TextType;
-    public rebuildMesh: (options: any) => VertexData;
+  constructor(container: Container, url: string, uuid?: string) {
+    super(
+      container,
+      undefined,
+      uuid == undefined ? Utils.generatorUuid() : uuid
+    );
+    this.uuid = this.name;
 
-    constructor(container: Container, uuid?: string) {
-        super(container, undefined, uuid == undefined ? Utils.generatorUuid() : uuid);
-        this.uuid = this.name;
-
-        let scene = this.getScene();
-        let font = new FontType();
-        font.load("assets/font/Ubuntu-L.ttf", scene, (font: FontType) => {
-            this.text = new TextType(font, "Text", this);
-        });
-
-    }
+    let scene = this.getScene();
+    let font = new FontType();
+    font.load(url, scene, (font: FontType) => {
+      this.text = new TextType(font, 'Text', this);
+    });
+  }
 }
