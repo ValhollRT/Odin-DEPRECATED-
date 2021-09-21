@@ -16,7 +16,7 @@ import { Utils } from '../engine/Utils/Utils';
 import { ImageDto } from '../models/ImageDto.model';
 import { MaterialDto } from '../models/MaterialDto.model';
 import { SceneSettings } from '../models/SceneSettings.model';
-import { setSettings } from '../store/actions/engine.actions';
+import { oneSelection, setSettings } from '../store/actions/engine.actions';
 import { AppState } from '../store/app.reducer';
 import { PlugDirectionalLight } from './../engine/plugs/plug-light/plug-directional-light';
 import { PlugHemisphericLight } from './../engine/plugs/plug-light/plug-hemispheric-light';
@@ -141,6 +141,7 @@ export class AppService {
     if (this.noSelected()) return;
     let container = this.getFirstSelected();
     container.setPlugMaterial(PlugMaterial.fromDto(material, container));
+    this.updateSidebarData(container.uuid);
   }
 
   addPlugTextureFromDto(image: ImageDto) {
@@ -225,5 +226,9 @@ export class AppService {
 
   addCameraToMapScene(c: Container, camera: ArcRotateCamera) {
     this.uuidToCamera.set(c.uuid, camera);
+  }
+
+  updateSidebarData(containerUUID: string) {
+    this.store.dispatch(oneSelection({ uuid: containerUUID }));
   }
 }
