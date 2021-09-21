@@ -1,67 +1,60 @@
 <div #transformMenuValue class="container" style="display: flex; flex-direction:column;">
-  <div style="height:300px; width: 100%; position: relative; margin-top: 5px;">
-    <tabs-plugs-panel></tabs-plugs-panel>
-  </div>
-  <div style="height:100%; position: relative;" class="input-group">
-    <div style="display: flex; flex-direction:column; height: 100%;">
-      <div>
-        <div class="title-section-menu">Tree Node</div>
-      </div>
-      <div>
-        <div class="tree-node__top-menu-align">
-          <div class="tree-node__tope-menu__group-vertical-btn">
-            <div class="icon-hide icon-color icon-xxs float-left" (click)="checkHideDirectDescendants()"></div>
-            <div class="icon-unhide icon-color icon-xxs float-left" (click)="checkUnHideDirectDescendants()"></div>
-          </div>
-          <div class="tree-node__tope-menu__group-vertical-btn">
-            <div class="icon-lock icon-color icon-xxs float-left" (click)="checkLockDirectDescendants()"></div>
-            <div class="icon-unlock icon-color icon-xxs float-left" (click)="checkUnLockDirectDescendants()"></div>
-          </div>
-          <input (keyup.enter)="searchElement($event.target.value)" class="searchElement" type="text"
-            placeholder="search...">
-          <div (click)="createNewContainer($event)" class="icon-btn-color icon-container icon-btn-xs float-left"></div>
-          <div (click)="addNewDefaultMaterial($event)" class="icon-btn-color icon-material icon-btn-xs float-left">
-          </div>
-          <div (click)="clickDeleteNode($event)" class="icon-btn-color icon-trash icon-btn-xs float-left"></div>
-        </div>
-        <div class="separator"></div>
-      </div>
-      <mat-tree class="tree-node" [dataSource]="dataSource" [treeControl]="treeControl">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
-          <button mat-icon-button disabled></button>
-          <container
-            [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+    <div style="height:300px; width: 100%; position: relative; margin-top: 5px;">
+        <tabs-plugs-panel></tabs-plugs-panel>
+    </div>
+    <div style="height:100%; position: relative;" class="input-group">
+        <div style="display: flex; flex-direction:column; height: 100%;">
+            <div>
+                <div class="title-section-menu">Tree Node</div>
+            </div>
+            <div>
+                <div class="tree-node__top-menu-align">
+                    <div class="tree-node__tope-menu__group-vertical-btn">
+                        <div class="icon-hide icon-color icon-xxs float-left" (click)="checkHideDirectDescendants()"></div>
+                        <div class="icon-unhide icon-color icon-xxs float-left" (click)="checkUnHideDirectDescendants()"></div>
+                    </div>
+                    <div class="tree-node__tope-menu__group-vertical-btn">
+                        <div class="icon-lock icon-color icon-xxs float-left" (click)="checkLockDirectDescendants()"></div>
+                        <div class="icon-unlock icon-color icon-xxs float-left" (click)="checkUnLockDirectDescendants()"></div>
+                    </div>
+                    <input (keyup.enter)="searchElement($event.target.value)" class="searchElement" type="text" placeholder="search...">
+                    <div (click)="createNewContainer($event)" class="icon-btn-color icon-container icon-btn-xs float-left"></div>
+                    <div (click)="addNewDefaultMaterial($event)" class="icon-btn-color icon-material icon-btn-xs float-left">
+                    </div>
+                    <div (click)="clickDeleteNode($event)" class="icon-btn-color icon-trash icon-btn-xs float-left"></div>
+                </div>
+                <div class="separator"></div>
+            </div>
+            <mat-tree class="tree-node" [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding matTreeNodePaddingIndent="20">
+                    <button mat-icon-button disabled></button>
+                    <container [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                                                 'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-                                                'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
-            draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);"
-            (dragover)="handleDragOver($event, node);" (drop)="handleDrop($event, node);"
-            (dragend)="handleDragEnd($event);" [data]=node></container>
-        </mat-tree-node>
+                                                'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}" draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);" (dragover)="handleDragOver($event, node);"
+                        (drop)="handleDrop($event, node);" (dragend)="handleDragEnd($event);" [data]=node></container>
+                </mat-tree-node>
 
-        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
-          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
+                    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
             <mat-icon class="mat-icon-rtl-mirror">
               {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
             </mat-icon>
           </button>
-          <container
-            [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                    <container [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
                                               'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-                                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
-            draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);"
-            (dragover)="handleDragOver($event, node);" (drop)="handleDrop($event, node);"
-            (dragend)="handleDragEnd($event);" [data]=node></container>
-        </mat-tree-node>
-      </mat-tree>
-      <span #emptyItem></span>
+                                              'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}" draggable="true" draggable="true" (dragstart)="handleDragStart($event, node);" (dragover)="handleDragOver($event, node);"
+                        (drop)="handleDrop($event, node);" (dragend)="handleDragEnd($event);" [data]=node></container>
+                </mat-tree-node>
+            </mat-tree>
+            <span #emptyItem></span>
+
+        </div>
+
+
 
     </div>
-
-
-
-  </div>
-  <div style="height:30px; position: relative;" class="input-group">
-    <tool-menu></tool-menu>
-    <div class="odin-version">@ValhollRT Odin v0.1.5</div>
-  </div>
+    <div style="height:30px; position: relative;" class="input-group">
+        <tool-menu></tool-menu>
+        <div class="odin-version">@ValhollRT Odin v0.1.5</div>
+    </div>
 </div>

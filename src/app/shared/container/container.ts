@@ -117,6 +117,15 @@ export class Container {
     this.plugs.push(pa);
   }
 
+  removePlug(plugUuidSelected: string) {
+    let plugToRemove = this.plugs.filter(
+      (plug) => plug.uuid == plugUuidSelected
+    );
+    if (plugToRemove[0] instanceof PlugTransform) return;
+    this.plugs = this.plugs.filter((plug) => plug !== plugToRemove[0]);
+    plugToRemove[0].dispose();
+  }
+
   unHide() {
     this.hidden = false;
     if (this.plugGeometry != undefined) {

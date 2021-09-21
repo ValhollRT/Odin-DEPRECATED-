@@ -17,6 +17,7 @@ export class PlugMaterial extends StandardMaterial implements Plug {
   title: string = 'Material';
   colorTile: string;
   panel: any;
+  isSelected: boolean;
   openPanel: () => SidebarPanelAction;
   copy: () => Plug;
 
@@ -36,6 +37,8 @@ export class PlugMaterial extends StandardMaterial implements Plug {
     let texture = container.getPlugTexture();
     if (geometry != undefined) geometry.material = this;
     if (texture != undefined) this.diffuseTexture = texture;
+
+    this.isSelected = false;
   }
 
   getIcon() {

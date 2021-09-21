@@ -17,6 +17,7 @@ export class PlugTexture extends Texture implements Plug {
   colorTile: string;
   panel: any;
   active: boolean;
+  isSelected: boolean;
   openPanel: () => SidebarPanelAction;
   copy: () => Plug;
 
@@ -32,6 +33,7 @@ export class PlugTexture extends Texture implements Plug {
       return new SidebarPanelAction(SidebarPanel.TEXTURE, true);
     };
     this.active = false;
+    this.isSelected = false;
   }
 
   getIcon() {

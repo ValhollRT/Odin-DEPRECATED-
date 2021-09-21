@@ -35,7 +35,9 @@ export class PlugAudio extends Sound implements Plug {
     this.openPanel = () => {
       return new SidebarPanelAction(SidebarPanel.AUDIO, true);
     };
+    this.isSelected = false;
   }
+  isSelected: boolean;
 
   getIcon() {
     return this.icon;

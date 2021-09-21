@@ -16,7 +16,7 @@
     margin: 4px;
 }
 
-.plug-box:hover {
-    border: 1px solid dimgray;
-    background: grey;
+.plug-selected {
+    border: 2px solid #c9ecfa;
+    box-sizing: inherit;
 }

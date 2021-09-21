@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Store } from '@ngrx/store';
 import { ArcRotateCamera, Light, Mesh } from 'babylonjs';
@@ -30,7 +30,7 @@ export class flatTreeContainer {
   templateUrl: './tree-node.component.html',
   styleUrls: ['./tree-node.component.scss']
 })
-export class TreeNodeComponent {
+export class TreeNodeComponent implements AfterViewInit{
   flatNodeMap = new Map<flatTreeContainer, Container>();
   nestedNodeMap = new Map<Container, flatTreeContainer>();
   nestedMeshMap = new Map<Mesh | Light | ArcRotateCamera, flatTreeContainer>();
@@ -48,9 +48,13 @@ export class TreeNodeComponent {
   dragNodeExpandOverTime: number;
   dragNodeExpandOverArea: string;
   @ViewChild('emptyItem') emptyItem: ElementRef;
+  @ViewChild('transformMenuValue') transformMenuValue: ElementRef;
 
   isReadOnly: boolean = true;
   isEngineLoadedSubscriber;
+
+  containerPlugUuidSelected : string;
+  plugUuidSelected : string;
 
   constructor(
     public store: Store<AppState>,
@@ -63,6 +67,11 @@ export class TreeNodeComponent {
     this.treeControl = new FlatTreeControl<flatTreeContainer>(this.getLevel, this.isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
+    this.store.select('engine').subscribe((engine) => {
+      this.containerPlugUuidSelected = engine.containerPlugUuidSelected
+      this.plugUuidSelected = engine.plugUuidSelected
+    });
+
     this.isEngineLoadedSubscriber = this.store.select('engine').subscribe(engine => {
       if (engine.isLoaded) {
         this.init();
@@ -72,6 +81,16 @@ export class TreeNodeComponent {
         this.isEngineLoadedSubscriber.unsubscribe();
       }
     });
+  }
+  ngAfterViewInit(): void {
+    let el = this.transformMenuValue.nativeElement;
+    onkeydown = (e) => {
+      if (e.keyCode == 46 || e.keyCode == 8) {
+        this.appServ.removePlugSelectedFromContainer(this.containerPlugUuidSelected, this.plugUuidSelected);
+      }};
+      
+    el.addEventListener("keydown", onkeydown, false);
+
   }
 
   init(): void {

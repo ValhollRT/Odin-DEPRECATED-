@@ -13,16 +13,14 @@ export class PlugText extends PlugGeometry implements Plug {
   containerUuid: string;
   enable: boolean;
   icon: string = 'icon-font';
+  text: TextType;
   title: string;
   colorTile: string;
-  getIcon() {
-    return this.icon;
-  }
-  openPanel: () => SidebarPanelAction;
+  isSelected: boolean;
   panel: GeometryPanel;
+
+  openPanel: () => SidebarPanelAction;
   copy: () => Plug;
-  text: TextType;
-  public rebuildMesh: (options: any) => VertexData;
 
   constructor(container: Container, url: string, uuid?: string) {
     super(
@@ -37,5 +35,12 @@ export class PlugText extends PlugGeometry implements Plug {
     font.load(url, scene, (font: FontType) => {
       this.text = new TextType(font, 'Text', this);
     });
+    this.isSelected = false;
   }
+
+  getIcon() {
+    return this.icon;
+  }
+
+  public rebuildMesh: (options: any) => VertexData;
 }

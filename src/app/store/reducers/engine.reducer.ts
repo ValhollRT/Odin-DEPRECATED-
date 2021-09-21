@@ -1,10 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 import { addSelection, clearSelection, oneSelection, removeSelection } from '../actions';
 import { SceneSettings } from './../../models/SceneSettings.model';
-import { engineIsLoaded, setSettings } from './../actions/engine.actions';
+import { engineIsLoaded, onePlugSelection, setSettings } from './../actions/engine.actions';
 
 export interface State {
   uuidCsSelected: string[];
+  plugUuidSelected: string;
+  containerPlugUuidSelected: string;
   prevUuidCsSelected: string[];
   isLoaded: boolean;
   sceneSettings: SceneSettings;
@@ -13,6 +15,8 @@ export interface State {
 export const initialState: State = {
   uuidCsSelected: [],
   prevUuidCsSelected: [],
+  plugUuidSelected : '',
+  containerPlugUuidSelected : "",
   isLoaded: false,
   sceneSettings: {
     backgroundColor: "#333335",
@@ -25,6 +29,7 @@ let _engineReducer = createReducer(
   on(addSelection, (state, { uuid: uuid }) => ({ ...state, uuidCsSelected: [...state.uuidCsSelected, uuid] })),
   on(removeSelection, (state, { uuid: uuid }) => ({ ...state, uuidCsSelected: [uuid] })),
   on(clearSelection, (state) => ({ ...state, prevUuidCsSelected: [...state.uuidCsSelected], uuidCsSelected: [] })),
+  on(onePlugSelection, (state, { plugUuidSelected: plugUuidSelected , containerPlugUuidSelected : containerPlugUuidSelected}) => ({ ...state, plugUuidSelected: plugUuidSelected, containerPlugUuidSelected: containerPlugUuidSelected })),
   on(engineIsLoaded, (state) => ({ ...state, isLoaded: true })),
   on(setSettings, (state, { sceneSettings: sceneSettings }) => ({ ...state, sceneSettings: { ...sceneSettings } })),
 );

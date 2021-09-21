@@ -1,17 +1,14 @@
 <div #container class="container-box" [ngClass]="{'container-selected': data.selected == true}">
     <div>
         <div class="box-hide-lock">
-            <div [ngClass]="[dataContainer.hidden ? 'icon-hide' : 'icon-unhide', 'icon-size-hide-lock' ]"
-                (click)="hide()" style="float: none;"></div>
+            <div [ngClass]="[dataContainer.hidden ? 'icon-hide' : 'icon-unhide', 'icon-size-hide-lock' ]" (click)="hide()" style="float: none;"></div>
         </div>
         <div class="box-hide-lock">
-            <div [ngClass]="[dataContainer.locked ? 'icon-lock' : 'icon-unlock', 'icon-size-hide-lock']"
-                (click)="lock()"></div>
+            <div [ngClass]="[dataContainer.locked ? 'icon-lock' : 'icon-unlock', 'icon-size-hide-lock']" (click)="lock()"></div>
         </div>
     </div>
     <div *ngFor="let plug of dataContainer.plugs">
-        <plug [plug]='plug'></plug>
+        <plug (click)="clickOnPlug($event, plug)" [plug]='plug'></plug>
     </div>
-    <input type="text" [ngModel]="data.name" (ngModelChange)="setName($event)" [readonly]="this.readOnlyInput"
-        (blur)="this.readOnlyInput=true">
+    <input type="text" [ngModel]="data.name" (ngModelChange)="setName($event)" [readonly]="this.readOnlyInput" (blur)="this.readOnlyInput=true">
 </div>

@@ -29,6 +29,8 @@ export class PlugGeometry extends Mesh implements Plug {
   icon: string = 'icon-geometry';
   title: string;
   colorTile: string;
+  isSelected: boolean;
+
   getIcon() {
     return this.icon;
   }
@@ -60,6 +62,8 @@ export class PlugGeometry extends Mesh implements Plug {
     let material = container.getPlugMaterial();
     if (material == undefined) return;
     this.material = material;
+
+    this.isSelected = false;
   }
 
   private getDefaultGeometryData(type: String) {

@@ -192,6 +192,14 @@ export class AppService {
     this.addPlugGeometryToMapScene(container);
   }
 
+  removePlugSelectedFromContainer(
+    containerPlugUuidSelected: string,
+    plugUuidSelected: string
+  ) {
+    let container = this.getContainerFromUuid(containerPlugUuidSelected);
+    if (!!plugUuidSelected) container.removePlug(plugUuidSelected);
+  }
+
   /** References Containers */
   public getContainerFromUuid(uuid: string): Container {
     return this.uuidToContainer.get(uuid);

@@ -14,6 +14,8 @@ export class PlugDirectionalLight extends DirectionalLight implements Plug {
     title: string = 'Light';
     colorTile: string;
     panel: any;
+    isSelected: boolean;
+
     openPanel: () => SidebarPanelAction;
     copy: () => Plug;
 
@@ -24,6 +26,8 @@ export class PlugDirectionalLight extends DirectionalLight implements Plug {
 
         this.parent = container.getPlugTransform();
         this.openPanel = () => { return new SidebarPanelAction(SidebarPanel.LIGHT, true) }
+
+        this.isSelected = false;
     }
 
     getIcon() { return this.icon }
