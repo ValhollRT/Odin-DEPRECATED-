@@ -291,8 +291,12 @@ export class ExplorerPanelComponent {
       Array.from(this.fDbFlatNodes.keys()).forEach((k) => {
         if (k.startsWith('DELETE')) this.fDbFlatNodes.delete(k);
       });
-
       this.database.dataChange.next(Array.from(this.fDbFlatNodes.values()));
+
+      let firstFolder = Array.from(this.fDbFlatNodes.values()).filter(
+        (folder) => folder.parent == ''
+      )[0];
+      this.setActiveFolder(undefined, firstFolder);
     });
   }
 
@@ -394,7 +398,7 @@ export class ExplorerPanelComponent {
 
   public selectedNode = undefined;
   setActiveFolder(event, node) {
-    event.stopPropagation();
+    if (!!event) event.stopPropagation();
     if (this.selectedNode != undefined) this.selectedNode.active = false;
     this.selectedNode = node;
     node.active = true;
