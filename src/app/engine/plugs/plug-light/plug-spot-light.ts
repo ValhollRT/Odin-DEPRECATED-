@@ -19,7 +19,6 @@ export class PlugSpotLight extends SpotLight implements Plug {
   isSelected: boolean;
 
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, uuid?: string) {
     super(
@@ -42,5 +41,9 @@ export class PlugSpotLight extends SpotLight implements Plug {
 
   getIcon() {
     return this.icon;
+  }
+
+  copy(parent: Container): PlugSpotLight {
+    throw new Error('Method not implemented.');
   }
 }

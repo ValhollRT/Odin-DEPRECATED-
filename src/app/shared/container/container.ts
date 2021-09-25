@@ -51,7 +51,7 @@ export class Container {
   getPlugLight(): Plug {
     return this.plugLight;
   }
-  getPlugCamera(): Plug {
+  getPlugCamera(): PlugCamera {
     return this.plugCamera;
   }
   getPlugAudio(): Plug {
@@ -124,6 +124,8 @@ export class Container {
     if (plugToRemove[0] instanceof PlugTransform) return;
     this.plugs = this.plugs.filter((plug) => plug !== plugToRemove[0]);
     plugToRemove[0].dispose();
+    let pm = this.getPlugMaterial();
+    if (!!pm) pm.diffuseTexture = undefined; // if removed texture, remove it from material
   }
 
   unHide() {
@@ -185,4 +187,6 @@ export class Container {
     });
     return acc;
   }
+
+  pastePlug(plugCloned: Plug) {}
 }

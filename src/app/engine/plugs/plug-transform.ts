@@ -1,6 +1,7 @@
 import { TransformNode, Vector3 } from 'babylonjs';
 import { AppModule } from 'src/app/app.module';
 import { EngineService } from 'src/app/services/index.service';
+import { Container } from 'src/app/shared/container/container';
 import {
   SidebarPanel,
   SidebarPanelAction,
@@ -17,7 +18,6 @@ export class PlugTransform extends TransformNode implements Plug {
   colorTile: string;
   panel: any;
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
   axis: AxisHelper;
   origin: Vector3;
   originZero: TransformNode;
@@ -65,5 +65,15 @@ export class PlugTransform extends TransformNode implements Plug {
   }
   setScale(): void {
     this.scaling;
+  }
+
+  copy(parent: Container): PlugTransform {
+    let plugTransformParent = parent.getPlugTransform();
+    plugTransformParent.position = this.position;
+    plugTransformParent.rotation = this.rotation;
+    plugTransformParent.scaling = this.scaling;
+    plugTransformParent.origin = this.origin;
+    plugTransformParent.originZero = this.originZero;
+    return this;
   }
 }

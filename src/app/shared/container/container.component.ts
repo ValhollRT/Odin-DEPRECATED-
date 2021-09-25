@@ -1,10 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { fromEvent, merge } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { AppService } from 'src/app/services/index.service';
 import {
   addSelection,
+  clearAllPlugSelection,
   onePlugSelection,
   oneSelection,
 } from 'src/app/store/actions';
@@ -52,6 +53,9 @@ export class ContainerComponent implements OnInit {
   selectContainer(event: any) {
     event.preventDefault();
     this.data.selected = !this.data.selected;
+    this.store.dispatch(
+      clearAllPlugSelection()
+    );
 
     if (event.shiftKey) {
       // this.store.dispatch(addSelection({ uuid: this.data.uuid }));
@@ -65,29 +69,30 @@ export class ContainerComponent implements OnInit {
 
   public allowClickContainer: boolean = true;
   clickOnPlug(event: MouseEvent, plug: Plug) {
+
     event.preventDefault();
     setTimeout(() => {
       this.allowClickContainer = false;
     }, 300);
     this.allowClickContainer = false;
     let plugSelectedIndex = this.listPlugs.findIndex((p) => p.isSelected);
+
     if (
       plugSelectedIndex != -1 &&
       plug.uuid === this.listPlugs[plugSelectedIndex].uuid
     ) {
       plug.isSelected = false;
       this.store.dispatch(
-        onePlugSelection({
-          plugUuidSelected: '',
-          containerPlugUuidSelected: '',
-        })
+        clearAllPlugSelection()
       );
       return;
     }
 
+
     this.listPlugs.forEach((p) => {
       p.isSelected = false;
     });
+
     plug.isSelected = true;
     this.store.dispatch(
       onePlugSelection({
@@ -118,8 +123,8 @@ export class ContainerComponent implements OnInit {
     const clickEvent = fromEvent<MouseEvent>(el, 'click');
     const dblClickEvent = fromEvent<MouseEvent>(el, 'dblclick');
     const eventsMerged = merge(clickEvent, dblClickEvent).pipe(
-      debounceTime(100)
-      // filter((e) => this.allowClickContainer)
+      debounceTime(100),
+      filter((e) => this.allowClickContainer)
     );
     eventsMerged.subscribe((event) => {
       event.preventDefault();

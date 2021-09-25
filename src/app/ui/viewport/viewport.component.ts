@@ -233,7 +233,7 @@ export class ViewportComponent implements OnInit {
         }, 0);
       }
     } else {
-      this.store.dispatch(clearSelection());
+      this.store.dispatch(clearSelection());   
     }
   }
 

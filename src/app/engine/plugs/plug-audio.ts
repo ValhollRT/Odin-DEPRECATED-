@@ -17,8 +17,9 @@ export class PlugAudio extends Sound implements Plug {
   colorTile: string;
   panel: any;
   active: boolean;
+  guidAudio: string;
+
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, guid: string, uuid?: string) {
     super(
@@ -36,7 +37,13 @@ export class PlugAudio extends Sound implements Plug {
       return new SidebarPanelAction(SidebarPanel.AUDIO, true);
     };
     this.isSelected = false;
+    this.guidAudio = guid
   }
+
+  copy(parent: Container): PlugAudio {
+    return new PlugAudio(parent, this.guidAudio);
+  }
+  
   isSelected: boolean;
 
   getIcon() {

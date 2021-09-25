@@ -19,7 +19,6 @@ export class PlugMaterial extends StandardMaterial implements Plug {
   panel: any;
   isSelected: boolean;
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, uuid?: string) {
     super(
@@ -63,10 +62,25 @@ export class PlugMaterial extends StandardMaterial implements Plug {
     return this;
   }
 
+  setAlpha(alpha: number): PlugMaterial {
+    this.alpha = alpha;
+    return this;
+  }
+
+  
+
   static fromDto(dto: MaterialDto, container: Container): PlugMaterial {
     return new PlugMaterial(container)
       .setDiffuseColor(dto.diffuseColor)
       .setAmbientColor(dto.ambientColor)
       .setSpecularColor(dto.specularColor);
+  }
+
+  copy(parent: Container): PlugMaterial {
+    return new PlugMaterial(parent, Utils.generatorUuid())
+      .setDiffuseColor(this.diffuseColor)
+      .setAmbientColor(this.ambientColor)
+      .setSpecularColor(this.specularColor)
+      .setAlpha(this.alpha);
   }
 }

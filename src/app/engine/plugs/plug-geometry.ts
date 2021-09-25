@@ -28,30 +28,44 @@ export class PlugGeometry extends Mesh implements Plug {
   enable: boolean;
   icon: string = 'icon-geometry';
   title: string;
-  colorTile: string;
-  isSelected: boolean;
+  colorTile: string = '';
+  isSelected: boolean = false;
+  geomType: string;
 
   getIcon() {
     return this.icon;
   }
   openPanel: () => SidebarPanelAction;
   panel: GeometryPanel;
-  copy: () => Plug;
   public rebuildMesh: (options: any) => VertexData;
   public lock: (lock: boolean) => void;
   public hide: (hide: boolean) => void;
 
-  constructor(container: Container, geomType?: string, uuid?: string) {
+  constructor(
+    container: Container,
+    geomType?: string,
+    uuid?: string,
+    panelValues?: GeometryPanel
+  ) {
     super(
       uuid == undefined ? Utils.generatorUuid() : uuid,
       AppModule.injector.get(EngineService).getScene()
     );
     this.uuid = this.name;
     this.setEnabled(!container.hidden);
-    if (geomType != undefined) {
+
+    if (panelValues != undefined) {
+      this.geomType = geomType;
       this.getDefaultGeometryData(geomType);
+      this.getDefaultPanel(geomType, panelValues);
+      this.rebuildMesh(panelValues).applyToMesh(this, true);
+    } else {
+      this.geomType = geomType;
+      this.getDefaultGeometryData(geomType);
+      this.getDefaultPanel(geomType);
       this.rebuildMesh(this.panel.values).applyToMesh(this, true);
     }
+
     this.parent = container.getPlugTransform();
     this.containerUuid = container.uuid;
     this.openPanel = () => {
@@ -66,44 +80,74 @@ export class PlugGeometry extends Mesh implements Plug {
     this.isSelected = false;
   }
 
-  private getDefaultGeometryData(type: String) {
-    switch (type) {
+  copy(parent: Container): PlugGeometry {
+    return new PlugGeometry(parent, this.geomType, Utils.generatorUuid(), {
+      ...this.panel.values,
+    });
+  }
+
+  private getDefaultGeometryData(geomType: String) {
+    switch (geomType) {
       case GEOM.BOX:
-        this.panel = new BoxPanel();
         this.rebuildMesh = VertexData.CreateBox;
         break;
       case GEOM.CYLINDER:
-        this.panel = new CylinderPanel();
         this.rebuildMesh = VertexData.CreateCylinder;
         break;
       case GEOM.DISC:
-        this.panel = new DiscPanel();
         this.rebuildMesh = VertexData.CreateDisc;
         break;
       case GEOM.ICOSPHERE:
-        this.panel = new IcoSpherePanel();
         this.rebuildMesh = VertexData.CreateIcoSphere;
         break;
       case GEOM.PLANE:
-        this.panel = new PlanePanel();
         this.rebuildMesh = VertexData.CreatePlane;
         break;
       case GEOM.POLYHEDRON:
-        this.panel = new PolyhedronPanel();
         this.rebuildMesh = VertexData.CreatePolyhedron;
         break;
       case GEOM.TORUS:
-        this.panel = new TorusPanel();
         this.rebuildMesh = VertexData.CreateTorus;
         break;
       case GEOM.CAPSULE:
-        this.panel = new CapsulePanel();
         this.rebuildMesh = VertexData.CreateCapsule;
         break;
       case GEOM.SPHERE:
-        this.panel = new SpherePanel();
         this.rebuildMesh = VertexData.CreateSphere;
         break;
     }
+  }
+
+  private getDefaultPanel(geomType: String, values?: any) {
+    switch (geomType) {
+      case GEOM.BOX:
+        this.panel = new BoxPanel();
+        break;
+      case GEOM.CYLINDER:
+        this.panel = new CylinderPanel();
+        break;
+      case GEOM.DISC:
+        this.panel = new DiscPanel();
+        break;
+      case GEOM.ICOSPHERE:
+        this.panel = new IcoSpherePanel();
+        break;
+      case GEOM.PLANE:
+        this.panel = new PlanePanel();
+        break;
+      case GEOM.POLYHEDRON:
+        this.panel = new PolyhedronPanel();
+        break;
+      case GEOM.TORUS:
+        this.panel = new TorusPanel();
+        break;
+      case GEOM.CAPSULE:
+        this.panel = new CapsulePanel();
+        break;
+      case GEOM.SPHERE:
+        this.panel = new SpherePanel();
+        break;
+    }
+    if (!!values) this.panel.values = values;
   }
 }

@@ -19,7 +19,6 @@ export class PlugCamera extends ArcRotateCamera implements Plug {
   active: boolean;
   isSelected: boolean;
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, uuid?: string) {
     super(
@@ -45,5 +44,9 @@ export class PlugCamera extends ArcRotateCamera implements Plug {
 
   getIcon() {
     return this.icon;
+  }
+
+  copy(parent: Container): PlugCamera {
+    throw new Error('Method not implemented.');
   }
 }

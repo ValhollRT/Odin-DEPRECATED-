@@ -20,7 +20,6 @@ export class PlugText extends PlugGeometry implements Plug {
   panel: GeometryPanel;
 
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, url: string, uuid?: string) {
     super(

@@ -32,7 +32,7 @@ export class AppService {
   } as SceneSettings;
 
   // References Containers
-  public plugToContainer = new Map<Node | PlugGeometry | Light, Container>();
+  public plugGeometryToContainer = new Map<Node | PlugGeometry | Light, Container>();
   public uuidToContainer = new Map<string, Container>();
   public uuidToBBox = new Map<string, BoundingBox>();
   public uuidToCamera = new Map<string, ArcRotateCamera>();
@@ -200,12 +200,38 @@ export class AppService {
     if (!!plugUuidSelected) container.removePlug(plugUuidSelected);
   }
 
+  clonePlugFromClipboardToContainer(
+    plugUuidSelected: string,
+    containerPlugUuidSelected: string
+  ) {
+    if (this.noSelected()) return;
+    let containerTopaste = this.getFirstSelected();
+    let containerPlug = this.getContainerFromUuid(containerPlugUuidSelected);
+    let plugToClone = containerPlug.plugs.filter((plug) => plug.uuid == plugUuidSelected)[0];
+    let plugCloned = plugToClone.copy(containerTopaste);
+
+    if (plugCloned instanceof PlugTransform) return; // PlugTransform is only copied trasnform values
+    if (plugCloned instanceof PlugCamera) return; // not applied to container
+    if (plugCloned instanceof PlugText) return; // not applied to container
+
+    if (plugCloned instanceof PlugTransform) containerTopaste.setPlugTransform(plugCloned);
+    if (plugCloned instanceof PlugGeometry) {
+      containerTopaste.setPlugGeometry(plugCloned);
+      this.addPlugGeometryToMapScene(containerTopaste);
+    }
+
+    if (plugCloned instanceof PlugMaterial) containerTopaste.setPlugMaterial(plugCloned);
+    if (plugCloned instanceof (PlugDirectionalLight || PlugSpotLight || PlugPointLight || PlugHemisphericLight) ) containerTopaste.setPlugLight(plugCloned);
+    if (plugCloned instanceof PlugTexture) containerTopaste.setPlugTexture(plugCloned);
+    if (plugCloned instanceof PlugAudio) containerTopaste.setPlugAudio(plugCloned);
+  }
+
   /** References Containers */
   public getContainerFromUuid(uuid: string): Container {
     return this.uuidToContainer.get(uuid);
   }
   public getContainerFromPlugGeometry(type: Node | PlugGeometry): Container {
-    return this.plugToContainer.get(type);
+    return this.plugGeometryToContainer.get(type);
   }
 
   // Get Selections methods
@@ -225,7 +251,7 @@ export class AppService {
   }
 
   addPlugGeometryToMapScene(c: Container) {
-    this.plugToContainer.set(c.getPlugGeometry(), c);
+    this.plugGeometryToContainer.set(c.getPlugGeometry(), c);
     this.uuidToBBox.set(
       c.uuid,
       c.getPlugGeometry().getBoundingInfo().boundingBox

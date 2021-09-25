@@ -19,7 +19,6 @@ export class PlugHemisphericLight extends HemisphericLight implements Plug {
   isSelected: boolean;
 
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, uuid?: string) {
     super(
@@ -39,5 +38,9 @@ export class PlugHemisphericLight extends HemisphericLight implements Plug {
 
   getIcon() {
     return this.icon;
+  }
+
+  copy(parent: Container): PlugHemisphericLight {
+    throw new Error('Method not implemented.');
   }
 }
