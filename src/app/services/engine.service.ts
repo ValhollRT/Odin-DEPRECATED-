@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Color3, Color4, Engine, Scene } from 'babylonjs';
 import 'babylonjs-materials';
 import { BehaviorSubject } from 'rxjs';
+import { GizmoHelper } from '../engine/helpers/gizmo-helper';
 import { Grid } from '../engine/helpers/grid';
 import { PlugCamera } from '../engine/plugs/plug-camera';
 import { Container } from '../shared/container/container';
@@ -18,6 +19,7 @@ export class EngineService {
   private engine: Engine;
   private defaultCamera: PlugCamera;
   private scene: Scene;
+  private gizmoHelper: GizmoHelper;
 
   public emitNewContainerTreeNode$ = new BehaviorSubject<Container>(undefined);
   public updateTreeNode$ = new BehaviorSubject<boolean>(false);
@@ -33,15 +35,29 @@ export class EngineService {
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
     this.canvas = canvas.nativeElement;
-    this.engine = new Engine(this.canvas, true);
+    this.engine = new Engine(this.canvas, true, {
+      preserveDrawingBuffer: true,
+      stencil: true,
+      alpha: true,
+      antialias: true,
+    });
 
+    this.engine.setSize(1920, 1080);
     this.scene = new Scene(this.engine);
-    this.scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
+    this.scene.autoClearDepthAndStencil = true; // Depth and stencil, obviously
     this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);
     this.scene.registerAfterRender(() => {});
-    
+
     this.grid = new Grid(this.scene);
     this.store.dispatch(engineIsLoaded({ isLoaded: true }));
+  }
+
+  initGizmoHelper() {
+    this.gizmoHelper = new GizmoHelper(this.getEngine(), this.getCamera());
+  }
+
+  getGizmoHelper() {
+    return this.gizmoHelper;
   }
 
   public getCanvas(): HTMLCanvasElement {
@@ -57,6 +73,10 @@ export class EngineService {
     return this.engine;
   }
 
+  public getGrid(): Grid {
+    return this.grid;
+  }
+
   public setCamera(camera: PlugCamera) {
     if (this.defaultCamera != undefined) this.defaultCamera.active = false;
     camera.active = true;
@@ -70,13 +90,13 @@ export class EngineService {
     this.emitNewContainerTreeNode$.next(c);
   }
 
-  public setBackgroundColorScene(backgroundColor: string) {
+  public setBackgroundColorScene(backgroundColor: string, alpha: number = 1) {
     this.sceneBackgroundColor = Color3.FromHexString(backgroundColor);
     this.scene.clearColor = new Color4(
       this.sceneBackgroundColor.r,
       this.sceneBackgroundColor.g,
       this.sceneBackgroundColor.b,
-      1
+      alpha
     );
   }
 

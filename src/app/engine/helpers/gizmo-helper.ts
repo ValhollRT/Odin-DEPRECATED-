@@ -18,6 +18,19 @@ export class GizmoHelper {
 
 	public sceneGizmo: Scene;
 	public cameraGizmo: ArcRotateCamera;
+	public pxChar;
+	public mxChar;
+	public pyChar;
+	public myChar;
+	public pzChar;
+	public mzChar;
+	public xplus;
+	public xminus;
+	public yplus;
+	public yminus;
+	public zplus;
+	public zminus;
+	public box;
 
 	constructor(public engine: Engine, viewportCamera: ArcRotateCamera) {
 		this.sceneGizmo = new Scene(engine);
@@ -47,56 +60,56 @@ export class GizmoHelper {
 		boxMat.diffuseColor = new Color3(.5, .5, .6);
 		boxMat.specularColor = new Color3(0.1, 0.1, 0.2);
 
-		let box = Mesh.CreateBox("box", 8, this.sceneGizmo);
-		box.material = boxMat;
+		this.box = Mesh.CreateBox("box", 8, this.sceneGizmo);
+		this.box.material = boxMat;
 
 		// X Axi
-		var xplus = MeshBuilder.CreateCylinder("xplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
-		var xminus = MeshBuilder.CreateCylinder("xminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		this.xplus = MeshBuilder.CreateCylinder("xplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		this.xminus = MeshBuilder.CreateCylinder("xminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
 
-		let pxChar = this.makeTextPlane("+X", "red", 7, this.sceneGizmo);
-		pxChar.position = new Vector3(18, 0, 0);
-		let mxChar = this.makeTextPlane("-X", "red", 7, this.sceneGizmo);
-		mxChar.position = new Vector3(-18, 0, 0);
+		this.pxChar = this.makeTextPlane("+X", "red", 7, this.sceneGizmo);
+		this.pxChar.position = new Vector3(18, 0, 0);
+		this.mxChar = this.makeTextPlane("-X", "red", 7, this.sceneGizmo);
+		this.mxChar.position = new Vector3(-18, 0, 0);
 
-		xplus.rotation.z = BABYLON.Tools.ToRadians(-90);
-		xplus.position.x = -8;
-		xplus.material = redMat;
-		xminus.rotation.z = BABYLON.Tools.ToRadians(90);
-		xminus.position.x = 8;
-		xminus.material = redMat;
+		this.xplus.rotation.z = BABYLON.Tools.ToRadians(-90);
+		this.xplus.position.x = -8;
+		this.xplus.material = redMat;
+		this.xminus.rotation.z = BABYLON.Tools.ToRadians(90);
+		this.xminus.position.x = 8;
+		this.xminus.material = redMat;
 
 		// Y Axi
-		var yminus = MeshBuilder.CreateCylinder("yplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
-		var yplus = MeshBuilder.CreateCylinder("yminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		this.yminus = MeshBuilder.CreateCylinder("yplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		this.yplus = MeshBuilder.CreateCylinder("yminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
 
-		let pyChar = this.makeTextPlane("+Y", "lime", 7, this.sceneGizmo);
-		pyChar.position = new Vector3(0, 18, 0);
-		let myChar = this.makeTextPlane("-Y", "lime", 7, this.sceneGizmo);
-		myChar.position = new Vector3(0, -18, 0);
+		this.pyChar = this.makeTextPlane("+Y", "lime", 7, this.sceneGizmo);
+		this.pyChar.position = new Vector3(0, 18, 0);
+		this.myChar = this.makeTextPlane("-Y", "lime", 7, this.sceneGizmo);
+		this.myChar.position = new Vector3(0, -18, 0);
 
-		yminus.rotation.x = BABYLON.Tools.ToRadians(0);
-		yminus.position.y = -8;
-		yminus.material = greenMat;
-		yplus.rotation.x = BABYLON.Tools.ToRadians(180);
-		yplus.position.y = 8;
-		yplus.material = greenMat;
+		this.yminus.rotation.x = BABYLON.Tools.ToRadians(0);
+		this.yminus.position.y = -8;
+		this.yminus.material = greenMat;
+		this.yplus.rotation.x = BABYLON.Tools.ToRadians(180);
+		this.yplus.position.y = 8;
+		this.yplus.material = greenMat;
 
 		// Z Axi
-		var zplus = MeshBuilder.CreateCylinder("zplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
-		var zminus = MeshBuilder.CreateCylinder("zminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		this.zplus = MeshBuilder.CreateCylinder("zplus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
+		this.zminus = MeshBuilder.CreateCylinder("zminus", { diameterBottom: 8, diameterTop: 0, tessellation: 6, height: 10 }, this.sceneGizmo);
 
-		let pzChar = this.makeTextPlane("+Z", "cyan", 7, this.sceneGizmo);
-		pzChar.position = new Vector3(0, 0, 18);
-		let mzChar = this.makeTextPlane("-Z", "cyan", 7, this.sceneGizmo);
-		mzChar.position = new Vector3(0, 0, -18);
+		this.pzChar = this.makeTextPlane("+Z", "cyan", 7, this.sceneGizmo);
+		this.pzChar.position = new Vector3(0, 0, 18);
+		this.mzChar = this.makeTextPlane("-Z", "cyan", 7, this.sceneGizmo);
+		this.mzChar.position = new Vector3(0, 0, -18);
 
-		zplus.rotation.x = BABYLON.Tools.ToRadians(-90);
-		zplus.position.z = 8;
-		zplus.material = blueMat;
-		zminus.rotation.x = BABYLON.Tools.ToRadians(90);
-		zminus.position.z = -8;
-		zminus.material = blueMat;
+		this.zplus.rotation.x = BABYLON.Tools.ToRadians(-90);
+		this.zplus.position.z = 8;
+		this.zplus.material = blueMat;
+		this.zminus.rotation.x = BABYLON.Tools.ToRadians(90);
+		this.zminus.position.z = -8;
+		this.zminus.material = blueMat;
 
 		this.sceneGizmo.onReadyObservable.add(() => {
 			for (var i = 0; i < this.sceneGizmo.meshes.length; i++) {
@@ -117,6 +130,7 @@ export class GizmoHelper {
 			}
 		});
 
+
 	}
 
 	makeTextPlane(text, color, size, scene: Scene) {
@@ -136,4 +150,27 @@ export class GizmoHelper {
 	getScene() { return this.sceneGizmo; }
 
 	getCamera() { return this.cameraGizmo; }
+
+	setEnabled(enabled: boolean) {
+		this.pxChar.isVisible = enabled;
+		this.mxChar.isVisible = enabled;
+
+		this.pyChar.isVisible = enabled;
+		this.myChar.isVisible = enabled;
+
+		this.pzChar.isVisible = enabled;
+		this.mzChar.isVisible = enabled;
+
+		this.xplus.isVisible = enabled;
+		this.xminus.isVisible = enabled;
+
+		this.yplus.isVisible = enabled;
+		this.yminus.isVisible = enabled;
+		
+		this.zplus.isVisible = enabled;
+		this.zminus.isVisible = enabled;
+
+		this.box.isVisible = enabled;
+
+	}
 }

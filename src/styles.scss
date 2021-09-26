@@ -66,6 +66,10 @@ a:visited {
     outline: none !important;
 }
 
+body {
+    background-color: #000;
+}
+
 textarea:focus,
 input:focus {
     outline: none !important;
@@ -189,6 +193,10 @@ body {
 
 .icon-import {
     mask-image: url("assets/icons/import.svg");
+}
+
+.icon-export {
+    mask-image: url("assets/icons/export.svg");
 }
 
 .icon-user {

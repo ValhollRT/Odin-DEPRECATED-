@@ -605,4 +605,8 @@ export class ExplorerPanelComponent {
       item.selected = false;
     });
   }
+
+  openExportRenderFromViewport(){
+    this.appServ.openExportRenderFromViewport();
+  }
 }
