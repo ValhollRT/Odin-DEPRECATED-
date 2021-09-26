@@ -1,150 +1,161 @@
 :host {
-  flex: 4;
+    flex: 4;
 }
+
 .container {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background-color: var(--main-menu-background-color);
-  width: 400px;
-  height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: var(--main-menu-background-color);
+    width: 475px;
+    height: 100%;
 }
 
 label {
-  float: left;
-  color: white;
-  margin: 0px 5px;
-  width: 5px;
-  font-size: 9px;
-  line-height: 18px;
+    float: left;
+    color: white;
+    margin: 0px 5px;
+    width: 5px;
+    font-size: 9px;
+    line-height: 18px;
 }
 
 .input-group {
-  padding: 5px;
-  margin: 5px;
-  border: var(--main-menu-border);
+    padding: 5px;
+    margin: 5px;
+    border: var(--main-menu-border);
 }
 
 .col-transform-menu {
-  float: left;
+    float: left;
 }
 
 .title-section-menu {
-  font-size: 10px;
-  color: var(--console-debug-color);
+    font-size: 10px;
+    color: var(--console-debug-color);
 }
 
 mat-tree {
-  flex: 1 1 0;
-  font-size: 12px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  background-color: var(--main-menu-background-color);
-  color: var(--console-debug-color);
+    flex: 1 1 0;
+    font-size: 12px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: var(--main-menu-background-color);
+    color: var(--console-debug-color);
 }
 
 mat-tree-node {
-  font-size: 12px;
-  //padding-left: 10px !important;
-  min-height: 0px;
-  color: var(--console-debug-color);
+    font-size: 12px;
+    //padding-left: 10px !important;
+    min-height: 0px;
+    color: var(--console-debug-color);
 }
+
 
 /*Style Tree Node*/
+
 mat-tree-node {
-  &:hover {
-    background-color: var(--highlight-color-hover);
-  }
+    &:hover {
+        background-color: var(--highlight-color-hover);
+    }
 }
 
 button[mat-icon-button] {
-  height: 24px;
-  width: 24px;
+    height: 24px;
+    width: 24px;
 }
 
 mat-icon {
-  font-size: 14px;
-  line-height: 26px;
-  height: 10px;
-  width: 10px;
+    font-size: 14px;
+    line-height: 26px;
+    height: 10px;
+    width: 10px;
 }
 
 button {
-  color: var(--console-debug-color);
-  background: transparent;
-  border: none;
+    color: var(--console-debug-color);
+    background: transparent;
+    border: none;
 }
 
+
 /* Track */
+
+
 /* width */
+
 ::-webkit-scrollbar {
-  width: 4px;
+    width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
 }
+
 
 /* Handle */
+
 ::-webkit-scrollbar-thumb {
-  background: var(--console-debug-color);
-  border-radius: 10px;
+    background: var(--console-debug-color);
+    border-radius: 10px;
 }
 
+
 /* Handle on hover */
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--console-debug-color);
+    background: var(--console-debug-color);
 }
 
 .drop-above {
-  border-top: 2px solid #dddddd;
-  margin-top: -6px;
+    border-top: 2px solid #dddddd;
+    margin-top: -6px;
 }
 
 .drop-below {
-  border-bottom: 2px solid #dddddd;
-  margin-bottom: -6px;
+    border-bottom: 2px solid #dddddd;
+    margin-bottom: -6px;
 }
 
 .drop-center {
-  background-color: #dddddd;
+    background-color: #dddddd;
 }
 
 .attribute-box {
-  width: 20px;
-  height: 20px;
-  background: #3c3b3b;
-  display: inline-block;
-  margin: 0px 2px;
-  border: 1px solid rgba(0, 0, 0, 0.38);
-  box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    background: #3c3b3b;
+    display: inline-block;
+    margin: 0px 2px;
+    border: 1px solid rgba(0, 0, 0, 0.38);
+    box-sizing: border-box;
 }
 
 .btn-tree-header {
-  border: var(--main-menu-border);
+    border: var(--main-menu-border);
 }
 
 .tree-node__top-menu-align {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .searchElement {
-  width: 140px;
-  height: 18px;
+    width: 140px;
+    height: 18px;
 }
 
 .tree-node__tope-menu__group-vertical-btn {
-  width: min-content;
+    width: min-content;
 }
 
 .odin-version {
-  position: relative;
-  color: var(--console-debug-color);
-  text-align: left;
-  float: right;
-  font-size: 13px;
-  line-height: 22px;
+    position: relative;
+    color: var(--console-debug-color);
+    text-align: left;
+    float: right;
+    font-size: 13px;
+    line-height: 22px;
 }

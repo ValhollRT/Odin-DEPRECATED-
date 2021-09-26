@@ -42,7 +42,7 @@ export class EngineService {
       antialias: true,
     });
 
-    this.engine.setSize(1920, 1080);
+    this.engine.setSize(1445, 813);
     this.scene = new Scene(this.engine);
     this.scene.autoClearDepthAndStencil = true; // Depth and stencil, obviously
     this.scene.clearColor = new Color4(0.2, 0.2, 0.2, 1);

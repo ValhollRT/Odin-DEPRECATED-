@@ -298,6 +298,7 @@ export class AppService {
     this.engineServ.setBackgroundColorScene('#000000', 0);
     this.engineServ.getGrid().ground.setEnabled(false);
     this.engineServ.getGizmoHelper().setEnabled(false);
+    this.engineServ.getEngine().setSize(1920, 1080);
 
     setTimeout(() => {
     ScreenshotTools.CreateScreenshot(
@@ -337,6 +338,7 @@ export class AppService {
         this.engineServ.setBackgroundColorScene(this.sceneSettings.backgroundColor, 1);
         this.engineServ.getGrid().ground.setEnabled(true);
         this.engineServ.getGizmoHelper().setEnabled(true);
+        this.engineServ.getEngine().setSize(1445, 813);
       }
 
     );},200);
