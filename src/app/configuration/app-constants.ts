@@ -42,4 +42,4 @@ export const APP_ODIN_TITLE = `
       G#t     E#K##i       E#t E#t      .E##E
        t      E##D.        E#t ..         G#E
               E#t          ,;.             fE
-              L:                            , 0.1.5`;
+              L:                            , 0.1.6`;
