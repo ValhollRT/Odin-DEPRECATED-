@@ -17,11 +17,11 @@ export class BoxPanel implements GeometryPanel {
 export class CylinderPanel implements GeometryPanel {
 	values = { arc: 1, diameter: 10, height: 10, width: 10, subdivisions: 10, tessellation: 10 };
 	properties: PropertyPanel<any>[] = [
-		new PropertyPanel<string>({ controlType: 'number', key: 'arc', label: 'Arc', value: 'p.arc' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'diameter', label: 'Diameter', value: 'p.diameter' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'height', label: 'Height', value: 'p.height' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'subdivisions', label: 'Subdivisions', value: 'p.subdivisions' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation' })
+		new PropertyPanel<string>({ controlType: 'number', key: 'arc', label: 'Arc', value: 'p.arc', step: "0.1" }),
+		new PropertyPanel<string>({ controlType: 'number', key: 'diameter', label: 'Diameter', value: 'p.diameter', step: "0.1" }),
+		new PropertyPanel<string>({ controlType: 'number', key: 'height', label: 'Height', value: 'p.height', step: "0.1" }),
+		new PropertyPanel<string>({ controlType: 'number', key: 'subdivisions', label: 'Subdivisions', value: 'p.subdivisions', step: "1" }),
+		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation', step: "1" })
 	];
 }
 
@@ -30,7 +30,7 @@ export class DiscPanel implements GeometryPanel {
 	properties: PropertyPanel<any>[] = [
 		new PropertyPanel<string>({ controlType: 'number', key: 'arc', label: 'Arc', value: 'p.arc' }),
 		new PropertyPanel<string>({ controlType: 'number', key: 'radius', label: 'Radius', value: 'p.diameter' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation' })
+		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation', step: "1" })
 	];
 }
 
@@ -38,7 +38,7 @@ export class IcoSpherePanel implements GeometryPanel {
 	values = { radius: 10, subdivisions: 10 };
 	properties: PropertyPanel<any>[] = [
 		new PropertyPanel<string>({ controlType: 'number', key: 'radius', label: 'Radius', value: 'p.radius' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'subdivisions', label: 'Subdivisions', value: 'p.subdivisions' })
+		new PropertyPanel<string>({ controlType: 'number', key: 'subdivisions', label: 'Subdivisions', value: 'p.subdivisions', step: "1" })
 	];
 }
 
@@ -63,7 +63,7 @@ export class TorusPanel implements GeometryPanel {
 	properties: PropertyPanel<any>[] = [
 		new PropertyPanel<string>({ controlType: 'number', key: 'diameter', label: 'diameter', value: 'p.diameter' }),
 		new PropertyPanel<string>({ controlType: 'number', key: 'thickness', label: 'thickness', value: 'p.thickness' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation' })
+		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation', step: "1" })
 	];
 }
 
@@ -73,8 +73,8 @@ export class CapsulePanel implements GeometryPanel {
 		new PropertyPanel<string>({ controlType: 'number', key: 'capSubdivisions', label: 'capSubdivisions', value: 'p.capSubdivisions' }),
 		new PropertyPanel<string>({ controlType: 'number', key: 'radius', label: 'Radius', value: 'p.radius' }),
 		new PropertyPanel<string>({ controlType: 'number', key: 'height', label: 'height', value: 'p.height' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'subdivisions	', label: 'subdivisions	', value: 'p.subdivisions' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation' })
+		new PropertyPanel<string>({ controlType: 'number', key: 'subdivisions	', label: 'subdivisions	', value: 'p.subdivisions', step: "1" }),
+		new PropertyPanel<string>({ controlType: 'number', key: 'tessellation', label: 'Tessellation', value: 'p.tessellation', step: "1" })
 	];
 }
 
@@ -82,6 +82,6 @@ export class SpherePanel implements GeometryPanel {
 	values = { diameter: 10, segments: 8 };
 	properties: PropertyPanel<any>[] = [
 		new PropertyPanel<string>({ controlType: 'number', key: 'diameter', label: 'Diameter', value: 'p.diameter' }),
-		new PropertyPanel<string>({ controlType: 'number', key: 'segments', label: 'Segments', value: 'p.segments' })
+		new PropertyPanel<string>({ controlType: 'number', key: 'segments', label: 'Segments', value: 'p.segments' , step: "1"})
 	];
 }

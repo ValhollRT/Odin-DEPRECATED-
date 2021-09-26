@@ -66,6 +66,10 @@ a:visited {
     outline: none !important;
 }
 
+body {
+    background-color: #333335;
+}
+
 textarea:focus,
 input:focus {
     outline: none !important;
@@ -191,6 +195,10 @@ body {
     mask-image: url("assets/icons/import.svg");
 }
 
+.icon-export {
+    mask-image: url("assets/icons/export.svg");
+}
+
 .icon-user {
     mask-image: url("assets/icons/user.svg");
 }
@@ -229,6 +237,10 @@ body {
 
 .icon-container {
     mask-image: url("assets/icons/container.svg");
+}
+
+.icon-viking {
+    mask-image: url("assets/icons/vikings.svg");
 }
 
 .icon-color,

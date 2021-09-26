@@ -1,16 +1,19 @@
 <div *ngIf="this.selected !== null && this.selected !== undefined">
-	<div *ngIf="isPlugText">
-		<text-panel [plugText]=this.selected></text-panel>
-	</div>
-	<div *ngIf="!isPlugText">
-		<div *ngFor="let p of this.selected.panel.properties">
-			<div class="property-panel-group"
-				style="margin: 2px 0px; display: flex; flex-direction: row; justify-content: space-between;">
-				<span class="property-panel-text">{{p.label}}</span>
-				<input-number [bind]="selected.panel.values" [param]="p.key" [label]="'R'" [step]=0.1
-					[resetValue]=selected.panel.values[p.key] [change]=updateMesh()>
-				</input-number>
-			</div>
-		</div>
-	</div>
+    <div *ngIf="isPlugText">
+        <text-panel [plugText]="this.selected"></text-panel>
+    </div>
+    <div *ngIf="!isPlugText">
+        <div *ngFor="let p of this.selected.panel.properties">
+            <div class="property-panel-group" style="
+          margin: 2px 0px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        ">
+                <span class="property-panel-text">{{ p.label }}</span>
+                <input-number [bind]="selected.panel.values" [param]="p.key" [label]="'R'" [step]="p.step" [resetValue]="selected.panel.values[p.key]" [change]="updateMesh()">
+                </input-number>
+            </div>
+        </div>
+    </div>
 </div>

@@ -34,7 +34,7 @@ export class TabsPlugsPanelComponent implements OnInit {
           { displayName: 'Torus', param: GEOM.TORUS, fn: (param) => { this.appServ.addPlugGeometry(param) } },
           { displayName: 'Capsule', param: GEOM.CAPSULE, fn: (param) => { this.appServ.addPlugGeometry(param) } },
           { displayName: 'Sphere', param: GEOM.SPHERE, fn: (param) => { this.appServ.addPlugGeometry(param) } },
-          { displayName: 'Text', param: GEOM.TEXT, fn: (param) => { this.appServ.addPlugText() } },
+          // { displayName: 'Text', param: GEOM.TEXT, fn: (param) => { this.appServ.addPlugText() } },
         ]
       },
       {

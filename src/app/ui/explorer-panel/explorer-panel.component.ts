@@ -291,8 +291,12 @@ export class ExplorerPanelComponent {
       Array.from(this.fDbFlatNodes.keys()).forEach((k) => {
         if (k.startsWith('DELETE')) this.fDbFlatNodes.delete(k);
       });
-
       this.database.dataChange.next(Array.from(this.fDbFlatNodes.values()));
+
+      let firstFolder = Array.from(this.fDbFlatNodes.values()).filter(
+        (folder) => folder.parent == ''
+      )[0];
+      this.setActiveFolder(undefined, firstFolder);
     });
   }
 
@@ -394,7 +398,7 @@ export class ExplorerPanelComponent {
 
   public selectedNode = undefined;
   setActiveFolder(event, node) {
-    event.stopPropagation();
+    if (!!event) event.stopPropagation();
     if (this.selectedNode != undefined) this.selectedNode.active = false;
     this.selectedNode = node;
     node.active = true;
@@ -588,6 +592,7 @@ export class ExplorerPanelComponent {
     if (node.type == 'MATERIAL') this.appServ.addPlugMaterialFromDto(node);
     if (node.type == 'IMAGE') this.appServ.addPlugTextureFromDto(node);
     if (node.type == 'AUDIO') this.appServ.addPlugAudioFromDto(node);
+    if (node.type == 'FONT') this.appServ.addPlugText(node.url);
   }
 
   clickIconExplorer(event, node) {
@@ -599,5 +604,9 @@ export class ExplorerPanelComponent {
     this.contentFolder.forEach((item) => {
       item.selected = false;
     });
+  }
+
+  openExportRenderFromViewport(){
+    this.appServ.openExportRenderFromViewport();
   }
 }

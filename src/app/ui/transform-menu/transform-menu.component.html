@@ -1,4 +1,4 @@
-<div #transformMenuValue class="container" *ngIf="(selected != undefined )">
+<div class="container" *ngIf="(selected != undefined )">
     <div class="col-transform-menu">
         <div class="input-group">
             <div class="title-section-menu">Position</div>
@@ -8,14 +8,11 @@
         </div>
         <div class="input-group">
             <div class="title-section-menu">Rotation</div>
-            <input-number [bind]="selected.rotation" [param]="'x'" [label]="'x'" [resetValue]=0 [pipe]="'rotation'"
-                [pipeInput]=pipeInputRotation>
+            <input-number [bind]="selected.rotation" [param]="'x'" [label]="'x'" [resetValue]=0 [pipe]="'rotation'" [pipeInput]=pipeInputRotation>
             </input-number>
-            <input-number [bind]="selected.rotation" [param]="'y'" [label]="'y'" [resetValue]=0 [pipe]="'rotation'"
-                [pipeInput]=pipeInputRotation>
+            <input-number [bind]="selected.rotation" [param]="'y'" [label]="'y'" [resetValue]=0 [pipe]="'rotation'" [pipeInput]=pipeInputRotation>
             </input-number>
-            <input-number [bind]="selected.rotation" [param]="'z'" [label]="'z'" [resetValue]=0 [pipe]="'rotation'"
-                [pipeInput]=pipeInputRotation>
+            <input-number [bind]="selected.rotation" [param]="'z'" [label]="'z'" [resetValue]=0 [pipe]="'rotation'" [pipeInput]=pipeInputRotation>
             </input-number>
         </div>
     </div>

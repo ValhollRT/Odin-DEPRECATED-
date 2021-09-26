@@ -17,8 +17,8 @@ export class PlugTexture extends Texture implements Plug {
   colorTile: string;
   panel: any;
   active: boolean;
+  isSelected: boolean;
   openPanel: () => SidebarPanelAction;
-  copy: () => Plug;
 
   constructor(container: Container, url: string, uuid?: string) {
     super(url, AppModule.injector.get(EngineService).getScene());
@@ -32,6 +32,7 @@ export class PlugTexture extends Texture implements Plug {
       return new SidebarPanelAction(SidebarPanel.TEXTURE, true);
     };
     this.active = false;
+    this.isSelected = false;
   }
 
   getIcon() {
@@ -40,5 +41,9 @@ export class PlugTexture extends Texture implements Plug {
 
   static fromDto(url: string, container: Container): PlugTexture {
     return new PlugTexture(container, url);
+  }
+
+  copy(parent: Container): PlugTexture {
+    return new PlugTexture(parent, this.url);
   }
 }

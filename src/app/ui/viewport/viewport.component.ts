@@ -13,7 +13,6 @@ import { Utils } from 'src/app/engine/Utils/Utils';
 import { AppService, EngineService } from 'src/app/services/index.service';
 import { Container } from 'src/app/shared/container/container';
 import { clearSelection, oneSelection } from 'src/app/store/actions';
-import { GizmoHelper } from '../../engine/helpers/gizmo-helper';
 import { AppState } from './../../store/app.reducer';
 
 @Component({
@@ -30,7 +29,7 @@ export class ViewportComponent implements OnInit {
   private startingPoint: any;
   private gizmoManager: GizmoManager;
   private lightGizmo: LightGizmo;
-  private gizmoHelper: GizmoHelper;
+
 
   public constructor(
     public ngZone: NgZone,
@@ -42,13 +41,14 @@ export class ViewportComponent implements OnInit {
   public ngOnInit(): void {
     this.engineServ.createScene(this.rendererCanvas);
     this.initCanvasRender();
-    this.gizmoHelper = new GizmoHelper(this.engineServ.getEngine(), this.engineServ.getCamera());
+
+    this.engineServ.initGizmoHelper();
     let cameraViewport = this.engineServ.getCamera();
     cameraViewport.onViewMatrixChangedObservable.add(() => {
-      this.gizmoHelper.cameraGizmo.position = cameraViewport.position;
+      this.engineServ.getGizmoHelper().cameraGizmo.position = cameraViewport.position;
     });
     this.ngZone.runOutsideAngular(() => {
-      this.engineServ.animate(this.gizmoHelper.getScene());
+      this.engineServ.animate(this.engineServ.getGizmoHelper().getScene());
     });
   }
 
@@ -233,7 +233,7 @@ export class ViewportComponent implements OnInit {
         }, 0);
       }
     } else {
-      this.store.dispatch(clearSelection());
+      this.store.dispatch(clearSelection());   
     }
   }
 
